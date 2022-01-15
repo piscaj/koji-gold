@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLaptop } from "@fortawesome/pro-duotone-svg-icons";
+import { faLaptop, faBan } from "@fortawesome/pro-duotone-svg-icons";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -18,6 +18,7 @@ import { faLaptop } from "@fortawesome/pro-duotone-svg-icons";
 // "websocketObject" - Pass the websocket as an object here
 // "feedbackObject" - Pass the data from the websocket here
 // "storedElements" - Array of fb_objects current values
+// "syncStatusName" - This name should match up to the Crestron digital name paramiter
 ///////////////////////////////////////////////////////////////////////////////
 
 const LaptopButton = ({
@@ -33,6 +34,7 @@ const LaptopButton = ({
   websocketObject,
   feedbackObject,
   storedElements = [],
+  syncStatusName = null,
 }) => {
   const [style, styleState] = useState({ value: "primary" });
   const [handlerType, handlerTypeState] = useState({
@@ -51,6 +53,7 @@ const LaptopButton = ({
   const [activeColor, activeColorState] = useState({
     value: muiColorFeedback === null ? "secondary" : muiColorFeedback,
   });
+  const [sync, syncState] = useState({ value: false });
 
   const useStyles = makeStyles({
     button: {
@@ -75,35 +78,73 @@ const LaptopButton = ({
         feedbackObject.fb.fb_objects[0].id === serialName
       ) {
         dynamicTextState({ value: feedbackObject.fb.fb_objects[0].value });
+      } else if (
+        feedbackObject.fb.fb_objects[0].type === "bool" &&
+        feedbackObject.fb.fb_objects[0].id === syncStatusName
+      ) {
+        feedbackObject.fb.fb_objects[0].value === "1"
+          ? syncState({ value: true })
+          : syncState({ value: false });
       }
     } catch {
       console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [feedbackObject.fb, digitalName, activeColor, inActiveColor, serialName]);
+  }, [
+    feedbackObject.fb,
+    digitalName,
+    activeColor,
+    inActiveColor,
+    serialName,
+    syncStatusName,
+  ]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    var foundIndex = storedElements.findIndex(
-      (x) => x.id === digitalName || serialName
+    var foundIndexDigital = storedElements.findIndex(
+      (x) => x.id === digitalName
     );
-    if (foundIndex >= 0) {
+    if (foundIndexDigital >= 0) {
       if (
-        storedElements[foundIndex].type === "bool" &&
-        storedElements[foundIndex].id === digitalName
+        storedElements[foundIndexDigital].type === "bool" &&
+        storedElements[foundIndexDigital].id === digitalName
       ) {
-        storedElements[foundIndex].value === "1"
+        storedElements[foundIndexDigital].value === "1"
           ? styleState({ value: activeColor.value })
           : styleState({ value: inActiveColor.value });
-      } else if (
-        storedElements[foundIndex].type === "string" &&
-        storedElements[foundIndex].id === serialName
-      ) {
-        dynamicTextState({ value: storedElements[foundIndex].value });
       }
     }
-  }, [storedElements, digitalName, serialName, activeColor, inActiveColor]);
+    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
+    if (foundIndexSerial >= 0) {
+      if (
+        storedElements[foundIndexSerial].type === "string" &&
+        storedElements[foundIndexSerial].id === serialName
+      ) {
+        dynamicTextState({ value: storedElements[foundIndexSerial].value });
+      }
+    }
+    var foundIndexSync = storedElements.findIndex(
+      (x) => x.id === syncStatusName
+    );
+    if (foundIndexSync >= 0) {
+      if (
+        storedElements[foundIndexSync].type === "bool" &&
+        storedElements[foundIndexSync].id === syncStatusName
+      ) {
+        storedElements[foundIndexSync].value === "1"
+          ? syncState({ value: true })
+          : syncState({ value: false });
+      }
+    }
+  }, [
+    storedElements,
+    digitalName,
+    serialName,
+    activeColor,
+    inActiveColor,
+    syncStatusName,
+  ]);
 
   useEffect(() => {
     if (!serialName === null) dynamicTextState({ value: serialName });
@@ -132,6 +173,10 @@ const LaptopButton = ({
     if (!muiColorFeedback === null)
       activeColorState({ value: muiColorFeedback });
   }, [muiColor, muiColorFeedback]);
+
+  useEffect(() => {
+    if (!syncStatusName === null) syncState({ value: false });
+  }, [syncStatusName]);
 
   // Send message to websocket
   const sendMessage = (data) => {
@@ -203,7 +248,18 @@ const LaptopButton = ({
               p: "2.5px",
             }}
           >
-            <FontAwesomeIcon icon={faLaptop} size="4x" />
+            {sync.value === true ? (
+              <FontAwesomeIcon icon={faLaptop} size="4x" />
+            ) : (
+              <i className="fa-stack fa-2x">
+                <FontAwesomeIcon icon={faLaptop} className="fa-stack-1x" />
+                <FontAwesomeIcon
+                  icon={faBan}
+                  style={{ color: "Tomato" }}
+                  className="fa-stack-2x"
+                />
+              </i>
+            )}
           </Box>
           <Box
             sx={{
@@ -212,6 +268,15 @@ const LaptopButton = ({
           >
             {dynamicText.value === "" ? text : dynamicText.value}
           </Box>
+          {sync.value === false ? (
+            <Box
+              sx={{
+                fontSize: "10px",
+              }}
+            >
+              ( No device detected )
+            </Box>
+          ) : undefined}
         </Box>
       </Button>
     </div>
@@ -230,6 +295,7 @@ LaptopButton.propTypes = {
   websocketObject: PropTypes.object,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
+  syncStatusName: PropTypes.string,
 };
 
 export default LaptopButton;

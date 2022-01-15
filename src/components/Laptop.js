@@ -41,6 +41,7 @@ const Laptop = ({websocketObject,feedbackObject, storedElements}) => {
                   websocketObject={websocketObject}
                   feedbackObject={feedbackObject}
                   storedElements={storedElements}
+                  syncStatusName="sync_laptop_table"
                 />
               </Box>
               <Box sx={{ p: "20px" }}>
@@ -56,6 +57,7 @@ const Laptop = ({websocketObject,feedbackObject, storedElements}) => {
                   websocketObject={websocketObject}
                   feedbackObject={feedbackObject}
                   storedElements={storedElements}
+                  syncStatusName="sync_laptop_floor"
                 />
               </Box>
               <Box sx={{ p: "20px" }}>
@@ -71,6 +73,7 @@ const Laptop = ({websocketObject,feedbackObject, storedElements}) => {
                   websocketObject={websocketObject}
                   feedbackObject={feedbackObject}
                   storedElements={storedElements}
+                  syncStatusName="sync_laptop_wall"
                 />
               </Box>
           </Box>

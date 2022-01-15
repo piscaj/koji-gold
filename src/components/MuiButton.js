@@ -85,7 +85,6 @@ const MuiButton = ({
     var foundIndexDigital = storedElements.findIndex(
       (x) => x.id === digitalName
     );
-    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
     if (foundIndexDigital >= 0) {
       if (
         storedElements[foundIndexDigital].type === "bool" &&
@@ -96,6 +95,7 @@ const MuiButton = ({
           : styleState({ value: inActiveColor.value });
       }
     }
+    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
     if (foundIndexSerial >= 0) {
       if (
         storedElements[foundIndexSerial].type === "string" &&

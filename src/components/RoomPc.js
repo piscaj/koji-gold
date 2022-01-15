@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./Header";
-import LaptopButton from "./LaptopButton";
+import RoomPcStatus from "./RoomPcStatus";
 
 const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
   return (
@@ -30,23 +30,10 @@ const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
             }}
           >
             <Box sx={{ padding: "20px" }}>
-              <LaptopButton
-                text="ROOM PC"
-                muiColor="primary"
-                addStyle={{
-                  maxWidth: "150px",
-                  maxHeight: "150px",
-                  minWidth: "150px",
-                  minHeight: "150px",
-                }}
-                muiColorFeedback="secondary"
-                muiVariant="contained"
-                digitalName="matrix_source1"
-                joinNumber={101}
-                serialName=""
-                websocketObject={websocketObject}
+              <RoomPcStatus
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
+                syncStatusName="sync_room_pc"
               />
             </Box>
           </Box>
