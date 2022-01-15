@@ -17,6 +17,7 @@ import MenuLeft from "./MenuLeft";
 import ButtonShowcase from "./ButtonShowcase";
 import Laptop from "./Laptop";
 import RoomPc from "./RoomPc";
+import Camera from "./Camera";
 import Button from "@mui/material/Button";
 
 const Main = () => {
@@ -27,6 +28,7 @@ const Main = () => {
   const [mode, setMode] = React.useState("light");
   const menuLeft = useRef();
   var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
+
 
   const connect = () => {
     var ws = new WebSocket("wss://192.168.2.29:1851");
@@ -204,7 +206,18 @@ const Main = () => {
           />
           <Route
             exact
-            path="/buttonshowcase"
+            path="/camera"
+            element={
+              <Camera
+                websocketObject={ws}
+                feedbackObject={fbObjects}
+                storedElements={wsStore}
+              />
+            }
+          />
+        <Route
+            exact
+            path="/showcase"
             element={
               <ButtonShowcase
                 websocketObject={ws}
@@ -214,6 +227,7 @@ const Main = () => {
             }
           />
         </Routes>
+        
       </Container>
     </ThemeProvider>
   );

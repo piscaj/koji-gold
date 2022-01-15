@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLaptop,
   faWebcam,
-  faDesktop,
+  faDesktop,faTheaterMasks
 } from "@fortawesome/pro-duotone-svg-icons";
 import "./scss/MenuL.scss";
 
@@ -70,7 +70,7 @@ const MenuLeft = forwardRef((props, ref) => {
               </Link>
             </List>
             <List>
-              <Link to="/buttonshowcase" className="text-link">
+              <Link to="/camera" className="text-link">
                 <ListItem button>
                   <ListItemIcon>
                     <FontAwesomeIcon icon={faWebcam} size="2x" />
@@ -79,6 +79,20 @@ const MenuLeft = forwardRef((props, ref) => {
                   <ListItemText
                     primary="Camera Controls"
                     secondary="& presets"
+                  />
+                </ListItem>
+              </Link>
+            </List>
+            <List>
+              <Link to="/showcase" className="text-link">
+                <ListItem button>
+                  <ListItemIcon>
+                    <FontAwesomeIcon icon={faTheaterMasks} size="2x" />
+                  </ListItemIcon>
+
+                  <ListItemText
+                    primary="Showcase"
+                    secondary="MUI Components"
                   />
                 </ListItem>
               </Link>

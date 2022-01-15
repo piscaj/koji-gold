@@ -25,6 +25,7 @@ const ButtonShowcase = ({websocketObject,feedbackObject , storedElements}) => {
                 flexDirection: "row",
                 flexWrap: "wrap",
                 alignItems: "center",
+                justifyContent: "center",
                 overflow: "hidden",
                 mb: "20px",
               }}
