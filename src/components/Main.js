@@ -27,6 +27,7 @@ import {
   faSun,
   faMoon,
 } from "@fortawesome/pro-duotone-svg-icons";
+import MediaVolume from "./MediaVolume";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -245,6 +246,21 @@ const Main = () => {
             }
           />
         </Routes>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            mt:"20px"
+          }}
+        >
+    
+          <MediaVolume />
+          
+
+        </Box>
       </Container>
     </ThemeProvider>
   );

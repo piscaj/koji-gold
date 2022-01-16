@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./Header";
-import LaptopButton from "./LaptopButton";
+import MuiButton from "./MuiButton";
 
 const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
   return (
@@ -10,7 +10,7 @@ const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "column" },
+            flexDirection: "column",
             alignItems: "center",
             overflow: "hidden",
           }}
@@ -30,14 +30,14 @@ const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
             }}
           >
             <Box sx={{ padding: "20px" }}>
-              <LaptopButton
+              <MuiButton
                 text="CAMERA"
                 muiColor="primary"
                 addStyle={{
-                  maxWidth: "150px",
-                  maxHeight: "150px",
-                  minWidth: "150px",
-                  minHeight: "150px",
+                  maxWidth: "100px",
+                  maxHeight: "100px",
+                  minWidth: "100px",
+                  minHeight: "100px",
                 }}
                 muiColorFeedback="secondary"
                 muiVariant="contained"
