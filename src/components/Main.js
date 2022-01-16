@@ -21,7 +21,12 @@ import Camera from "./Camera";
 import "./scss/Main.scss";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCheeseburger, faSun, faMoon } from "@fortawesome/pro-duotone-svg-icons";
+import {
+  faBars,
+  faCheeseburger,
+  faSun,
+  faMoon,
+} from "@fortawesome/pro-duotone-svg-icons";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -132,7 +137,6 @@ const Main = () => {
             setLoader({ value: false });
           }}
         >
-          
           <Box
             sx={{
               display: "flex",
@@ -168,18 +172,19 @@ const Main = () => {
               className="icon-burger"
             />
           </IconButton>
-          <Box  sx={{  ml: "auto", fontSize:"12px"}}>{theme.palette.mode} mode 
-          <IconButton
-            sx={{  mb: "5px", mt: "5px" }}
-            onClick={colorMode.toggleColorMode}
-            color="inherit"
-          >
-            {theme.palette.mode === "dark" ? (
-              <FontAwesomeIcon icon={faMoon} size="lg" />
-            ) : (
-              <FontAwesomeIcon icon={faSun} size="lg" />
-            )}
-          </IconButton>
+          <Box sx={{ ml: "auto", fontSize: "12px" }}>
+            {theme.palette.mode} mode
+            <IconButton
+              sx={{ mb: "5px", mt: "5px" }}
+              onClick={colorMode.toggleColorMode}
+              color="inherit"
+            >
+              {theme.palette.mode === "dark" ? (
+                <FontAwesomeIcon icon={faMoon} size="lg" />
+              ) : (
+                <FontAwesomeIcon icon={faSun} size="lg" />
+              )}
+            </IconButton>
           </Box>
         </Box>
 
