@@ -29,7 +29,7 @@ const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
               mb: "20px",
             }}
           >
-            <Box sx={{ padding: "20px" }}>
+            <Box sx={{ padding: "10px" }}>
               <RoomPcStatus
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}

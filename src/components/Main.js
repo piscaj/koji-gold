@@ -18,7 +18,10 @@ import ButtonShowcase from "./ButtonShowcase";
 import Laptop from "./Laptop";
 import RoomPc from "./RoomPc";
 import Camera from "./Camera";
+import "./scss/Main.scss";
 import Button from "@mui/material/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faCheeseburger, faSun, faMoon } from "@fortawesome/pro-duotone-svg-icons";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -28,7 +31,6 @@ const Main = () => {
   const [mode, setMode] = React.useState("light");
   const menuLeft = useRef();
   var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
-
 
   const connect = () => {
     var ws = new WebSocket("wss://192.168.2.29:1851");
@@ -130,7 +132,7 @@ const Main = () => {
             setLoader({ value: false });
           }}
         >
-          {" "}
+          
           <Box
             sx={{
               display: "flex",
@@ -155,19 +157,30 @@ const Main = () => {
             overflow: "hidden",
           }}
         >
-          <Button onClick={() => menuLeft.current.toggleDrawer()}> Menu</Button>
-          <div>{theme.palette.mode} mode </div>
           <IconButton
-            sx={{ ml: "auto", mb: "5px", mt: "5px" }}
+            className="burger-menu"
+            onClick={() => menuLeft.current.toggleDrawer()}
+          >
+            <FontAwesomeIcon icon={faBars} size="lg" className="icon-bars" />
+            <FontAwesomeIcon
+              icon={faCheeseburger}
+              size="lg"
+              className="icon-burger"
+            />
+          </IconButton>
+          <Box  sx={{  ml: "auto", fontSize:"12px"}}>{theme.palette.mode} mode 
+          <IconButton
+            sx={{  mb: "5px", mt: "5px" }}
             onClick={colorMode.toggleColorMode}
             color="inherit"
           >
             {theme.palette.mode === "dark" ? (
-              <Brightness7Icon />
+              <FontAwesomeIcon icon={faMoon} size="lg" />
             ) : (
-              <Brightness4Icon />
+              <FontAwesomeIcon icon={faSun} size="lg" />
             )}
           </IconButton>
+          </Box>
         </Box>
 
         <Routes>
@@ -215,7 +228,7 @@ const Main = () => {
               />
             }
           />
-        <Route
+          <Route
             exact
             path="/showcase"
             element={
@@ -227,7 +240,6 @@ const Main = () => {
             }
           />
         </Routes>
-        
       </Container>
     </ThemeProvider>
   );

@@ -274,7 +274,7 @@ const LaptopButton = ({
                 fontSize: "10px",
               }}
             >
-              ( No device detected )
+              ( Device undetected )
             </Box>
           ) : undefined}
         </Box>
