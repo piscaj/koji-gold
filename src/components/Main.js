@@ -274,7 +274,12 @@ const Main = () => {
             mt: "20px",
           }}
         >
-          <MediaVolume />
+          <MediaVolume
+            serialName="media_volume"
+            websocketObject={ws}
+            feedbackObject={fbObjects}
+            storedElements={wsStore}
+          />
         </Box>
       </Container>
     </ThemeProvider>
