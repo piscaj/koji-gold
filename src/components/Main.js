@@ -7,8 +7,6 @@ import {
   ThemeProvider,
   responsiveFontSizes,
 } from "@mui/material//styles";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Backdrop from "@mui/material/Backdrop";
@@ -19,7 +17,6 @@ import Laptop from "./Laptop";
 import RoomPc from "./RoomPc";
 import Camera from "./Camera";
 import "./scss/Main.scss";
-import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -28,6 +25,8 @@ import {
   faMoon,
 } from "@fortawesome/pro-duotone-svg-icons";
 import MediaVolume from "./MediaVolume";
+import logoDark from "./images/logoDark.png";
+import logoLight from "./images/logoLight.png";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -162,17 +161,36 @@ const Main = () => {
             overflow: "hidden",
           }}
         >
-          <IconButton
-            className="burger-menu"
-            onClick={() => menuLeft.current.toggleDrawer()}
+          <Box
+            sx={{
+              width: "50px",
+            }}
           >
-            <FontAwesomeIcon icon={faBars} size="lg" className="icon-bars" />
-            <FontAwesomeIcon
-              icon={faCheeseburger}
-              size="lg"
-              className="icon-burger"
-            />
-          </IconButton>
+            <IconButton
+              className="burger-menu"
+              onClick={() => menuLeft.current.toggleDrawer()}
+            >
+              <FontAwesomeIcon icon={faBars} size="lg" className="icon-bars" />
+              <FontAwesomeIcon
+                icon={faCheeseburger}
+                size="lg"
+                className="icon-burger"
+              />
+            </IconButton>
+          </Box>
+          <Box
+            sx={{
+              ml: "10px",
+              mt: "8px",
+            }}
+          >
+            {theme.palette.mode === "dark" ? (
+              <img src={logoDark} width="150px" height="auto" alt="" />
+            ) : (
+              <img src={logoLight} width="150px" height="auto" alt="" />
+            )}
+          </Box>
+
           <Box sx={{ ml: "auto", fontSize: "12px" }}>
             {theme.palette.mode} mode
             <IconButton
@@ -253,13 +271,10 @@ const Main = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            mt:"20px"
+            mt: "20px",
           }}
         >
-    
           <MediaVolume />
-          
-
         </Box>
       </Container>
     </ThemeProvider>
