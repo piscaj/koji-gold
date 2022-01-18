@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import CameraControls from "./CameraControls";
 import Header from "./Header";
-import MuiButton from "./MuiButton";
 
 const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
   return (
@@ -29,26 +29,11 @@ const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
               mb: "20px",
             }}
           >
-            <Box sx={{ padding: "20px" }}>
-              <MuiButton
-                text="CAMERA"
-                muiColor="primary"
-                addStyle={{
-                  maxWidth: "100px",
-                  maxHeight: "100px",
-                  minWidth: "100px",
-                  minHeight: "100px",
-                }}
-                muiColorFeedback="secondary"
-                muiVariant="contained"
-                digitalName="matrix_source1"
-                joinNumber={101}
-                serialName=""
-                websocketObject={websocketObject}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
-              />
-            </Box>
+            <CameraControls
+              websocketObject={websocketObject}
+              feedbackObject={feedbackObject}
+              storedElements={storedElements}
+            />
           </Box>
         </Box>
       </Paper>
