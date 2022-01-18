@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -23,6 +25,9 @@ const MuiButton = ({
   muiColorFeedback = null,
   muiVariant = null,
   addStyle = {},
+  faIcon,
+  faClass,
+  faSize,
   digitalName,
   joinNumber,
   serialName = null,
@@ -48,6 +53,8 @@ const MuiButton = ({
   const [activeColor, activeColorState] = useState({
     value: muiColorFeedback === null ? "secondary" : muiColorFeedback,
   });
+
+  const [useIcon, useIconState] = useState(false);
 
   const useStyles = makeStyles({
     button: {
@@ -195,7 +202,34 @@ const MuiButton = ({
             : undefined
         }
       >
-        {dynamicText.value === "" ? text : dynamicText.value}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "nowrap",
+            alignItems: "center",
+            overflow: "hidden",
+          }}
+        >
+          {faIcon ? (
+            <Box
+              sx={{
+                p: "2.5px",
+              }}
+            >
+              <FontAwesomeIcon icon={faIcon} size={faSize} className={faClass} />
+            </Box>
+          ) : undefined}
+          {text === "" && dynamicText.value === "" ? undefined : (
+            <Box
+              sx={{
+                p: "2.5px",
+              }}
+            >
+              {dynamicText.value === "" ? text : dynamicText.value}
+            </Box>
+          )}
+        </Box>
       </Button>
     </div>
   );
@@ -207,6 +241,7 @@ MuiButton.propTypes = {
   muiColorFeedback: PropTypes.string,
   muiVariant: PropTypes.string,
   addStyle: PropTypes.object,
+  faIcon: PropTypes.object,
   digitalName: PropTypes.string,
   serialName: PropTypes.string,
   eventType: PropTypes.string,

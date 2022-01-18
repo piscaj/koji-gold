@@ -8,7 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 ReactDOM.render(
   <React.StrictMode>
       <Router>
-        <div className="noselect">
+        <div className="noselect min-width">
           <App />
         </div>
       </Router>

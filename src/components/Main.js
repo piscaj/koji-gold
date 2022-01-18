@@ -163,7 +163,7 @@ const Main = () => {
         >
           <Box
             sx={{
-              width: "50px",
+              width: "45px",
             }}
           >
             <IconButton
@@ -179,15 +179,16 @@ const Main = () => {
             </IconButton>
           </Box>
           <Box
+          className="logo"
             sx={{
-              ml: "10px",
+              ml: "5px",
               mt: "8px",
             }}
           >
             {theme.palette.mode === "dark" ? (
-              <img src={logoDark} width="150px" height="auto" alt="" />
+              <img src={logoDark} alt="" />
             ) : (
-              <img src={logoLight} width="150px" height="auto" alt="" />
+              <img src={logoLight} alt="" />
             )}
           </Box>
 
