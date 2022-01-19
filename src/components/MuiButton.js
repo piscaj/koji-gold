@@ -17,6 +17,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // "websocketObject" - Pass the websocket as an object here
 // "feedbackObject" - Pass the data from the websocket here
 // "storedElements" - Array of fb_objects current values
+// "faIcon" - FontAwesome icon -- any imported icon
+// "faClass" - FontAwesome class -- any fa class
+// "faSize" - FontAwesome icon size -- lg, sm, 1x, 2x, 3x, 4x
 ///////////////////////////////////////////////////////////////////////////////
 
 const MuiButton = ({
@@ -53,8 +56,6 @@ const MuiButton = ({
   const [activeColor, activeColorState] = useState({
     value: muiColorFeedback === null ? "secondary" : muiColorFeedback,
   });
-
-  const [useIcon, useIconState] = useState(false);
 
   const useStyles = makeStyles({
     button: {
@@ -217,7 +218,11 @@ const MuiButton = ({
                 p: "2.5px",
               }}
             >
-              <FontAwesomeIcon icon={faIcon} size={faSize} className={faClass} />
+              <FontAwesomeIcon
+                icon={faIcon}
+                size={faSize}
+                className={faClass}
+              />
             </Box>
           ) : undefined}
           {text === "" && dynamicText.value === "" ? undefined : (

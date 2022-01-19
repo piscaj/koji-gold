@@ -1,67 +1,25 @@
-import React, { useState } from "react";
-import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import MuiButton from "./MuiButton";
 import Button from "@mui/material/Button";
-import CameraPresets from "./CameraPresets";
-import Slide from "@mui/material/Slide";
-import {
-  faSearchPlus,
-  faSearchMinus,
-  faHome,
-  faLongArrowUp,
-  faLongArrowDown,
-  faLongArrowLeft,
-  faLongArrowRight,
-} from "@fortawesome/pro-duotone-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/pro-duotone-svg-icons";
 
-const CameraControls = ({
+const CameraPresets = ({
   websocketObject,
   feedbackObject,
   storedElements,
+  onMouseUp,
 }) => {
-  const useStyles = makeStyles({
-    button: {
-      textTransform: "none",
-      //add additional styling here if needed
-    },
-  });
-  const classes = useStyles();
-
-  const [showPreset, showPresetState] = useState(false);
-
-  const show = () => {
-    showPresetState((prevState) => (prevState === false ? true : false));
-  };
-
   return (
     <Box
       sx={{
-        position: "relative",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
         mt: "10px",
+        background: "white",
       }}
     >
-      <Slide direction="up" in={showPreset} mountOnEnter unmountOnExit>
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: "0px",
-            zIndex: 1,
-          }}
-        >
-          <CameraPresets
-            onMouseUp={() => {
-              show();
-            }}
-            websocketObject={websocketObject}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
-          />
-        </Box>
-      </Slide>
       <Box
         sx={{
           display: "flex",
@@ -77,8 +35,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            muiVariant="text"
+            text="Preset 1"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -96,10 +53,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            faIcon={faLongArrowUp}
-            faSize="4x"
-            muiVariant="text"
+            text="Preset 2"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -118,10 +72,7 @@ const CameraControls = ({
         >
           <Button
             variant="text"
-            className={classes.button}
-            onMouseUp={() => {
-              show();
-            }}
+            onMouseUp={onMouseUp}
             sx={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -129,7 +80,7 @@ const CameraControls = ({
               minHeight: "75px",
             }}
           >
-            Presets
+            <FontAwesomeIcon icon={faTimes} size="2x" />
           </Button>
         </Box>
       </Box>
@@ -148,10 +99,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            faIcon={faLongArrowLeft}
-            faSize="4x"
-            muiVariant="text"
+            text="Preset 3"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -169,10 +117,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            faIcon={faHome}
-            faSize="3x"
-            muiVariant="text"
+            text="Preset 4"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -190,10 +135,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            faIcon={faLongArrowRight}
-            faSize="4x"
-            muiVariant="text"
+            text="Preset 5"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -221,10 +163,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            faIcon={faSearchMinus}
-            faSize="2x"
-            muiVariant="text"
+            text="Preset 6"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -242,10 +181,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            faIcon={faLongArrowDown}
-            faSize="4x"
-            muiVariant="text"
+            text="Preset 7"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -263,10 +199,7 @@ const CameraControls = ({
           }}
         >
           <MuiButton
-            text=""
-            faIcon={faSearchPlus}
-            faSize="2x"
-            muiVariant="text"
+            text="Preset 8"
             addStyle={{
               maxWidth: "75px",
               maxHeight: "75px",
@@ -283,4 +216,4 @@ const CameraControls = ({
   );
 };
 
-export default CameraControls;
+export default CameraPresets;

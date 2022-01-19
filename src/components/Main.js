@@ -33,7 +33,7 @@ const Main = () => {
   const [fbObjects, fbObjectsState] = useState({ fb: null });
   const [wsStore, wsStoreState] = useState();
   const [loader, setLoader] = useState({ value: false });
-  const [mode, setMode] = React.useState("light");
+  const [mode, setMode] = useState("light");
   const menuLeft = useRef();
   var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
 
