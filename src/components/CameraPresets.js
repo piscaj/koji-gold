@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import MuiButton from "./MuiButton";
 import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/pro-duotone-svg-icons";
 
@@ -11,13 +12,13 @@ const CameraPresets = ({
   onMouseUp,
 }) => {
   return (
+    <Paper>
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
         mt: "10px",
-        background: "white",
       }}
     >
       <Box
@@ -213,6 +214,7 @@ const CameraPresets = ({
         </Box>
       </Box>
     </Box>
+    </Paper>
   );
 };
 

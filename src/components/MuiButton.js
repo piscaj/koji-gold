@@ -188,7 +188,7 @@ const MuiButton = ({
               }
             : undefined
         }
-        onTouchStart={
+        /* onTouchStart={
           handlerType.value === "press"
             ? () => {
                 sendMessage(digitalName + "=1\x0d\x0a");
@@ -201,7 +201,7 @@ const MuiButton = ({
                 sendMessage(digitalName + "=0\x0d\x0a");
               }
             : undefined
-        }
+        } */
       >
         <Box
           sx={{

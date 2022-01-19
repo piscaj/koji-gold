@@ -210,10 +210,10 @@ const Main = () => {
 
         <Routes>
           <Route
-            exact
+          exact
             path="/"
             element={
-              <Laptop
+              <RoomPc
                 websocketObject={ws}
                 feedbackObject={fbObjects}
                 storedElements={wsStore}
@@ -221,7 +221,7 @@ const Main = () => {
             }
           />
           <Route
-            exact
+            
             path="/roomPc"
             element={
               <RoomPc
@@ -232,7 +232,7 @@ const Main = () => {
             }
           />
           <Route
-            exact
+            
             path="/laptop"
             element={
               <Laptop
@@ -243,7 +243,7 @@ const Main = () => {
             }
           />
           <Route
-            exact
+            
             path="/camera"
             element={
               <Camera
@@ -254,7 +254,7 @@ const Main = () => {
             }
           />
           <Route
-            exact
+            
             path="/showcase"
             element={
               <ButtonShowcase
