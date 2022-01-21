@@ -99,6 +99,7 @@ const Main = () => {
       ws.close();
     };
   };
+  
   useEffect(() => {
     connect();
     return () => {
@@ -179,7 +180,7 @@ const Main = () => {
             </IconButton>
           </Box>
           <Box
-          className="logo"
+            className="logo"
             sx={{
               ml: "5px",
               mt: "8px",
@@ -210,7 +211,7 @@ const Main = () => {
 
         <Routes>
           <Route
-          exact
+            exact
             path="/"
             element={
               <RoomPc
@@ -221,7 +222,6 @@ const Main = () => {
             }
           />
           <Route
-            
             path="/roomPc"
             element={
               <RoomPc
@@ -232,7 +232,6 @@ const Main = () => {
             }
           />
           <Route
-            
             path="/laptop"
             element={
               <Laptop
@@ -243,7 +242,6 @@ const Main = () => {
             }
           />
           <Route
-            
             path="/camera"
             element={
               <Camera
@@ -254,7 +252,6 @@ const Main = () => {
             }
           />
           <Route
-            
             path="/showcase"
             element={
               <ButtonShowcase
