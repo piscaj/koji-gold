@@ -11,7 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLaptop,
   faWebcam,
-  faDesktop,faTheaterMasks
+  faDesktop,
+  faTheaterMasks,
 } from "@fortawesome/pro-duotone-svg-icons";
 import "./scss/MenuL.scss";
 
@@ -29,6 +30,16 @@ const MenuLeft = forwardRef((props, ref) => {
     },
   }));
 
+  // Send message to websocket
+  const sendMessage = (data) => {
+    try {
+      if (props.websocketObject.socket.OPEN) props.websocketObject.socket.send(data);
+    } catch (error) {
+      console.warn("Component MenuL had a websocketObject problem");
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Box onClick={() => setDrawerOpen(false)}>
@@ -42,7 +53,13 @@ const MenuLeft = forwardRef((props, ref) => {
         >
           <Box sx={{ width: "250px" }} onClick={() => setDrawerOpen(false)}>
             <List>
-              <Link to="/roompc" className="text-link">
+              <Link
+                to="/roompc"
+                className="text-link"
+                onClick={() => {
+                  sendMessage("digital=25\x0d\x0a");
+                }}
+              >
                 <ListItem button>
                   <ListItemIcon>
                     <FontAwesomeIcon icon={faDesktop} size="2x" />
@@ -56,7 +73,13 @@ const MenuLeft = forwardRef((props, ref) => {
               </Link>
             </List>
             <List>
-              <Link to="/laptop" className="text-link">
+              <Link
+                to="/laptop"
+                className="text-link"
+                onClick={() => {
+                  sendMessage("digital=26\x0d\x0a");
+                }}
+              >
                 <ListItem button>
                   <ListItemIcon>
                     <FontAwesomeIcon icon={faLaptop} size="2x" />
@@ -70,7 +93,13 @@ const MenuLeft = forwardRef((props, ref) => {
               </Link>
             </List>
             <List>
-              <Link to="/camera" className="text-link">
+              <Link
+                to="/camera"
+                className="text-link"
+                onClick={() => {
+                  sendMessage("digital=27\x0d\x0a");
+                }}
+              >
                 <ListItem button>
                   <ListItemIcon>
                     <FontAwesomeIcon icon={faWebcam} size="2x" />
@@ -84,16 +113,19 @@ const MenuLeft = forwardRef((props, ref) => {
               </Link>
             </List>
             <List>
-              <Link to="/showcase" className="text-link">
+              <Link
+                to="/showcase"
+                className="text-link"
+                onClick={() => {
+                  sendMessage("digital=28\x0d\x0a");
+                }}
+              >
                 <ListItem button>
                   <ListItemIcon>
                     <FontAwesomeIcon icon={faTheaterMasks} size="2x" />
                   </ListItemIcon>
 
-                  <ListItemText
-                    primary="Showcase"
-                    secondary="MUI Components"
-                  />
+                  <ListItemText primary="Showcase" secondary="MUI Components" />
                 </ListItem>
               </Link>
             </List>

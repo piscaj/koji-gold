@@ -153,7 +153,7 @@ const Main = () => {
             <Box sx={{ p: "5px" }}>Updating</Box>
           </Box>
         </Backdrop>
-        <MenuLeft ref={menuLeft} />
+        <MenuLeft websocketObject={ws} ref={menuLeft} />
         <Box
           sx={{
             display: "flex",
