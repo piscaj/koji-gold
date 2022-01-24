@@ -33,7 +33,8 @@ const MenuLeft = forwardRef((props, ref) => {
   // Send message to websocket
   const sendMessage = (data) => {
     try {
-      if (props.websocketObject.socket.OPEN) props.websocketObject.socket.send(data);
+      if (props.websocketObject.socket.OPEN)
+        props.websocketObject.socket.send(data);
     } catch (error) {
       console.warn("Component MenuL had a websocketObject problem");
       console.log(error);
@@ -57,7 +58,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 to="/roompc"
                 className="text-link"
                 onClick={() => {
-                  sendMessage("digital=25\x0d\x0a");
+                  sendMessage("digital=1\x0d\x0a");
                 }}
               >
                 <ListItem button>
@@ -77,7 +78,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 to="/laptop"
                 className="text-link"
                 onClick={() => {
-                  sendMessage("digital=26\x0d\x0a");
+                  sendMessage("digital=2\x0d\x0a");
                 }}
               >
                 <ListItem button>
@@ -97,7 +98,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 to="/camera"
                 className="text-link"
                 onClick={() => {
-                  sendMessage("digital=27\x0d\x0a");
+                  sendMessage("digital=3\x0d\x0a");
                 }}
               >
                 <ListItem button>
@@ -117,7 +118,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 to="/showcase"
                 className="text-link"
                 onClick={() => {
-                  sendMessage("digital=28\x0d\x0a");
+                  sendMessage("digital=4\x0d\x0a");
                 }}
               >
                 <ListItem button>

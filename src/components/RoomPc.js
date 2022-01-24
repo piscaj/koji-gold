@@ -33,7 +33,7 @@ const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
               <RoomPcStatus
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
-                syncStatusName="sync_room_pc"
+                syncStatusName="sync-room-pc"
               />
             </Box>
           </Box>

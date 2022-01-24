@@ -106,6 +106,8 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
+            eventType={"press"}
+            digitalName="camera-up"
             websocketObject={websocketObject}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
@@ -158,6 +160,8 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
+            eventType={"press"}
+            digitalName="camera-left"
             websocketObject={websocketObject}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
@@ -179,6 +183,8 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
+            eventType={"press"}
+            digitalName="camera-home"
             websocketObject={websocketObject}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
@@ -200,6 +206,8 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
+            eventType={"press"}
+            digitalName="camera-right"
             websocketObject={websocketObject}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
@@ -231,6 +239,8 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
+            eventType={"press"}
+            digitalName="camera-zoom-minus"
             websocketObject={websocketObject}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
@@ -252,6 +262,8 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
+            eventType={"press"}
+            digitalName="camera-down"
             websocketObject={websocketObject}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
@@ -273,6 +285,8 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
+            eventType={"press"}
+            digitalName="camera-zoom-plus"
             websocketObject={websocketObject}
             feedbackObject={feedbackObject}
             storedElements={storedElements}

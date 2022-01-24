@@ -39,8 +39,20 @@ const Main = () => {
 
   const connect = () => {
     var ws = new WebSocket("wss://192.168.2.29:1851");
+    
+    //Uncomment for Docker testing of webSocket
+    //var ws = new WebSocket("ws://192.168.2.209:10000");
 
     wsState({ socket: ws });
+
+    const sendMessage = (data) => {
+      try {
+        ws.send(data);
+      } catch (error) {
+        console.warn("Main component websocket problem");
+        console.log(error);
+      }
+    };
 
     ws.onopen = () => {
       sendMessage("get_json=all\x0d\x0a");
@@ -53,6 +65,7 @@ const Main = () => {
         sendMessage("ACK\x0d\x0a");
         console.log("Heartbeat sent");
         wsStoreState(wsStoredElements);
+        //console.log(ws.url);
         setLoader({ value: false });
       } else {
         fbObjectsState({ fb: JSON.parse(event.data) });
@@ -71,15 +84,6 @@ const Main = () => {
           wsStoredElements.push(JSON.parse(event.data).fb_objects[0]);
           if (!setLoader.value) wsStoreState(wsStoredElements);
         }
-      }
-    };
-
-    const sendMessage = (data) => {
-      try {
-        ws.send(data);
-      } catch (error) {
-        console.warn("Main component websocket problem");
-        console.log(error);
       }
     };
 
@@ -105,6 +109,7 @@ const Main = () => {
     return () => {
       console.warn("App exiting");
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const colorMode = React.useMemo(
