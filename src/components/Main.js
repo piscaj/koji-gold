@@ -38,76 +38,73 @@ const Main = () => {
   const menuLeft = useRef();
   var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
 
-  const connect = () => {
-    var ws = new WebSocket("wss://192.168.2.29:1851");
-
-    //Uncomment for Docker testing of webSocket
-    //var ws = new WebSocket("ws://192.168.2.209:10000");
-
-    wsState({ socket: ws });
-
-    const sendMessage = (data) => {
-      try {
-        ws.send(data);
-      } catch (error) {
-        console.warn("Main component websocket problem");
-        console.log(error);
-      }
-    };
-
-    ws.onopen = () => {
-      sendMessage("get_json=all\x0d\x0a");
-      console.log("Requsting update from processor");
-      setLoader({ value: true });
-    };
-
-    ws.onmessage = (event) => {
-      if (event.data === "HB") {
-        sendMessage("ACK\x0d\x0a");
-        console.log("Heartbeat sent");
-        wsStoreState(wsStoredElements);
-        //console.log(ws.url);
-        setLoader({ value: false });
-      } else {
-        fbObjectsState({ fb: JSON.parse(event.data) });
-        var newObject = JSON.parse(event.data).fb_objects[0];
-        // Check incomming ws json stream elements against the stored elements
-        var foundIndex = wsStoredElements.findIndex(
-          (x) => x.id === newObject.id
-        );
-        // If we have a matching element value at id, overwrite it
-        if (foundIndex >= 0) {
-          wsStoredElements[foundIndex].value = newObject.value;
-          if (!setLoader.value) wsStoreState(wsStoredElements);
-        }
-        // If we don't have a match lets push the element into the array
-        else {
-          wsStoredElements.push(JSON.parse(event.data).fb_objects[0]);
-          if (!setLoader.value) wsStoreState(wsStoredElements);
-        }
-      }
-    };
-
-    ws.onclose = () => {
-      //Try a reconnect in 3 seconds
-      setTimeout(() => check(), 3000);
-    };
-
-    const check = () => {
-      if (!ws.socket || ws.socket.readyState === WebSocket.CLOSED) {
-        connect();
-      }
-    };
-
-    ws.onerror = (err) => {
-      console.warn("Socket error: ", err.message, "Closing socket");
-      ws.close();
-    };
-  };
-
   useEffect(() => {
+    const connect = () => {
+      var ws = new WebSocket("wss://192.168.2.29:1851");
+      console.warn("New socket created");
+      wsState({ socket: ws });
+
+      const sendMessage = (data) => {
+        try {
+          ws.send(data);
+        } catch (error) {
+          console.warn("Main component websocket problem");
+          console.log(error);
+        }
+      };
+
+      ws.onopen = () => {
+        sendMessage("get_json=all\x0d\x0a");
+        console.log("Requsting update from processor");
+        setLoader({ value: true });
+      };
+
+      ws.onmessage = (event) => {
+        if (event.data === "HB") {
+          sendMessage("ACK\x0d\x0a");
+          console.log("Heartbeat sent");
+          wsStoreState(wsStoredElements);
+          //console.log(ws.url);
+          setLoader({ value: false });
+        } else {
+          fbObjectsState({ fb: JSON.parse(event.data) });
+          var newObject = JSON.parse(event.data).fb_objects[0];
+          // Check incomming ws json stream elements against the stored elements
+          var foundIndex = wsStoredElements.findIndex(
+            (x) => x.id === newObject.id
+          );
+          // If we have a matching element value at id, overwrite it
+          if (foundIndex >= 0) {
+            wsStoredElements[foundIndex].value = newObject.value;
+            if (!setLoader.value) wsStoreState(wsStoredElements);
+          }
+          // If we don't have a match lets push the element into the array
+          else {
+            wsStoredElements.push(JSON.parse(event.data).fb_objects[0]);
+            if (!setLoader.value) wsStoreState(wsStoredElements);
+          }
+        }
+      };
+      ws.onclose = () => {
+        //Try a reconnect in 3 seconds
+        setTimeout(() => check(), 3000);
+      };
+
+      const check = () => {
+        if (!ws || ws.readyState === WebSocket.CLOSED) {
+          connect();
+        }
+      };
+
+      ws.onerror = (err) => {
+        console.warn("Socket error: ", err.message, "Closing socket");
+        ws.close();
+      };
+    };
     connect();
     return () => {
+      ws.close();
+      console.warn("Socket clased");
       console.warn("App exiting");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
