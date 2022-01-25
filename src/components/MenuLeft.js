@@ -54,81 +54,66 @@ const MenuLeft = forwardRef((props, ref) => {
         >
           <Box sx={{ width: "250px" }} onClick={() => setDrawerOpen(false)}>
             <List>
-              <Link
-                to="/roompc"
-                className="text-link"
+              <ListItem
+                button
                 onClick={() => {
                   sendMessage("digital=1\x0d\x0a");
                 }}
               >
-                <ListItem button>
-                  <ListItemIcon>
-                    <FontAwesomeIcon icon={faDesktop} size="2x" />
-                  </ListItemIcon>
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faDesktop} size="2x" />
+                </ListItemIcon>
 
-                  <ListItemText
-                    primary="Room PC"
-                    secondary="for ZOOM conference"
-                  />
-                </ListItem>
-              </Link>
+                <ListItemText
+                  primary="Room PC"
+                  secondary="for ZOOM conference"
+                />
+              </ListItem>
             </List>
             <List>
-              <Link
-                to="/laptop"
-                className="text-link"
+              <ListItem
+                button
                 onClick={() => {
                   sendMessage("digital=2\x0d\x0a");
                 }}
               >
-                <ListItem button>
-                  <ListItemIcon>
-                    <FontAwesomeIcon icon={faLaptop} size="2x" />
-                  </ListItemIcon>
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faLaptop} size="2x" />
+                </ListItemIcon>
 
-                  <ListItemText
-                    primary="Laptop"
-                    secondary="& portable deveices"
-                  />
-                </ListItem>
-              </Link>
+                <ListItemText
+                  primary="Laptop"
+                  secondary="& portable deveices"
+                />
+              </ListItem>
             </List>
             <List>
-              <Link
-                to="/camera"
-                className="text-link"
+              <ListItem
+                button
                 onClick={() => {
                   sendMessage("digital=3\x0d\x0a");
                 }}
               >
-                <ListItem button>
-                  <ListItemIcon>
-                    <FontAwesomeIcon icon={faWebcam} size="2x" />
-                  </ListItemIcon>
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faWebcam} size="2x" />
+                </ListItemIcon>
 
-                  <ListItemText
-                    primary="Camera Controls"
-                    secondary="& presets"
-                  />
-                </ListItem>
-              </Link>
+                <ListItemText primary="Camera Controls" secondary="& presets" />
+              </ListItem>
             </List>
             <List>
-              <Link
-                to="/showcase"
-                className="text-link"
+              <ListItem
+                button
                 onClick={() => {
                   sendMessage("digital=4\x0d\x0a");
                 }}
               >
-                <ListItem button>
-                  <ListItemIcon>
-                    <FontAwesomeIcon icon={faTheaterMasks} size="2x" />
-                  </ListItemIcon>
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faTheaterMasks} size="2x" />
+                </ListItemIcon>
 
-                  <ListItemText primary="Showcase" secondary="MUI Components" />
-                </ListItem>
-              </Link>
+                <ListItemText primary="Showcase" secondary="MUI Components" />
+              </ListItem>
             </List>
             <Divider />
           </Box>

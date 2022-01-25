@@ -27,6 +27,7 @@ import {
 import MediaVolume from "./MediaVolume";
 import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
+import Linker from "./Linker";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -39,7 +40,7 @@ const Main = () => {
 
   const connect = () => {
     var ws = new WebSocket("wss://192.168.2.29:1851");
-    
+
     //Uncomment for Docker testing of webSocket
     //var ws = new WebSocket("ws://192.168.2.209:10000");
 
@@ -103,13 +104,13 @@ const Main = () => {
       ws.close();
     };
   };
-  
+
   useEffect(() => {
     connect();
     return () => {
       console.warn("App exiting");
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const colorMode = React.useMemo(
@@ -267,7 +268,30 @@ const Main = () => {
             }
           />
         </Routes>
-
+        <Linker
+          link="/roomPc"
+          digitalName="menu-1"
+          feedbackObject={fbObjects}
+          storedElements={wsStore}
+        />
+        <Linker
+          link="/laptop"
+          digitalName="menu-2"
+          feedbackObject={fbObjects}
+          storedElements={wsStore}
+        />
+        <Linker
+          link="/camera"
+          digitalName="menu-3"
+          feedbackObject={fbObjects}
+          storedElements={wsStore}
+        />
+        <Linker
+          link="/showcase"
+          digitalName="menu-4"
+          feedbackObject={fbObjects}
+          storedElements={wsStore}
+        />
         <Box
           sx={{
             display: "flex",

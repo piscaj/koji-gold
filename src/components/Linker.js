@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
@@ -8,8 +8,8 @@ import { useHistory } from "react-router";
 // "storedElements" - Array of fb_objects current values
 ///////////////////////////////////////////////////////////////////////////////
 
-const Linker = ({ digitalName, link, feedbackObject, storedElements }) => {
-  const history = useHistory();
+const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
+  const navigate = useNavigate();
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
@@ -18,13 +18,14 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements }) => {
         feedbackObject.fb.fb_objects[0].type === "bool" &&
         feedbackObject.fb.fb_objects[0].id === digitalName
       ) {
-        history.push({ link });
+        if (feedbackObject.fb.fb_objects[0].value === "1")
+        navigate(link);
       }
     } catch {
       console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [feedbackObject.fb, digitalName, link, history]);
+  }, [feedbackObject.fb, digitalName, link, navigate]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
@@ -37,12 +38,13 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements }) => {
         storedElements[foundIndexDigital].type === "bool" &&
         storedElements[foundIndexDigital].id === digitalName
       ) {
-        history.push({ link });
+        if(storedElements[foundIndexDigital].value === "1")
+        navigate(link);
       }
     }
-  }, [storedElements, digitalName, link, history]);
+  }, [storedElements, digitalName, link, navigate]);
 
-  return undefined;
+  return <></>;
 };
 
 export default Linker;
