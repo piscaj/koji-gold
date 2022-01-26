@@ -39,8 +39,9 @@ const Main = () => {
   var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
 
   useEffect(() => {
+    setLoader({ value: true });
     const connect = () => {
-      var ws = new WebSocket("wss://192.168.2.29:1851");
+      var ws = new WebSocket("wss://192.168.2.29:49797");
       console.warn("New socket created");
       wsState({ socket: ws });
 
@@ -64,7 +65,6 @@ const Main = () => {
           sendMessage("ACK\x0d\x0a");
           console.log("Heartbeat sent");
           wsStoreState(wsStoredElements);
-          //console.log(ws.url);
           setLoader({ value: false });
         } else {
           fbObjectsState({ fb: JSON.parse(event.data) });

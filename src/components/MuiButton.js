@@ -161,81 +161,105 @@ const MuiButton = ({
 
   return (
     <div>
-      <Button
-        id={digitalName}
-        variant={variantType.value}
-        color={style.value}
-        style={styleType.value}
-        className={classes.button}
-        onClick={
-          handlerType.value === "click"
-            ? () => {
-                sendMessage("digital=" + joinNumber + "\x0d\x0a");
-              }
-            : undefined
-        }
-        onMouseDown={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=1\x0d\x0a");
-              }
-            : undefined
-        }
-        onMouseUp={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=0\x0d\x0a");
-              }
-            : undefined
-        }
-        /* onTouchStart={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=1\x0d\x0a");
-              }
-            : undefined
-        }
-        onTouchEnd={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=0\x0d\x0a");
-              }
-            : undefined
-        } */
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            flexWrap: "nowrap",
-            alignItems: "center",
-            overflow: "hidden",
+      {handlerType.value === "click" ? (
+        <Button
+          id={digitalName}
+          variant={variantType.value}
+          color={style.value}
+          style={styleType.value}
+          className={classes.button}
+          onClick={() => {
+            sendMessage("digital=" + joinNumber + "\x0d\x0a");
           }}
         >
-          {faIcon ? (
-            <Box
-              sx={{
-                p: "2.5px",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faIcon}
-                size={faSize}
-                className={faClass}
-              />
-            </Box>
-          ) : undefined}
-          {text === "" && dynamicText.value === "" ? undefined : (
-            <Box
-              sx={{
-                p: "2.5px",
-              }}
-            >
-              {dynamicText.value === "" ? text : dynamicText.value}
-            </Box>
-          )}
-        </Box>
-      </Button>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexWrap: "nowrap",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+          >
+            {faIcon ? (
+              <Box
+                sx={{
+                  p: "2.5px",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faIcon}
+                  size={faSize}
+                  className={faClass}
+                />
+              </Box>
+            ) : undefined}
+            {text === "" && dynamicText.value === "" ? undefined : (
+              <Box
+                sx={{
+                  p: "2.5px",
+                }}
+              >
+                {dynamicText.value === "" ? text : dynamicText.value}
+              </Box>
+            )}
+          </Box>
+        </Button>
+      ) : undefined}
+      {handlerType.value === "press" ? (
+        <Button
+          id={digitalName}
+          variant={variantType.value}
+          color={style.value}
+          style={styleType.value}
+          className={classes.button}
+          onMouseDown={() => {
+            sendMessage(digitalName + "=1\x0d\x0a");
+          }}
+          onMouseUp={() => {
+            sendMessage(digitalName + "=0\x0d\x0a");
+          }}
+          onTouchStart={() => {
+            sendMessage(digitalName + "=1\x0d\x0a");
+          }}
+          onTouchEnd={() => {
+            sendMessage(digitalName + "=0\x0d\x0a");
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexWrap: "nowrap",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+          >
+            {faIcon ? (
+              <Box
+                sx={{
+                  p: "2.5px",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faIcon}
+                  size={faSize}
+                  className={faClass}
+                />
+              </Box>
+            ) : undefined}
+            {text === "" && dynamicText.value === "" ? undefined : (
+              <Box
+                sx={{
+                  p: "2.5px",
+                }}
+              >
+                {dynamicText.value === "" ? text : dynamicText.value}
+              </Box>
+            )}
+          </Box>
+        </Button>
+      ) : undefined}
     </div>
   );
 };

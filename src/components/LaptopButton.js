@@ -192,93 +192,129 @@ const LaptopButton = ({
 
   return (
     <div>
-      <Button
-        id={digitalName}
-        variant={variantType.value}
-        color={style.value}
-        style={styleType.value}
-        className={classes.button}
-        onClick={
-          handlerType.value === "click"
-            ? () => {
-                sendMessage("digital=" + joinNumber + "\x0d\x0a");
-              }
-            : undefined
-        }
-        onMouseDown={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=1\x0d\x0a");
-              }
-            : undefined
-        }
-        onMouseUp={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=0\x0d\x0a");
-              }
-            : undefined
-        }
-        /* onTouchStart={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=1\x0d\x0a");
-              }
-            : undefined
-        }
-        onTouchEnd={
-          handlerType.value === "press"
-            ? () => {
-                sendMessage(digitalName + "=0\x0d\x0a");
-              }
-            : undefined
-        } */
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            flexWrap: "nowrap",
-            alignItems: "center",
-            overflow: "hidden",
+      {handlerType.value === "click" ? (
+        <Button
+          id={digitalName}
+          variant={variantType.value}
+          color={style.value}
+          style={styleType.value}
+          className={classes.button}
+          onClick={() => {
+            sendMessage("digital=" + joinNumber + "\x0d\x0a");
           }}
         >
           <Box
             sx={{
-              p: "2.5px",
+              display: "flex",
+              flexDirection: "column",
+              flexWrap: "nowrap",
+              alignItems: "center",
+              overflow: "hidden",
             }}
           >
-            {sync.value === true ? (
-              <FontAwesomeIcon icon={faLaptop} size="4x" />
-            ) : (
-              <i className="fa-stack fa-2x">
-                <FontAwesomeIcon icon={faLaptop} className="fa-stack-1x" />
-                <FontAwesomeIcon
-                  icon={faBan}
-                  style={{ color: "Tomato" }}
-                  className="fa-stack-2x"
-                />
-              </i>
-            )}
-          </Box>
-          <Box
-            sx={{
-              p: "2.5px",
-            }}
-          >
-            {dynamicText.value === "" ? text : dynamicText.value}
-          </Box>
-          {sync.value === false ? (
             <Box
               sx={{
-                fontSize: "10px",
+                p: "2.5px",
               }}
             >
-              ( Device undetected )
+              {sync.value === true ? (
+                <FontAwesomeIcon icon={faLaptop} size="4x" />
+              ) : (
+                <i className="fa-stack fa-2x">
+                  <FontAwesomeIcon icon={faLaptop} className="fa-stack-1x" />
+                  <FontAwesomeIcon
+                    icon={faBan}
+                    style={{ color: "Tomato" }}
+                    className="fa-stack-2x"
+                  />
+                </i>
+              )}
             </Box>
-          ) : undefined}
-        </Box>
-      </Button>
+            <Box
+              sx={{
+                p: "2.5px",
+              }}
+            >
+              {dynamicText.value === "" ? text : dynamicText.value}
+            </Box>
+            {sync.value === false ? (
+              <Box
+                sx={{
+                  fontSize: "10px",
+                }}
+              >
+                ( Device undetected )
+              </Box>
+            ) : undefined}
+          </Box>
+        </Button>
+      ) : undefined}
+      {handlerType.value === "press" ? (
+        <Button
+          id={digitalName}
+          variant={variantType.value}
+          color={style.value}
+          style={styleType.value}
+          className={classes.button}
+          onMouseDown={() => {
+            sendMessage(digitalName + "=1\x0d\x0a");
+          }}
+          onMouseUp={() => {
+            sendMessage(digitalName + "=0\x0d\x0a");
+          }}
+          onTouchStart={() => {
+            sendMessage(digitalName + "=1\x0d\x0a");
+          }}
+          onTouchEnd={() => {
+            sendMessage(digitalName + "=0\x0d\x0a");
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flexWrap: "nowrap",
+              alignItems: "center",
+              overflow: "hidden",
+            }}
+          >
+            <Box
+              sx={{
+                p: "2.5px",
+              }}
+            >
+              {sync.value === true ? (
+                <FontAwesomeIcon icon={faLaptop} size="4x" />
+              ) : (
+                <i className="fa-stack fa-2x">
+                  <FontAwesomeIcon icon={faLaptop} className="fa-stack-1x" />
+                  <FontAwesomeIcon
+                    icon={faBan}
+                    style={{ color: "Tomato" }}
+                    className="fa-stack-2x"
+                  />
+                </i>
+              )}
+            </Box>
+            <Box
+              sx={{
+                p: "2.5px",
+              }}
+            >
+              {dynamicText.value === "" ? text : dynamicText.value}
+            </Box>
+            {sync.value === false ? (
+              <Box
+                sx={{
+                  fontSize: "10px",
+                }}
+              >
+                ( Device undetected )
+              </Box>
+            ) : undefined}
+          </Box>
+        </Button>
+      ) : undefined}
     </div>
   );
 };

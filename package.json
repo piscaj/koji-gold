@@ -2,7 +2,6 @@
   "name": "koji-gold",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://192.168.2.29/WSDemo/",
   "dependencies": {
     "@crestron/ch5-utilities-cli": "^0.1.52",
     "@emotion/react": "^11.7.1",
