@@ -1,8 +1,8 @@
-.burger-menu:hover .icon-bars,
+.burger-menu:active .icon-bars,
 .burger-menu .icon-burger {
   display: none;
 }
-.burger-menu:hover .icon-burger {
+.burger-menu:active .icon-burger {
   display: inline;
 }
 

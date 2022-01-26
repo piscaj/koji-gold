@@ -57,7 +57,6 @@ const Main = () => {
       ws.onopen = () => {
         sendMessage("get_json=all\x0d\x0a");
         console.log("Requsting update from processor");
-        setLoader({ value: true });
       };
 
       ws.onmessage = (event) => {
@@ -86,8 +85,8 @@ const Main = () => {
         }
       };
       ws.onclose = () => {
-        //Try a reconnect in 3 seconds
-        setTimeout(() => check(), 3000);
+        //Try a reconnect in 1 seconds
+        setTimeout(() => check(), 1000);
       };
 
       const check = () => {
