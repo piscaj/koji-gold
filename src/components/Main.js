@@ -11,6 +11,9 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import AlertTitle from '@mui/material/AlertTitle';
+import Slide from "@mui/material/Slide";
 import MenuLeft from "./MenuLeft";
 import ButtonShowcase from "./ButtonShowcase";
 import Laptop from "./Laptop";
@@ -34,9 +37,19 @@ const Main = () => {
   const [fbObjects, fbObjectsState] = useState({ fb: null });
   const [wsStore, wsStoreState] = useState();
   const [loader, setLoader] = useState({ value: false });
+  const [alertMessage, setAlertMessage] = useState({
+    active: false,
+    severity: "",
+    title:"",
+    message: "",
+  });
   const [mode, setMode] = useState("light");
   const menuLeft = useRef();
   var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
+
+  const clearAlert = () =>{
+    alertMessage.active === true ? setAlertMessage({active: false}) : setAlertMessage({active: true})
+  }
 
   useEffect(() => {
     setLoader({ value: true });
@@ -55,6 +68,13 @@ const Main = () => {
       };
 
       ws.onopen = () => {
+        setAlertMessage({
+          active: true,
+          severity: "success",
+          title:"Sweet!",
+          message: "I'm connected to " + ws.url,
+        });
+        //setAlertMessage({ active: false, severity: "", message: "" });
         sendMessage("get_json=all\x0d\x0a");
         console.log("Requsting update from processor");
       };
@@ -65,6 +85,7 @@ const Main = () => {
           console.log("Heartbeat sent");
           wsStoreState(wsStoredElements);
           setLoader({ value: false });
+          setAlertMessage({ active: false });
         } else {
           fbObjectsState({ fb: JSON.parse(event.data) });
           var newObject = JSON.parse(event.data).fb_objects[0];
@@ -85,6 +106,12 @@ const Main = () => {
         }
       };
       ws.onclose = () => {
+        setAlertMessage({
+          active: true,
+          severity: "warning",
+          title: "Ooops!",
+          message: "Attempting to reconnect.",
+        });
         //Try a reconnect in 1 seconds
         setTimeout(() => check(), 1000);
       };
@@ -102,7 +129,7 @@ const Main = () => {
     };
     connect();
     return () => {
-      ws.close();
+      ws.socket.close(1000, "Application closed");
       console.warn("Socket clased");
       console.warn("App exiting");
     };
@@ -159,58 +186,82 @@ const Main = () => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            overflow: "hidden",
+            flexDirection: "column",
           }}
+          className="header"
         >
+          <Slide
+            direction="down"
+            in={alertMessage.active}
+            mountOnEnter
+            unmountOnExit
+          >
+            <Box className="alert" onClick={() => {clearAlert()}}>
+              <Alert severity={alertMessage.severity}>
+              <AlertTitle> {alertMessage.title}</AlertTitle>
+                {alertMessage.message}
+              </Alert>
+            </Box>
+          </Slide>
           <Box
             sx={{
-              width: "45px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              overflow: "hidden",
             }}
           >
-            <IconButton
-              className="burger-menu"
-              onClick={() => menuLeft.current.toggleDrawer()}
+            <Box
+              sx={{
+                width: "45px",
+              }}
             >
-              <FontAwesomeIcon icon={faBars} size="lg" className="icon-bars" />
-              <FontAwesomeIcon
-                icon={faCheeseburger}
-                size="lg"
-                className="icon-burger"
-              />
-            </IconButton>
-          </Box>
-          <Box
-            className="logo"
-            sx={{
-              ml: "5px",
-              mt: "8px",
-            }}
-          >
-            {theme.palette.mode === "dark" ? (
-              <img src={logoDark} alt="" />
-            ) : (
-              <img src={logoLight} alt="" />
-            )}
-          </Box>
-
-          <Box sx={{ ml: "auto", fontSize: "12px" }}>
-            {theme.palette.mode} mode
-            <IconButton
-              sx={{ mb: "5px", mt: "5px" }}
-              onClick={colorMode.toggleColorMode}
-              color="inherit"
+              <IconButton
+                className="burger-menu"
+                onClick={() => menuLeft.current.toggleDrawer()}
+              >
+                <FontAwesomeIcon
+                  icon={faBars}
+                  size="lg"
+                  className="icon-bars"
+                />
+                <FontAwesomeIcon
+                  icon={faCheeseburger}
+                  size="lg"
+                  className="icon-burger"
+                />
+              </IconButton>
+            </Box>
+            <Box
+              className="logo"
+              sx={{
+                ml: "5px",
+                mt: "8px",
+              }}
             >
               {theme.palette.mode === "dark" ? (
-                <FontAwesomeIcon icon={faMoon} size="lg" />
+                <img src={logoDark} alt="" />
               ) : (
-                <FontAwesomeIcon icon={faSun} size="lg" />
+                <img src={logoLight} alt="" />
               )}
-            </IconButton>
+            </Box>
+
+            <Box sx={{ ml: "auto", fontSize: "12px" }}>
+              {theme.palette.mode} mode
+              <IconButton
+                sx={{ mb: "5px", mt: "5px" }}
+                onClick={colorMode.toggleColorMode}
+                color="inherit"
+              >
+                {theme.palette.mode === "dark" ? (
+                  <FontAwesomeIcon icon={faMoon} size="lg" />
+                ) : (
+                  <FontAwesomeIcon icon={faSun} size="lg" />
+                )}
+              </IconButton>
+            </Box>
           </Box>
         </Box>
-
         <Routes>
           <Route
             exact
