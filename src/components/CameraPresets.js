@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import MuiButton from "./MuiButton";
 import Button from "@mui/material/Button";
@@ -232,6 +233,11 @@ const CameraPresets = ({
       </Box>
     </Paper>
   );
+};
+CameraPresets.propTypes = {
+  websocketObject: PropTypes.object,
+  feedbackObject: PropTypes.object,
+  storedElements: PropTypes.array,
 };
 
 export default CameraPresets;

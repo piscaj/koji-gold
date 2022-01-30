@@ -12,6 +12,7 @@ import {
   faWebcam,
   faDesktop,
   faTheaterMasks,
+  faExchangeAlt,
 } from "@fortawesome/pro-duotone-svg-icons";
 import "./scss/MenuL.scss";
 
@@ -98,6 +99,20 @@ const MenuLeft = forwardRef((props, ref) => {
                 </ListItemIcon>
 
                 <ListItemText primary="Camera Controls" secondary="& presets" />
+              </ListItem>
+            </List>
+            <List>
+              <ListItem
+                button
+                onClick={() => {
+                  sendMessage("digital=5\x0d\x0a");
+                }}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faExchangeAlt} size="2x" />
+                </ListItemIcon>
+
+                <ListItemText primary="Video Switching" secondary="Advanced source routing" />
               </ListItem>
             </List>
             <List>

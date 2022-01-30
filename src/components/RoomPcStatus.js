@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {  faDesktop, faBan } from "@fortawesome/pro-duotone-svg-icons";
+import { faDesktop, faBan } from "@fortawesome/pro-duotone-svg-icons";
 
 // Props definition for component /////////////////////////////////////////////
 // "websocketObject" - Pass the websocket as an object here
@@ -90,37 +90,42 @@ const RoomPcStatus = ({
           sx={{
             p: "2.5px",
           }}
-        >
-        </Box>
+        ></Box>
         {sync.value === false ? (
-          <><Box
-            sx={{
-              fontSize: "18px",
-            }}
-          >
-            Device undetected
-          </Box><Box
-            sx={{
-              fontSize: "10px",
-            }}
-          >
+          <>
+            <Box
+              sx={{
+                fontSize: "18px",
+              }}
+            >
+              Device undetected
+            </Box>
+            <Box
+              sx={{
+                fontSize: "10px",
+              }}
+            >
               The Room PC could be in standby or powered off
-            </Box></>
-        ) : 
-        <><Box
-            sx={{
-              fontSize: "18px",
-            }}
-          >
-            Presentation and ZOOM
-          </Box><Box
-            sx={{
-              fontSize: "10px",
-            }}
-          >
+            </Box>
+          </>
+        ) : (
+          <>
+            <Box
+              sx={{
+                fontSize: "18px",
+              }}
+            >
+              Presentation and ZOOM
+            </Box>
+            <Box
+              sx={{
+                fontSize: "10px",
+              }}
+            >
               Wireless mouse and keyboard at table
-            </Box></>
-        }
+            </Box>
+          </>
+        )}
       </Box>
     </div>
   );

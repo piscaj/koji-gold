@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Button from "@mui/material/Button";
-import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
+import Zoom from "@mui/material/Zoom";
+import { makeStyles } from "@mui/styles";
+import Chip from "@mui/material/Chip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLaptop, faBan } from "@fortawesome/pro-duotone-svg-icons";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -18,23 +19,29 @@ import { faLaptop, faBan } from "@fortawesome/pro-duotone-svg-icons";
 // "websocketObject" - Pass the websocket as an object here
 // "feedbackObject" - Pass the data from the websocket here
 // "storedElements" - Array of fb_objects current values
-// "syncStatusName" - This name should match up to the Crestron digital name paramiter
+// "faIcon" - FontAwesome icon -- any imported icon
+// "faClass" - FontAwesome class -- any fa class
+// "faSize" - FontAwesome icon size -- lg, sm, 1x, 2x, 3x, 4x
 ///////////////////////////////////////////////////////////////////////////////
 
-const LaptopButton = ({
+const DestinationButton = ({
   text,
   muiColor = null,
   muiColorFeedback = null,
   muiVariant = null,
   addStyle = {},
-  digitalName,
+  faIcon,
+  faClass,
+  faSize,
+  digitalName = null,
   joinNumber,
+  joinNumberDelete,
   serialName = null,
+  inputName = null,
   eventType = null,
   websocketObject,
   feedbackObject,
   storedElements = [],
-  syncStatusName = null,
 }) => {
   const [style, styleState] = useState({ value: "primary" });
   const [handlerType, handlerTypeState] = useState({
@@ -47,21 +54,32 @@ const LaptopButton = ({
     value: addStyle === {} ? {} : addStyle,
   });
   const [dynamicText, dynamicTextState] = useState({ value: "" });
+  const [inputText, inputTextState] = useState({ value: "ABCDEFGHIJK" });
   const [inActiveColor, inActiveColorState] = useState({
     value: muiColor === null ? "primary" : muiColor,
   });
   const [activeColor, activeColorState] = useState({
     value: muiColorFeedback === null ? "secondary" : muiColorFeedback,
   });
-  const [sync, syncState] = useState({ value: false });
 
   const useStyles = makeStyles({
     button: {
       textTransform: "none",
+      lineHeight: "15px",
       //add additional styling here if needed
+    },
+    chip: {
+      textTransform: "none",
+      lineHeight: "15px",
+      maxWidth: "140px",
+      //add additional styling here if needed for chip
     },
   });
   const classes = useStyles();
+
+  const handleDelete = () => {
+    sendMessage("digital=" + joinNumberDelete + "\x0d\x0a");
+  };
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
@@ -79,12 +97,10 @@ const LaptopButton = ({
       ) {
         dynamicTextState({ value: feedbackObject.fb.fb_objects[0].value });
       } else if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === syncStatusName
+        feedbackObject.fb.fb_objects[0].type === "string" &&
+        feedbackObject.fb.fb_objects[0].id === inputName
       ) {
-        feedbackObject.fb.fb_objects[0].value === "1"
-          ? syncState({ value: true })
-          : syncState({ value: false });
+        inputTextState({ value: feedbackObject.fb.fb_objects[0].value });
       }
     } catch {
       console.warn("Waiting for payload from processor");
@@ -96,7 +112,7 @@ const LaptopButton = ({
     activeColor,
     inActiveColor,
     serialName,
-    syncStatusName,
+    inputName,
   ]);
 
   // When the component mounts set its last state if there was one.
@@ -124,17 +140,13 @@ const LaptopButton = ({
         dynamicTextState({ value: storedElements[foundIndexSerial].value });
       }
     }
-    var foundIndexSync = storedElements.findIndex(
-      (x) => x.id === syncStatusName
-    );
-    if (foundIndexSync >= 0) {
+    var foundInputSerial = storedElements.findIndex((x) => x.id === inputName);
+    if (foundInputSerial >= 0) {
       if (
-        storedElements[foundIndexSync].type === "bool" &&
-        storedElements[foundIndexSync].id === syncStatusName
+        storedElements[foundIndexSerial].type === "string" &&
+        storedElements[foundIndexSerial].id === inputName
       ) {
-        storedElements[foundIndexSync].value === "1"
-          ? syncState({ value: true })
-          : syncState({ value: false });
+        inputTextState({ value: storedElements[foundInputSerial].value });
       }
     }
   }, [
@@ -143,12 +155,14 @@ const LaptopButton = ({
     serialName,
     activeColor,
     inActiveColor,
-    syncStatusName,
+    inputName,
   ]);
 
   useEffect(() => {
-    if (!serialName === null) dynamicTextState({ value: serialName });
-  }, [serialName]);
+    if (!eventType === null) {
+      handlerTypeState({ value: eventType });
+    }
+  }, [eventType]);
 
   useEffect(() => {
     if (!eventType === null) {
@@ -170,13 +184,12 @@ const LaptopButton = ({
 
   useEffect(() => {
     if (!muiColor === null) inActiveColorState({ value: muiColor });
-    if (!muiColorFeedback === null)
-      activeColorState({ value: muiColorFeedback });
-  }, [muiColor, muiColorFeedback]);
+  }, [muiColor]);
 
   useEffect(() => {
-    if (!syncStatusName === null) syncState({ value: false });
-  }, [syncStatusName]);
+    if (!muiColorFeedback === null)
+      activeColorState({ value: muiColorFeedback });
+  }, [muiColorFeedback]);
 
   // Send message to websocket
   const sendMessage = (data) => {
@@ -214,40 +227,49 @@ const LaptopButton = ({
               overflow: "hidden",
             }}
           >
-            <Box
-              sx={{
-                p: "2.5px",
-              }}
-            >
-              {sync.value === true ? (
-                <FontAwesomeIcon icon={faLaptop} size="4x" />
-              ) : (
-                <i className="fa-stack fa-2x">
-                  <FontAwesomeIcon icon={faLaptop} className="fa-stack-1x" />
-                  <FontAwesomeIcon
-                    icon={faBan}
-                    style={{ color: "Tomato" }}
-                    className="fa-stack-2x"
-                  />
-                </i>
-              )}
-            </Box>
-            <Box
-              sx={{
-                p: "2.5px",
-              }}
-            >
-              {dynamicText.value === "" ? text : dynamicText.value}
-            </Box>
-            {sync.value === false ? (
+            {faIcon ? (
               <Box
                 sx={{
-                  fontSize: "10px",
+                  p: "2.5px",
                 }}
               >
-                ( Device undetected )
+                <FontAwesomeIcon
+                  icon={faIcon}
+                  size={faSize}
+                  className={faClass}
+                />
               </Box>
             ) : undefined}
+            {text === "" && dynamicText.value === "" ? undefined : (
+              <Box
+                sx={{
+                  p: "2.5px",
+                }}
+              >
+                {dynamicText.value === "" ? text : dynamicText.value}
+              </Box>
+            )}
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              zIndex: "1",
+              left: "0",
+              right: "0",
+              bottom: "7px",
+            }}
+          >
+            <Zoom
+              in={inputText.value}
+              style={{ transitionDelay: inputText.value ? "500ms" : "0ms" }}
+            >
+              <Chip
+                className={classes.chip}
+                label={inputText.value}
+                variant="outlined"
+                onDelete={handleDelete}
+              />
+            </Zoom>
           </Box>
         </Button>
       ) : undefined}
@@ -280,40 +302,49 @@ const LaptopButton = ({
               overflow: "hidden",
             }}
           >
-            <Box
-              sx={{
-                p: "2.5px",
-              }}
-            >
-              {sync.value === true ? (
-                <FontAwesomeIcon icon={faLaptop} size="4x" />
-              ) : (
-                <i className="fa-stack fa-2x">
-                  <FontAwesomeIcon icon={faLaptop} className="fa-stack-1x" />
-                  <FontAwesomeIcon
-                    icon={faBan}
-                    style={{ color: "Tomato" }}
-                    className="fa-stack-2x"
-                  />
-                </i>
-              )}
-            </Box>
-            <Box
-              sx={{
-                p: "2.5px",
-              }}
-            >
-              {dynamicText.value === "" ? text : dynamicText.value}
-            </Box>
-            {sync.value === false ? (
+            {faIcon ? (
               <Box
                 sx={{
-                  fontSize: "10px",
+                  p: "2.5px",
                 }}
               >
-                ( Device undetected )
+                <FontAwesomeIcon
+                  icon={faIcon}
+                  size={faSize}
+                  className={faClass}
+                />
               </Box>
             ) : undefined}
+            {text === "" && dynamicText.value === "" ? undefined : (
+              <Box
+                sx={{
+                  p: "2.5px",
+                }}
+              >
+                {dynamicText.value === "" ? text : dynamicText.value}
+              </Box>
+            )}
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              zIndex: "1",
+              left: "0",
+              right: "0",
+              top: "32px",
+            }}
+          >
+            <Zoom
+              in={inputText.value}
+              style={{ transitionDelay: inputText.value ? "500ms" : "0ms" }}
+            >
+              <Chip
+                className={classes.chip}
+                label={inputText.value}
+                variant="outlined"
+                onDelete={handleDelete}
+              />
+            </Zoom>
           </Box>
         </Button>
       ) : undefined}
@@ -321,19 +352,22 @@ const LaptopButton = ({
   );
 };
 
-LaptopButton.propTypes = {
+DestinationButton.propTypes = {
   text: PropTypes.string,
+  joinNumber: PropTypes.string,
+  joinNumberDelete: PropTypes.string,
   muiColor: PropTypes.string,
   muiColorFeedback: PropTypes.string,
   muiVariant: PropTypes.string,
   addStyle: PropTypes.object,
+  faIcon: PropTypes.object,
   digitalName: PropTypes.string,
   serialName: PropTypes.string,
+  inputName: PropTypes.string,
   eventType: PropTypes.string,
   websocketObject: PropTypes.object,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
-  syncStatusName: PropTypes.string,
 };
 
-export default LaptopButton;
+export default DestinationButton;

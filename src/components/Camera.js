@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import CameraControls from "./CameraControls";
@@ -39,6 +40,11 @@ const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
       </Paper>
     </>
   );
+};
+Camera.propTypes = {
+  websocketObject: PropTypes.object,
+  feedbackObject: PropTypes.object,
+  storedElements: PropTypes.array,
 };
 
 export default Camera;

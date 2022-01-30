@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
@@ -18,8 +19,7 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
         feedbackObject.fb.fb_objects[0].type === "bool" &&
         feedbackObject.fb.fb_objects[0].id === digitalName
       ) {
-        if (feedbackObject.fb.fb_objects[0].value === "1")
-        navigate(link);
+        if (feedbackObject.fb.fb_objects[0].value === "1") navigate(link);
       }
     } catch {
       console.warn("Waiting for payload from processor");
@@ -38,13 +38,18 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
         storedElements[foundIndexDigital].type === "bool" &&
         storedElements[foundIndexDigital].id === digitalName
       ) {
-        if(storedElements[foundIndexDigital].value === "1")
-        navigate(link);
+        if (storedElements[foundIndexDigital].value === "1") navigate(link);
       }
     }
   }, [storedElements, digitalName, link, navigate]);
 
   return <></>;
+};
+Linker.propTypes = {
+  link: PropTypes.string,
+  digitalName: PropTypes.string,
+  feedbackObject: PropTypes.object,
+  storedElements: PropTypes.array,
 };
 
 export default Linker;

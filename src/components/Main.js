@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
-import AlertTitle from '@mui/material/AlertTitle';
+import AlertTitle from "@mui/material/AlertTitle";
 import Slide from "@mui/material/Slide";
 import MenuLeft from "./MenuLeft";
 import ButtonShowcase from "./ButtonShowcase";
@@ -31,6 +31,7 @@ import MediaVolume from "./MediaVolume";
 import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
 import Linker from "./Linker";
+import VideoSwitching from "./VideoSwitching";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -39,22 +40,25 @@ const Main = () => {
   const [loader, setLoader] = useState({ value: false });
   const [alertMessage, setAlertMessage] = useState({
     active: false,
-    severity: "",
-    title:"",
-    message: "",
+    severity: "info",
+    title: "None",
+    message: "None",
   });
   const [mode, setMode] = useState("light");
   const menuLeft = useRef();
   var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
 
-  const clearAlert = () =>{
-    alertMessage.active === true ? setAlertMessage({active: false}) : setAlertMessage({active: true})
-  }
+  const clearAlert = () => {
+    alertMessage.active === true
+      ? setAlertMessage({ active: false })
+      : setAlertMessage({ active: true });
+  };
 
   useEffect(() => {
     setLoader({ value: true });
     const connect = () => {
-      var ws = new WebSocket("wss://192.168.2.29:49797");
+      //var ws = new WebSocket("wss://192.168.2.29:49797");
+      var ws = new WebSocket("wss://79shawsheen.mycrestron.com:49797");
       console.warn("New socket created");
       wsState({ socket: ws });
 
@@ -71,7 +75,7 @@ const Main = () => {
         setAlertMessage({
           active: true,
           severity: "success",
-          title:"Sweet!",
+          title: "Sweet!",
           message: "I'm connected to " + ws.url,
         });
         //setAlertMessage({ active: false, severity: "", message: "" });
@@ -130,7 +134,7 @@ const Main = () => {
     connect();
     return () => {
       ws.socket.close(1000, "Application closed");
-      console.warn("Socket clased");
+      console.warn("Socket closed");
       console.warn("App exiting");
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -196,9 +200,14 @@ const Main = () => {
             mountOnEnter
             unmountOnExit
           >
-            <Box className="alert" onClick={() => {clearAlert()}}>
+            <Box
+              className="alert"
+              onClick={() => {
+                clearAlert();
+              }}
+            >
               <Alert severity={alertMessage.severity}>
-              <AlertTitle> {alertMessage.title}</AlertTitle>
+                <AlertTitle> {alertMessage.title}</AlertTitle>
                 {alertMessage.message}
               </Alert>
             </Box>
@@ -305,6 +314,16 @@ const Main = () => {
             }
           />
           <Route
+            path="/switcher"
+            element={
+              <VideoSwitching
+                websocketObject={ws}
+                feedbackObject={fbObjects}
+                storedElements={wsStore}
+              />
+            }
+          />
+          <Route
             path="/showcase"
             element={
               <ButtonShowcase
@@ -336,6 +355,12 @@ const Main = () => {
         <Linker
           link="/showcase"
           digitalName="menu-4"
+          feedbackObject={fbObjects}
+          storedElements={wsStore}
+        />
+            <Linker
+          link="/switcher"
+          digitalName="menu-5"
           feedbackObject={fbObjects}
           storedElements={wsStore}
         />

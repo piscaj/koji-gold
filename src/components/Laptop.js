@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./Header";
@@ -42,7 +43,7 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
                 muiColorFeedback="secondary"
                 muiVariant="contained"
                 digitalName="laptop-1"
-                joinNumber={5}
+                joinNumber={6}
                 serialName=""
                 websocketObject={websocketObject}
                 feedbackObject={feedbackObject}
@@ -63,7 +64,7 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
                 muiColorFeedback="secondary"
                 muiVariant="contained"
                 digitalName="laptop-2"
-                joinNumber={6}
+                joinNumber={7}
                 serialName=""
                 websocketObject={websocketObject}
                 feedbackObject={feedbackObject}
@@ -84,7 +85,7 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
                 muiColorFeedback="secondary"
                 muiVariant="contained"
                 digitalName="laptop-3"
-                joinNumber={7}
+                joinNumber={8}
                 serialName=""
                 websocketObject={websocketObject}
                 feedbackObject={feedbackObject}
@@ -97,6 +98,12 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
       </Paper>
     </>
   );
+};
+
+Laptop.propTypes = {
+  websocketObject: PropTypes.object,
+  feedbackObject: PropTypes.object,
+  storedElements: PropTypes.array,
 };
 
 export default Laptop;

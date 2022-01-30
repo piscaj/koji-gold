@@ -1,0 +1,27 @@
+.source-container {
+  display: flex;
+  flex-direction: colum;
+  overflow: auto;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.source-container::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+.source-container::-webkit-scrollbar:horizontal {
+  height: 8px;
+}
+
+.source-container::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: 1px solid white;
+  background-color: rgba(0, 0, 0, 0.297);
+}
+
+.source {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+}

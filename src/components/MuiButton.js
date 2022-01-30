@@ -31,7 +31,7 @@ const MuiButton = ({
   faIcon,
   faClass,
   faSize,
-  digitalName,
+  digitalName = null,
   joinNumber,
   serialName = null,
   eventType = null,
@@ -60,6 +60,7 @@ const MuiButton = ({
   const useStyles = makeStyles({
     button: {
       textTransform: "none",
+      lineHeight: "15px",
       //add additional styling here if needed
     },
   });
@@ -149,13 +150,15 @@ const MuiButton = ({
 
   // Send message to websocket
   const sendMessage = (data) => {
-    try {
-      if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
-    } catch (error) {
-      console.warn(
-        "Component id:" + digitalName + " had a websocketObject problem"
-      );
-      console.log(error);
+    if (data.search("undefined") === -1) {
+      try {
+        if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
+      } catch (error) {
+        console.warn(
+          "Component id:" + digitalName + " had a websocketObject problem"
+        );
+        console.log(error);
+      }
     }
   };
 

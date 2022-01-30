@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import MuiButton from "./MuiButton";
@@ -295,6 +296,12 @@ const CameraControls = ({
       </Box>
     </Box>
   );
+};
+
+CameraControls.propTypes = {
+  websocketObject: PropTypes.object,
+  feedbackObject: PropTypes.object,
+  storedElements: PropTypes.array,
 };
 
 export default CameraControls;

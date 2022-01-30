@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./Header";
@@ -41,6 +42,12 @@ const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
       </Paper>
     </>
   );
+};
+
+RoomPc.propTypes = {
+  websocketObject: PropTypes.object,
+  feedbackObject: PropTypes.object,
+  storedElements: PropTypes.array,
 };
 
 export default RoomPc;
