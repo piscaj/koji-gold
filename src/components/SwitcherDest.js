@@ -10,7 +10,6 @@ const SwitcherDest = ({
   feedbackObject,
   storedElements,
 }) => {
-
   return (
     <Box className="source">
       {[...Array(sourceCount)].map((value, index) => (
@@ -25,7 +24,7 @@ const SwitcherDest = ({
             text={"Dest " + (index + 1)}
             digitalName={"output-" + (index + 1) + "-d"}
             serialName={"output-" + (index + 1) + "-s"}
-            inputName={"input-fb-" + (index + 1) + "-s"}
+            inputName={"output-fb-" + (index + 1) + "-s"}
             joinNumber={index + 1 + digitalOffset}
             joinNumberDelete={index + 1 + sourceCount + digitalOffset}
             muiVariant="contained"

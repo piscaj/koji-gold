@@ -54,7 +54,7 @@ const DestinationButton = ({
     value: addStyle === {} ? {} : addStyle,
   });
   const [dynamicText, dynamicTextState] = useState({ value: "" });
-  const [inputText, inputTextState] = useState({ value: "ABCDEFGHIJK" });
+  const [inputText, inputTextState] = useState({ value: "" });
   const [inActiveColor, inActiveColorState] = useState({
     value: muiColor === null ? "primary" : muiColor,
   });
@@ -79,6 +79,7 @@ const DestinationButton = ({
 
   const handleDelete = () => {
     sendMessage("digital=" + joinNumberDelete + "\x0d\x0a");
+    inputTextState({ value: "" });
   };
 
   // This is where the realtime update happens from the wsObject.fb
