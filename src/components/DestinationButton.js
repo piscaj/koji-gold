@@ -144,8 +144,8 @@ const DestinationButton = ({
     var foundInputSerial = storedElements.findIndex((x) => x.id === inputName);
     if (foundInputSerial >= 0) {
       if (
-        storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === inputName
+        storedElements[foundInputSerial].type === "string" &&
+        storedElements[foundInputSerial].id === inputName
       ) {
         inputTextState({ value: storedElements[foundInputSerial].value });
       }
@@ -262,7 +262,7 @@ const DestinationButton = ({
           >
             <Zoom
               in={inputText.value}
-              style={{ transitionDelay: inputText.value ? "500ms" : "0ms" }}
+              style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
             >
               <Chip
                 className={classes.chip}
@@ -337,7 +337,7 @@ const DestinationButton = ({
           >
             <Zoom
               in={inputText.value}
-              style={{ transitionDelay: inputText.value ? "500ms" : "0ms" }}
+              style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
             >
               <Chip
                 className={classes.chip}
