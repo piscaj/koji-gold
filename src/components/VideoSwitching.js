@@ -21,7 +21,7 @@ const VideoSwitching = ({
       <Box>
         <Header title="Inputs" />
       </Box>
-      <Box className="source-container">
+      <Box className="switcher-container">
         <SwitcherSoutce
           sourceCount={10}
           digitalOffset={11}
@@ -34,7 +34,7 @@ const VideoSwitching = ({
       <Box>
         <Header title="Outputs" />
       </Box>
-      <Box className="source-container">
+      <Box className="switcher-container">
         <SwitcherDest
           sourceCount={5}
           digitalOffset={21}

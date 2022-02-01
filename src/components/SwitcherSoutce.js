@@ -11,7 +11,7 @@ const SwitcherSoutce = ({
   storedElements,
 }) => {
   return (
-    <Box className="source">
+    <Box className="source-scroll">
       {[...Array(sourceCount)].map((value, index) => (
         <Box
           key={index + 1}

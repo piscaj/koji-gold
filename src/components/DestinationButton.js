@@ -260,17 +260,27 @@ const DestinationButton = ({
               bottom: "7px",
             }}
           >
-            <Zoom
-              in={inputText.value}
-              style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
-            >
-              <Chip
-                className={classes.chip}
-                label={inputText.value}
-                variant="outlined"
-                onDelete={handleDelete}
-              />
-            </Zoom>
+            {inputText.value !== "" ? (
+              <Zoom
+                in={inputText.value !== ""}
+                style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
+              >
+                <Chip
+                  className={classes.chip}
+                  label={inputText.value}
+                  variant="outlined"
+                  onDelete={handleDelete}
+                />
+              </Zoom>
+            ) : (
+              <Box
+              sx={{
+               fontSize: "10px",
+               mb: "10px"
+              }}
+              
+              > (No Source) </Box>
+            )}
           </Box>
         </Button>
       ) : undefined}
@@ -336,7 +346,7 @@ const DestinationButton = ({
             }}
           >
             <Zoom
-              in={inputText.value}
+              in={inputText.value !== ""}
               style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
             >
               <Chip
@@ -355,8 +365,8 @@ const DestinationButton = ({
 
 DestinationButton.propTypes = {
   text: PropTypes.string,
-  joinNumber: PropTypes.string,
-  joinNumberDelete: PropTypes.string,
+  joinNumber: PropTypes.number,
+  joinNumberDelete: PropTypes.number,
   muiColor: PropTypes.string,
   muiColorFeedback: PropTypes.string,
   muiVariant: PropTypes.string,

@@ -11,7 +11,7 @@ const SwitcherDest = ({
   storedElements,
 }) => {
   return (
-    <Box className="source">
+    <Box className="destination-scroll">
       {[...Array(sourceCount)].map((value, index) => (
         <Box
           key={index + 1}
