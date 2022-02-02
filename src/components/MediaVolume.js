@@ -19,29 +19,43 @@ const MediaVolume = ({
   feedbackObject,
   storedElements = [],
 }) => {
-  const [value, setValue] = useState("25");
-
+  const [barValue, setbarValue] = useState("25");
+  const [moving, setMoving] = useState(false);
+  var movingTimeout; //delay the websocket feedback stream
   const handleCommitted = (event, value) => {
-    sendMessage(serialName + "=" + value + "\x0d\x0a");
+    movingTimeout = setTimeout(() => {
+      setMoving(false);
+    }, 2000);
+    //sendMessage(serialName + "=" + value + "\x0d\x0a");
   };
   const handleChange = (event, value) => {
-    setValue(value);
+    //Clear the last timeout for the websocket stream activation
+    clearTimeout(movingTimeout);
+    //Reset moving to stop websocket feedback stream
+    setMoving(true);
+    // event likes to trigger on the same value so lets clean this up and make sure we are not sending
+    // duplicate values down the websocket to the processor
+    if (value !== barValue){sendMessage(serialName + "=" + value + "\x0d\x0a");}
+    //update the slider value for local feedback
+    setbarValue(value);
   };
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
-    try {
-      if (
-        feedbackObject.fb.fb_objects[0].type === "string" &&
-        feedbackObject.fb.fb_objects[0].id === serialName
-      ) {
-        setValue(feedbackObject.fb.fb_objects[0].value);
+    if (!moving) {
+      try {
+        if (
+          feedbackObject.fb.fb_objects[0].type === "string" &&
+          feedbackObject.fb.fb_objects[0].id === serialName
+        ) {
+          setbarValue(feedbackObject.fb.fb_objects[0].value);
+        }
+      } catch {
+        console.warn("Waiting for payload from processor");
       }
-    } catch {
-      console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [feedbackObject.fb, serialName]);
+  }, [feedbackObject.fb, serialName, moving]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
@@ -53,20 +67,22 @@ const MediaVolume = ({
         storedElements[foundIndexSerial].type === "string" &&
         storedElements[foundIndexSerial].id === serialName
       ) {
-        setValue(storedElements[foundIndexSerial].value);
+        setbarValue(storedElements[foundIndexSerial].value);
       }
     }
   }, [storedElements, serialName]);
 
   // Send message to websocket
   const sendMessage = (data) => {
-    try {
-      if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
-    } catch (error) {
-      console.warn(
-        "Component id:" + serialName + " had a websocketObject problem"
-      );
-      console.log(error);
+    if (data.search("undefined") === -1) {
+      try {
+        if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
+      } catch (error) {
+        console.warn(
+          "Component id:" + serialName + " had a websocketObject problem"
+        );
+        console.log(error);
+      }
     }
   };
 
@@ -80,7 +96,7 @@ const MediaVolume = ({
         <FontAwesomeIcon icon={faVolumeDown} size="lg" />
         <Slider
           valueLabelDisplay="auto"
-          value={isNaN(parseInt(value, 10)) ? 10 : parseInt(value, 10)}
+          value={isNaN(parseInt(barValue, 10)) ? 10 : parseInt(barValue, 10)}
           onChange={handleChange}
           onChangeCommitted={handleCommitted}
         />
