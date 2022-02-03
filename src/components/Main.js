@@ -29,8 +29,8 @@ import {
 import MediaVolume from "./MediaVolume";
 import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
-import Linker from "./Linker";
 import VideoSwitching from "./VideoSwitching";
+import DrivePages from "./DrivePages";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -334,36 +334,7 @@ const Main = () => {
               }
             />
           </Routes>
-          <Linker
-            link="/roomPc"
-            digitalName="menu-1"
-            feedbackObject={fbObjects}
-            storedElements={wsStore}
-          />
-          <Linker
-            link="/laptop"
-            digitalName="menu-2"
-            feedbackObject={fbObjects}
-            storedElements={wsStore}
-          />
-          <Linker
-            link="/camera"
-            digitalName="menu-3"
-            feedbackObject={fbObjects}
-            storedElements={wsStore}
-          />
-          <Linker
-            link="/showcase"
-            digitalName="menu-4"
-            feedbackObject={fbObjects}
-            storedElements={wsStore}
-          />
-          <Linker
-            link="/switcher"
-            digitalName="menu-5"
-            feedbackObject={fbObjects}
-            storedElements={wsStore}
-          />
+          <DrivePages feedbackObject={fbObjects} storedElements={wsStore} />
         </Box>
         <Box className="footer">
           <Box
