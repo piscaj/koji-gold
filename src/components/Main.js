@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Route, Routes } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import {
@@ -14,10 +13,6 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Slide from "@mui/material/Slide";
 import MenuLeft from "./MenuLeft";
-import ButtonShowcase from "./ButtonShowcase";
-import Laptop from "./Laptop";
-import RoomPc from "./RoomPc";
-import Camera from "./Camera";
 import "./scss/Main.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,8 +24,7 @@ import {
 import MediaVolume from "./MediaVolume";
 import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
-import VideoSwitching from "./VideoSwitching";
-import DrivePages from "./DrivePages";
+import { DriveLinks, DriveRoutes } from "./DrivePages";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -271,70 +265,12 @@ const Main = () => {
           </Box>
         </Box>
         <Box className="body">
-          <Routes>
-            <Route
-              exact
-              path="/"
-              element={
-                <RoomPc
-                  websocketObject={ws}
-                  feedbackObject={fbObjects}
-                  storedElements={wsStore}
-                />
-              }
-            />
-            <Route
-              path="/roomPc"
-              element={
-                <RoomPc
-                  websocketObject={ws}
-                  feedbackObject={fbObjects}
-                  storedElements={wsStore}
-                />
-              }
-            />
-            <Route
-              path="/laptop"
-              element={
-                <Laptop
-                  websocketObject={ws}
-                  feedbackObject={fbObjects}
-                  storedElements={wsStore}
-                />
-              }
-            />
-            <Route
-              path="/camera"
-              element={
-                <Camera
-                  websocketObject={ws}
-                  feedbackObject={fbObjects}
-                  storedElements={wsStore}
-                />
-              }
-            />
-            <Route
-              path="/switcher"
-              element={
-                <VideoSwitching
-                  websocketObject={ws}
-                  feedbackObject={fbObjects}
-                  storedElements={wsStore}
-                />
-              }
-            />
-            <Route
-              path="/showcase"
-              element={
-                <ButtonShowcase
-                  websocketObject={ws}
-                  feedbackObject={fbObjects}
-                  storedElements={wsStore}
-                />
-              }
-            />
-          </Routes>
-          <DrivePages feedbackObject={fbObjects} storedElements={wsStore} />
+          <DriveRoutes
+            websocketObject={ws}
+            feedbackObject={fbObjects}
+            storedElements={wsStore}
+          />
+          <DriveLinks feedbackObject={fbObjects} storedElements={wsStore} />
         </Box>
         <Box className="footer">
           <Box

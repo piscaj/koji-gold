@@ -1,9 +1,96 @@
 import PropTypes from "prop-types";
 import Linker from "./Linker";
+import { Route, Routes } from "react-router-dom";
+import ButtonShowcase from "./ButtonShowcase";
+import Laptop from "./Laptop";
+import RoomPc from "./RoomPc";
+import Camera from "./Camera";
+import VideoSwitching from "./VideoSwitching";
 
-//This component just moves the clutter of the Linker component out of the Main component to clean things up.
+//This component just moves the clutter of React Router and the fancy
+//Linker component out of the Main component to clean things up.
+//Drive all the pages here
 
-const DrivePages = ({ feedbackObject, storedElements }) => {
+//React Router routes go here
+export const DriveRoutes = ({
+  websocketObject,
+  feedbackObject,
+  storedElements,
+}) => {
+  return (
+    <Routes>
+      <Route
+        exact
+        path="/"
+        element={
+          <RoomPc
+            websocketObject={websocketObject}
+            feedbackObject={feedbackObject}
+            storedElements={storedElements}
+          />
+        }
+      />
+      <Route
+        path="/roomPc"
+        element={
+          <RoomPc
+            websocketObject={websocketObject}
+            feedbackObject={feedbackObject}
+            storedElements={storedElements}
+          />
+        }
+      />
+      <Route
+        path="/laptop"
+        element={
+          <Laptop
+            websocketObject={websocketObject}
+            feedbackObject={feedbackObject}
+            storedElements={storedElements}
+          />
+        }
+      />
+      <Route
+        path="/camera"
+        element={
+          <Camera
+            websocketObject={websocketObject}
+            feedbackObject={feedbackObject}
+            storedElements={storedElements}
+          />
+        }
+      />
+      <Route
+        path="/switcher"
+        element={
+          <VideoSwitching
+            websocketObject={websocketObject}
+            feedbackObject={feedbackObject}
+            storedElements={storedElements}
+          />
+        }
+      />
+      <Route
+        path="/showcase"
+        element={
+          <ButtonShowcase
+            websocketObject={websocketObject}
+            feedbackObject={feedbackObject}
+            storedElements={storedElements}
+          />
+        }
+      />
+    </Routes>
+  );
+};
+
+DriveRoutes.propTypes = {
+  feedbackObject: PropTypes.object,
+  storedElements: PropTypes.array,
+};
+
+//Make use of the Linker component for page tracking here.
+export const DriveLinks = ({ feedbackObject, storedElements }) => {
   return (
     <>
       <Linker
@@ -40,9 +127,7 @@ const DrivePages = ({ feedbackObject, storedElements }) => {
   );
 };
 
-DrivePages.propTypes = {
+DriveLinks.propTypes = {
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };
-
-export default DrivePages;
