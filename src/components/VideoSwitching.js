@@ -14,35 +14,43 @@ const VideoSwitching = ({
   return (
     <Paper
       sx={{
-        textAlign: "center",
+        position: "absolute",
+        top: "0",
+        bottom: "0",
+        left: "0",
+        right: "0",
+        m: "10px",
         p: "10px",
+        overflow: "scroll",
+        textAlign: "center",
       }}
     >
       <Box>
         <Header title="Inputs" />
       </Box>
-      <Box className="switcher-container">
-        <SwitcherSoutce
-          sourceCount={10}
-          digitalOffset={11}
-          websocketObject={websocketObject}
-          feedbackObject={feedbackObject}
-          storedElements={storedElements}
-        />
-      </Box>
+      <SwitcherSoutce
+        sourceCount={10}
+        digitalOffset={11}
+        websocketObject={websocketObject}
+        feedbackObject={feedbackObject}
+        storedElements={storedElements}
+      />
 
-      <Box>
+      <Box
+        sx={{
+          mt: "10px",
+        }}
+      >
         <Header title="Outputs" />
       </Box>
-      <Box className="switcher-container">
-        <SwitcherDest
-          sourceCount={5}
-          digitalOffset={21}
-          websocketObject={websocketObject}
-          feedbackObject={feedbackObject}
-          storedElements={storedElements}
-        />
-      </Box>
+
+      <SwitcherDest
+        sourceCount={5}
+        digitalOffset={21}
+        websocketObject={websocketObject}
+        feedbackObject={feedbackObject}
+        storedElements={storedElements}
+      />
     </Paper>
   );
 };

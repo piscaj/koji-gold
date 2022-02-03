@@ -8,7 +8,6 @@ import {
   responsiveFontSizes,
 } from "@mui/material//styles";
 import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
@@ -163,7 +162,7 @@ const Main = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container>
+      <Box className="container">
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={loader.value}
@@ -271,116 +270,118 @@ const Main = () => {
             </Box>
           </Box>
         </Box>
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <RoomPc
-                websocketObject={ws}
-                feedbackObject={fbObjects}
-                storedElements={wsStore}
-              />
-            }
+        <Box className="body">
+          <Routes>
+            <Route
+              exact
+              path="/"
+              element={
+                <RoomPc
+                  websocketObject={ws}
+                  feedbackObject={fbObjects}
+                  storedElements={wsStore}
+                />
+              }
+            />
+            <Route
+              path="/roomPc"
+              element={
+                <RoomPc
+                  websocketObject={ws}
+                  feedbackObject={fbObjects}
+                  storedElements={wsStore}
+                />
+              }
+            />
+            <Route
+              path="/laptop"
+              element={
+                <Laptop
+                  websocketObject={ws}
+                  feedbackObject={fbObjects}
+                  storedElements={wsStore}
+                />
+              }
+            />
+            <Route
+              path="/camera"
+              element={
+                <Camera
+                  websocketObject={ws}
+                  feedbackObject={fbObjects}
+                  storedElements={wsStore}
+                />
+              }
+            />
+            <Route
+              path="/switcher"
+              element={
+                <VideoSwitching
+                  websocketObject={ws}
+                  feedbackObject={fbObjects}
+                  storedElements={wsStore}
+                />
+              }
+            />
+            <Route
+              path="/showcase"
+              element={
+                <ButtonShowcase
+                  websocketObject={ws}
+                  feedbackObject={fbObjects}
+                  storedElements={wsStore}
+                />
+              }
+            />
+          </Routes>
+          <Linker
+            link="/roomPc"
+            digitalName="menu-1"
+            feedbackObject={fbObjects}
+            storedElements={wsStore}
           />
-          <Route
-            path="/roomPc"
-            element={
-              <RoomPc
-                websocketObject={ws}
-                feedbackObject={fbObjects}
-                storedElements={wsStore}
-              />
-            }
+          <Linker
+            link="/laptop"
+            digitalName="menu-2"
+            feedbackObject={fbObjects}
+            storedElements={wsStore}
           />
-          <Route
-            path="/laptop"
-            element={
-              <Laptop
-                websocketObject={ws}
-                feedbackObject={fbObjects}
-                storedElements={wsStore}
-              />
-            }
+          <Linker
+            link="/camera"
+            digitalName="menu-3"
+            feedbackObject={fbObjects}
+            storedElements={wsStore}
           />
-          <Route
-            path="/camera"
-            element={
-              <Camera
-                websocketObject={ws}
-                feedbackObject={fbObjects}
-                storedElements={wsStore}
-              />
-            }
+          <Linker
+            link="/showcase"
+            digitalName="menu-4"
+            feedbackObject={fbObjects}
+            storedElements={wsStore}
           />
-          <Route
-            path="/switcher"
-            element={
-              <VideoSwitching
-                websocketObject={ws}
-                feedbackObject={fbObjects}
-                storedElements={wsStore}
-              />
-            }
-          />
-          <Route
-            path="/showcase"
-            element={
-              <ButtonShowcase
-                websocketObject={ws}
-                feedbackObject={fbObjects}
-                storedElements={wsStore}
-              />
-            }
-          />
-        </Routes>
-        <Linker
-          link="/roomPc"
-          digitalName="menu-1"
-          feedbackObject={fbObjects}
-          storedElements={wsStore}
-        />
-        <Linker
-          link="/laptop"
-          digitalName="menu-2"
-          feedbackObject={fbObjects}
-          storedElements={wsStore}
-        />
-        <Linker
-          link="/camera"
-          digitalName="menu-3"
-          feedbackObject={fbObjects}
-          storedElements={wsStore}
-        />
-        <Linker
-          link="/showcase"
-          digitalName="menu-4"
-          feedbackObject={fbObjects}
-          storedElements={wsStore}
-        />
-            <Linker
-          link="/switcher"
-          digitalName="menu-5"
-          feedbackObject={fbObjects}
-          storedElements={wsStore}
-        />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            mt: "20px",
-          }}
-        >
-          <MediaVolume
-            serialName="media_volume"
-            websocketObject={ws}
+          <Linker
+            link="/switcher"
+            digitalName="menu-5"
             feedbackObject={fbObjects}
             storedElements={wsStore}
           />
         </Box>
-      </Container>
+        <Box className="footer">
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <MediaVolume
+              serialName="media_volume"
+              websocketObject={ws}
+              feedbackObject={fbObjects}
+              storedElements={wsStore}
+            />
+          </Box>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 };
