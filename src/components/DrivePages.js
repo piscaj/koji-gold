@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import Linker from "./Linker";
 
+//This component just moves the clutter of the Linker component out of the Main component to clean things up.
+
 const DrivePages = ({ feedbackObject, storedElements }) => {
   return (
     <>

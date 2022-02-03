@@ -38,7 +38,7 @@ const MediaVolume = ({
     if (value !== barValue) {
       sendMessage(serialName + "=" + value + "\x0d\x0a");
     }
-    //update the slider value for local feedback.
+    //update the slider value for the badge that appears over the slider.
     setbarValue(value);
   };
 
