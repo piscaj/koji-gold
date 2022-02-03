@@ -83,7 +83,7 @@ const MenuLeft = forwardRef((props, ref) => {
 
                 <ListItemText
                   primary="Laptop"
-                  secondary="& portable deveices"
+                  secondary="& portable devices"
                 />
               </ListItem>
             </List>
