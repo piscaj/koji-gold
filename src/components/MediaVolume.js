@@ -21,22 +21,24 @@ const MediaVolume = ({
 }) => {
   const [barValue, setbarValue] = useState("25");
   const [moving, setMoving] = useState(false);
-  var movingTimeout; //delay the websocket feedback stream
+  var movingTimeout;
   const handleCommitted = (event, value) => {
     movingTimeout = setTimeout(() => {
       setMoving(false);
     }, 2000);
-    //sendMessage(serialName + "=" + value + "\x0d\x0a");
   };
   const handleChange = (event, value) => {
     //Clear the last timeout for the websocket stream activation
     clearTimeout(movingTimeout);
-    //Reset moving to stop websocket feedback stream
+    //Reset... We are moving the slider, so stop websocket feedback stream
     setMoving(true);
-    // event likes to trigger on the same value so lets clean this up and make sure we are not sending
-    // duplicate values down the websocket to the processor
-    if (value !== barValue){sendMessage(serialName + "=" + value + "\x0d\x0a");}
-    //update the slider value for local feedback
+    // the slider moving "event" likes to trigger on the same value more than once,
+    //so lets clean this up and make sure we are not sending
+    // duplicate values down the websocket to the processor.
+    if (value !== barValue) {
+      sendMessage(serialName + "=" + value + "\x0d\x0a");
+    }
+    //update the slider value for local feedback.
     setbarValue(value);
   };
 
