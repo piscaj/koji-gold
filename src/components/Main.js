@@ -270,6 +270,7 @@ const Main = () => {
             feedbackObject={fbObjects}
             storedElements={wsStore}
           />
+
           <DriveLinks feedbackObject={fbObjects} storedElements={wsStore} />
         </Box>
         <Box className="footer">

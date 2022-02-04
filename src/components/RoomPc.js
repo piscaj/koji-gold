@@ -3,50 +3,53 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./Header";
 import RoomPcStatus from "./RoomPcStatus";
+import Fade from "@mui/material/Fade";
 
 const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
   return (
-    <Paper
-      sx={{
-        position: "absolute",
-        top: "0",
-        bottom: "0",
-        left: "0",
-        right: "0",
-        m: "10px",
-        overflow: "scroll",
-      }}
-    >
-      <Box
+    <Fade in={true}>
+      <Paper
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          overflow: "hidden",
+          position: "absolute",
+          top: "0",
+          bottom: "0",
+          left: "0",
+          right: "0",
+          m: "10px",
+          overflow: "scroll",
         }}
       >
-        <Box sx={{ mt: "20px" }}>
-          <Header title="Room PC" />
-        </Box>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            alignItems: "center",
             overflow: "hidden",
-            mb: "20px",
           }}
         >
-          <Box sx={{ padding: "10px" }}>
-            <RoomPcStatus
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
-              syncStatusName="sync-room-pc"
-            />
+          <Box sx={{ mt: "20px" }}>
+            <Header title="Room PC" />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              overflow: "hidden",
+              mb: "20px",
+            }}
+          >
+            <Box sx={{ padding: "10px" }}>
+              <RoomPcStatus
+                feedbackObject={feedbackObject}
+                storedElements={storedElements}
+                syncStatusName="sync-room-pc"
+              />
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </Paper>
+      </Paper>
+    </Fade>
   );
 };
 
