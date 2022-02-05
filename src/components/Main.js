@@ -25,6 +25,7 @@ import MediaVolume from "./MediaVolume";
 import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
 import { DriveLinks, DriveRoutes } from "./DrivePages";
+import { amber, deepOrange, grey, indigo, Indigo } from "@mui/material/colors";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -147,10 +148,46 @@ const Main = () => {
       createTheme({
         palette: {
           mode,
+          primary: {
+            ...indigo,
+            ...(mode === "light" && {
+              main: indigo[900],
+            }),
+          },
+          secondary: {
+            ...deepOrange,
+            ...(mode === "light" && {
+              main: deepOrange[900],
+            }),
+          },
+          ...(mode === "dark" && {
+            primary: {
+              main: indigo[100],
+            },
+            secondary: {
+              main: deepOrange[300],
+            },
+            background: {
+              //default: deepOrange[900],
+              //paper: deepOrange[900],
+            },
+          }),
+          text: {
+            ...(mode === "light"
+              ? {
+                  primary: grey[900],
+                  secondary: grey[800],
+                }
+              : {
+                  primary: "#fff",
+                  secondary: grey[500],
+                }),
+          },
         },
       }),
     [mode]
   );
+
   theme = responsiveFontSizes(theme);
 
   return (

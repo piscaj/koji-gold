@@ -69,7 +69,6 @@ const DestinationButton = ({
       //add additional styling here if needed
     },
     chip: {
-      textTransform: "none",
       lineHeight: "15px",
       maxWidth: "140px",
       //add additional styling here if needed for chip
@@ -267,19 +266,22 @@ const DestinationButton = ({
               >
                 <Chip
                   className={classes.chip}
+                  variant={"contained"}
+                  color={"secondary"}
                   label={inputText.value}
-                  variant="outlined"
                   onDelete={handleDelete}
                 />
               </Zoom>
             ) : (
               <Box
-              sx={{
-               fontSize: "10px",
-               mb: "10px"
-              }}
-              
-              > (No Source) </Box>
+                sx={{
+                  fontSize: "10px",
+                  mb: "10px",
+                }}
+              >
+                {" "}
+                (No Source){" "}
+              </Box>
             )}
           </Box>
         </Button>
@@ -350,9 +352,10 @@ const DestinationButton = ({
               style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
             >
               <Chip
+                variant={"contained"}
+                color={"secondary"}
                 className={classes.chip}
                 label={inputText.value}
-                variant="outlined"
                 onDelete={handleDelete}
               />
             </Zoom>
