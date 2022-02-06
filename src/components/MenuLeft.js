@@ -56,6 +56,7 @@ const MenuLeft = forwardRef((props, ref) => {
             <List>
               <ListItem
                 button
+                //selected={something to active}
                 onClick={() => {
                   sendMessage("digital=1\x0d\x0a");
                 }}

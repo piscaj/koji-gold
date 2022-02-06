@@ -25,7 +25,7 @@ import MediaVolume from "./MediaVolume";
 import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
 import { DriveLinks, DriveRoutes } from "./DrivePages";
-import { amber, deepOrange, grey, indigo, Indigo } from "@mui/material/colors";
+import { deepOrange, grey, indigo} from "@mui/material/colors";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
