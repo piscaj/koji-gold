@@ -1,4 +1,4 @@
-import { useState, useImperativeHandle, forwardRef } from "react";
+import { useState, useImperativeHandle, forwardRef, useEffect } from "react";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -18,7 +18,10 @@ import "./scss/MenuL.scss";
 
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
+
   const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+  const [menuIndex, menuIndexState] = useState({ value: "" });
 
   const setDrawerOpen = (newState) => {
     drawerOpenState({ value: newState });
@@ -29,6 +32,22 @@ const MenuLeft = forwardRef((props, ref) => {
       drawerOpenState({ value: drawerOpen.value === false ? true : false });
     },
   }));
+  console.log(props.storedElements);
+
+  // This is where the realtime update happens from the wsObject.fb
+  useEffect(() => {
+    try {
+      if (
+        props.feedbackObject.fb.fb_objects[0].type === "string" &&
+        props.feedbackObject.fb.fb_objects[0].id === props.serialName
+      ) {
+        menuIndexState({ value: props.feedbackObject.fb.fb_objects[0].value });
+      }
+    } catch {
+      console.warn("Waiting for payload from processor");
+    }
+    return () => {};
+  }, [props.feedbackObject.fb, props.serialName]);
 
   // Send message to websocket
   const sendMessage = (data) => {
@@ -56,7 +75,7 @@ const MenuLeft = forwardRef((props, ref) => {
             <List>
               <ListItem
                 button
-                //selected={something to active}
+                selected={menuIndex.value === "index-1" ? true : false}
                 onClick={() => {
                   sendMessage("digital=1\x0d\x0a");
                 }}
@@ -73,6 +92,7 @@ const MenuLeft = forwardRef((props, ref) => {
             </List>
             <List>
               <ListItem
+                selected={menuIndex.value === "index-2" ? true : false}
                 button
                 onClick={() => {
                   sendMessage("digital=2\x0d\x0a");
@@ -82,14 +102,12 @@ const MenuLeft = forwardRef((props, ref) => {
                   <FontAwesomeIcon icon={faLaptop} size="2x" />
                 </ListItemIcon>
 
-                <ListItemText
-                  primary="Laptop"
-                  secondary="& portable devices"
-                />
+                <ListItemText primary="Laptop" secondary="& portable devices" />
               </ListItem>
             </List>
             <List>
               <ListItem
+                selected={menuIndex.value === "index-3" ? true : false}
                 button
                 onClick={() => {
                   sendMessage("digital=3\x0d\x0a");
@@ -104,6 +122,7 @@ const MenuLeft = forwardRef((props, ref) => {
             </List>
             <List>
               <ListItem
+                selected={menuIndex.value === "index-5" ? true : false}
                 button
                 onClick={() => {
                   sendMessage("digital=5\x0d\x0a");
@@ -113,12 +132,16 @@ const MenuLeft = forwardRef((props, ref) => {
                   <FontAwesomeIcon icon={faExchangeAlt} size="2x" />
                 </ListItemIcon>
 
-                <ListItemText primary="Video Switching" secondary="Advanced source routing" />
+                <ListItemText
+                  primary="Video Switching"
+                  secondary="Advanced source routing"
+                />
               </ListItem>
             </List>
             <List>
               <ListItem
                 button
+                selected={menuIndex.value === "index-4" ? true : false}
                 onClick={() => {
                   sendMessage("digital=4\x0d\x0a");
                 }}

@@ -25,7 +25,7 @@ import MediaVolume from "./MediaVolume";
 import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
 import { DriveLinks, DriveRoutes } from "./DrivePages";
-import { deepOrange, grey, indigo} from "@mui/material/colors";
+import { deepOrange, grey, indigo } from "@mui/material/colors";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
@@ -167,10 +167,6 @@ const Main = () => {
             secondary: {
               main: deepOrange[300],
             },
-            background: {
-              //default: deepOrange[900],
-              //paper: deepOrange[900],
-            },
           }),
           text: {
             ...(mode === "light"
@@ -216,7 +212,12 @@ const Main = () => {
             <Box sx={{ p: "5px" }}>Updating</Box>
           </Box>
         </Backdrop>
-        <MenuLeft websocketObject={ws} ref={menuLeft} />
+        <MenuLeft 
+        serialName = {"menu-index"}
+        feedbackObject={fbObjects}
+        storedElements={wsStore}
+        websocketObject={ws} 
+        ref={menuLeft} />
         <Box
           sx={{
             display: "flex",
