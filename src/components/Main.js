@@ -30,7 +30,7 @@ import { deepOrange, grey, indigo } from "@mui/material/colors";
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
   const [fbObjects, fbObjectsState] = useState({ fb: null });
-  const [wsStore, wsStoreState] = useState();
+  const [wsStore, wsStoreState] = useState([{ id: "null", value: "null", type: "null" }]);
   const [loader, setLoader] = useState({ value: false });
   const [alertMessage, setAlertMessage] = useState({
     active: false,
@@ -212,12 +212,13 @@ const Main = () => {
             <Box sx={{ p: "5px" }}>Updating</Box>
           </Box>
         </Backdrop>
-        <MenuLeft 
-        serialName = {"menu-index"}
-        feedbackObject={fbObjects}
-        storedElements={wsStore}
-        websocketObject={ws} 
-        ref={menuLeft} />
+        <MenuLeft
+          serialName={"menu-index"}
+          feedbackObject={fbObjects}
+          storedElements={wsStore}
+          websocketObject={ws}
+          ref={menuLeft}
+        />
         <Box
           sx={{
             display: "flex",
@@ -314,17 +315,24 @@ const Main = () => {
         <Box className="footer">
           <Box
             sx={{
+              position: "relative",
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
             }}
           >
-            <MediaVolume
-              serialName="media_volume"
-              websocketObject={ws}
-              feedbackObject={fbObjects}
-              storedElements={wsStore}
-            />
+            <Box
+              sx={{
+                width: "300px",
+              }}
+            >
+              <MediaVolume
+                serialName="media_volume"
+                websocketObject={ws}
+                feedbackObject={fbObjects}
+                storedElements={wsStore}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>

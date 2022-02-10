@@ -89,11 +89,7 @@ const MediaVolume = ({
   };
 
   return (
-    <Box
-      sx={{
-        width: 300,
-      }}
-    >
+  
       <Stack direction="row" spacing={2} sx={{ mb: 1 }} alignItems="center">
         <FontAwesomeIcon icon={faVolumeDown} size="lg" />
         <Slider
@@ -104,7 +100,6 @@ const MediaVolume = ({
         />
         <FontAwesomeIcon icon={faVolumeUp} size="lg" />
       </Stack>
-    </Box>
   );
 };
 

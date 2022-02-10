@@ -13,8 +13,16 @@ import {
   faDesktop,
   faTheaterMasks,
   faExchangeAlt,
+  faProjector,
+  faTv,
 } from "@fortawesome/pro-duotone-svg-icons";
 import "./scss/MenuL.scss";
+import DisplayPowerListItem from "./DisplayPowerListItem";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MuiButton from "./MuiButton";
 
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
@@ -32,7 +40,6 @@ const MenuLeft = forwardRef((props, ref) => {
       drawerOpenState({ value: drawerOpen.value === false ? true : false });
     },
   }));
-  console.log(props.storedElements);
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
@@ -49,6 +56,20 @@ const MenuLeft = forwardRef((props, ref) => {
     return () => {};
   }, [props.feedbackObject.fb, props.serialName]);
 
+  useEffect(() => {
+    var foundIndexSerial = props.storedElements.findIndex(
+      (x) => x.id === props.serialName
+    );
+    if (foundIndexSerial >= 0) {
+      if (
+        props.storedElements[foundIndexSerial].type === "string" &&
+        props.storedElements[foundIndexSerial].id === props.serialName
+      ) {
+        menuIndexState({ value: props.storedElements[foundIndexSerial].value });
+      }
+    }
+  }, [props.storedElements, props.serialName]);
+
   // Send message to websocket
   const sendMessage = (data) => {
     try {
@@ -62,7 +83,7 @@ const MenuLeft = forwardRef((props, ref) => {
 
   return (
     <>
-      <Box onClick={() => setDrawerOpen(false)}>
+      <Box>
         <SwipeableDrawer
           anchor="left"
           open={drawerOpen.value}
@@ -71,13 +92,14 @@ const MenuLeft = forwardRef((props, ref) => {
           onClose={() => setDrawerOpen(false)}
           onOpen={() => setDrawerOpen(true)}
         >
-          <Box sx={{ width: "250px" }} onClick={() => setDrawerOpen(false)}>
+          <Box sx={{ width: "270px" }}>
             <List>
               <ListItem
                 button
                 selected={menuIndex.value === "index-1" ? true : false}
                 onClick={() => {
                   sendMessage("digital=1\x0d\x0a");
+                  setDrawerOpen(false);
                 }}
               >
                 <ListItemIcon>
@@ -96,6 +118,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 button
                 onClick={() => {
                   sendMessage("digital=2\x0d\x0a");
+                  setDrawerOpen(false);
                 }}
               >
                 <ListItemIcon>
@@ -111,6 +134,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 button
                 onClick={() => {
                   sendMessage("digital=3\x0d\x0a");
+                  setDrawerOpen(false);
                 }}
               >
                 <ListItemIcon>
@@ -126,6 +150,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 button
                 onClick={() => {
                   sendMessage("digital=5\x0d\x0a");
+                  setDrawerOpen(false);
                 }}
               >
                 <ListItemIcon>
@@ -144,6 +169,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 selected={menuIndex.value === "index-4" ? true : false}
                 onClick={() => {
                   sendMessage("digital=4\x0d\x0a");
+                  setDrawerOpen(false);
                 }}
               >
                 <ListItemIcon>
@@ -154,6 +180,93 @@ const MenuLeft = forwardRef((props, ref) => {
               </ListItem>
             </List>
             <Divider />
+            <DisplayPowerListItem
+              primaryText="Projector Power"
+              faIcon={faProjector}
+              digitalName="projector-power"
+              serialName="projector-status"
+              joinNumberOn="32"
+              joinNumberOff="33"
+              websocketObject={props.websocketObject}
+              feedbackObject={props.feedbackObject}
+              storedElements={props.storedElements}
+            />
+
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                Screen
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box
+                  sx={{
+                    textAlign: "center",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "inline-block",
+                      p: "2px",
+                    }}
+                  >
+                    <MuiButton
+                      text="Up"
+                      muiColor="primary"
+                      muiColorFeedback="secondary"
+                      muiVariant="contained"
+                      addStyle={{
+                        maxWidth: "80px",
+                        maxHeight: "30px",
+                        minWidth: "80px",
+                        minHeight: "30px",
+                      }}
+                      digitalName="screen-up"
+                      joinNumber={36}
+                      serialName=""
+                      websocketObject={props.websocketObject}
+                      feedbackObject={props.feedbackObject}
+                      storedElements={props.storedElements}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "inline-block",
+                      p: "2px",
+                    }}
+                  >
+                    <MuiButton
+                      text="Down"
+                      muiColor="primary"
+                      muiColorFeedback="secondary"
+                      muiVariant="contained"
+                      addStyle={{
+                        maxWidth: "80px",
+                        maxHeight: "30px",
+                        minWidth: "80px",
+                        minHeight: "30px",
+                      }}
+                      digitalName="screen-down"
+                      joinNumber={37}
+                      serialName=""
+                      websocketObject={props.websocketObject}
+                      feedbackObject={props.feedbackObject}
+                      storedElements={props.storedElements}
+                    />
+                  </Box>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+
+            <DisplayPowerListItem
+              primaryText="Monitor Power"
+              faIcon={faTv}
+              digitalName="monitor-power"
+              serialName="monitor-status"
+              joinNumberOn="34"
+              joinNumberOff="35"
+              websocketObject={props.websocketObject}
+              feedbackObject={props.feedbackObject}
+              storedElements={props.storedElements}
+            />
           </Box>
         </SwipeableDrawer>
       </Box>
