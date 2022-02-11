@@ -26,11 +26,14 @@ import logoDark from "./images/logoDark.png";
 import logoLight from "./images/logoLight.png";
 import { DriveLinks, DriveRoutes } from "./DrivePages";
 import { deepOrange, grey, indigo } from "@mui/material/colors";
+import PowerButton from "./PowerButton";
 
 const Main = () => {
   const [ws, wsState] = useState({ socket: null });
   const [fbObjects, fbObjectsState] = useState({ fb: null });
-  const [wsStore, wsStoreState] = useState([{ id: "null", value: "null", type: "null" }]);
+  const [wsStore, wsStoreState] = useState([
+    { id: "null", value: "null", type: "null" },
+  ]);
   const [loader, setLoader] = useState({ value: false });
   const [alertMessage, setAlertMessage] = useState({
     active: false,
@@ -317,8 +320,8 @@ const Main = () => {
             sx={{
               position: "relative",
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             <Box
@@ -328,6 +331,19 @@ const Main = () => {
             >
               <MediaVolume
                 serialName="media_volume"
+                websocketObject={ws}
+                feedbackObject={fbObjects}
+                storedElements={wsStore}
+              />
+            </Box>
+            <Box
+              sx={{
+                p: "3px",
+                ml: "auto",
+              }}
+            >
+              <PowerButton
+                digitalName="power-off"
                 websocketObject={ws}
                 feedbackObject={fbObjects}
                 storedElements={wsStore}

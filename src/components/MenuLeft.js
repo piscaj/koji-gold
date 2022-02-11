@@ -27,7 +27,10 @@ import MuiButton from "./MuiButton";
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
 
-  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+//iOS is hosted on high-end devices. The backdrop transition can be enabled without dropping frames. The performance will be good enough.
+//iOS has a "swipe to go back" feature that interferes with the discovery feature, so discovery has to be disabled.
+
+  const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const [menuIndex, menuIndexState] = useState({ value: "" });
 
@@ -87,8 +90,8 @@ const MenuLeft = forwardRef((props, ref) => {
         <SwipeableDrawer
           anchor="left"
           open={drawerOpen.value}
+          disableBackdropTransition={!iOS} 
           disableDiscovery={iOS}
-          disableBackdropTransition={!iOS}
           onClose={() => setDrawerOpen(false)}
           onOpen={() => setDrawerOpen(true)}
         >
