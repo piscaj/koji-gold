@@ -83,27 +83,30 @@ const DestinationButton = ({
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
-    try {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? styleState({ value: activeColor.value })
-          : styleState({ value: inActiveColor.value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "string" &&
-        feedbackObject.fb_objects[0].id === serialName
-      ) {
-        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "string" &&
-        feedbackObject.fb_objects[0].id === inputName
-      ) {
-        inputTextState({ value: feedbackObject.fb_objects[0].value });
+    if (Object.keys(feedbackObject).length === 0) {
+    } else {
+      try {
+        if (
+          feedbackObject.fb_objects[0].type === "bool" &&
+          feedbackObject.fb_objects[0].id === digitalName
+        ) {
+          feedbackObject.fb_objects[0].value === "1"
+            ? styleState({ value: activeColor.value })
+            : styleState({ value: inActiveColor.value });
+        } else if (
+          feedbackObject.fb_objects[0].type === "string" &&
+          feedbackObject.fb_objects[0].id === serialName
+        ) {
+          dynamicTextState({ value: feedbackObject.fb_objects[0].value });
+        } else if (
+          feedbackObject.fb_objects[0].type === "string" &&
+          feedbackObject.fb_objects[0].id === inputName
+        ) {
+          inputTextState({ value: feedbackObject.fb_objects[0].value });
+        }
+      } catch {
+        console.warn("Waiting for payload from processor");
       }
-    } catch {
-      console.warn("Waiting for payload from processor");
     }
     return () => {};
   }, [

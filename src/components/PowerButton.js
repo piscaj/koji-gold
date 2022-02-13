@@ -42,17 +42,20 @@ const PowerButton = ({
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
-    try {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? showPowerState({ value: true })
-          : showPowerState({ value: false });
+    if (Object.keys(feedbackObject).length === 0) {
+    }else{
+      try {
+        if (
+          feedbackObject.fb_objects[0].type === "bool" &&
+          feedbackObject.fb_objects[0].id === digitalName
+        ) {
+          feedbackObject.fb_objects[0].value === "1"
+            ? showPowerState({ value: true })
+            : showPowerState({ value: false });
+        }
+      } catch {
+        console.warn("Waiting for payload from processor");
       }
-    } catch {
-      console.warn("Waiting for payload from processor");
     }
     return () => {};
   }, [feedbackObject, digitalName]);

@@ -48,15 +48,18 @@ const MenuLeft = forwardRef((props, ref) => {
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
-    try {
-      if (
-        props.feedbackObject.fb_objects[0].type === "string" &&
-        props.feedbackObject.fb_objects[0].id === props.serialName
-      ) {
-        menuIndexState({ value: props.feedbackObject.fb_objects[0].value });
+    if (Object.keys(props.feedbackObject).length === 0) {
+    }else{
+      try {
+        if (
+          props.feedbackObject.fb_objects[0].type === "string" &&
+          props.feedbackObject.fb_objects[0].id === props.serialName
+        ) {
+          menuIndexState({ value: props.feedbackObject.fb_objects[0].value });
+        }
+      } catch {
+        console.warn("Waiting for payload from processor");
       }
-    } catch {
-      console.warn("Waiting for payload from processor");
     }
     return () => {};
   }, [props.feedbackObject, props.serialName]);

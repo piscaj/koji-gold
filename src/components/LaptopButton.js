@@ -65,29 +65,32 @@ const LaptopButton = ({
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
-    try {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? styleState({ value: activeColor.value })
-          : styleState({ value: inActiveColor.value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "string" &&
-        feedbackObject.fb_objects[0].id === serialName
-      ) {
-        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === syncStatusName
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? syncState({ value: true })
-          : syncState({ value: false });
+    if (Object.keys(feedbackObject).length === 0) {
+    } else {
+      try {
+        if (
+          feedbackObject.fb_objects[0].type === "bool" &&
+          feedbackObject.fb_objects[0].id === digitalName
+        ) {
+          feedbackObject.fb_objects[0].value === "1"
+            ? styleState({ value: activeColor.value })
+            : styleState({ value: inActiveColor.value });
+        } else if (
+          feedbackObject.fb_objects[0].type === "string" &&
+          feedbackObject.fb_objects[0].id === serialName
+        ) {
+          dynamicTextState({ value: feedbackObject.fb_objects[0].value });
+        } else if (
+          feedbackObject.fb_objects[0].type === "bool" &&
+          feedbackObject.fb_objects[0].id === syncStatusName
+        ) {
+          feedbackObject.fb_objects[0].value === "1"
+            ? syncState({ value: true })
+            : syncState({ value: false });
+        }
+      } catch {
+        console.warn("Waiting for payload from processor");
       }
-    } catch {
-      console.warn("Waiting for payload from processor");
     }
     return () => {};
   }, [

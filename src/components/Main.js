@@ -35,6 +35,7 @@ const Main = () => {
   ]);
   const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [connected, connectedState] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     active: false,
     severity: "info",
@@ -52,16 +53,25 @@ const Main = () => {
 
   //const socketUrl = "wss://192.168.2.29:49797";
   const socketUrl = "wss://79shawsheen.mycrestron.com:49797";
-  const empty = {};
+  const empty = {fb_objects: [{id: "", value: "", type: ""}]};
   const didUnmount = useRef(false);
 
   const { sendMessage, lastJsonMessage, lastMessage, readyState } =
     useWebSocket(socketUrl, {
       shouldReconnect: (closeEvent) => {
+        setAlertMessage({ active: false });
+        setAlertMessage({
+          active: true,
+          severity: "info",
+          title: "Whoops!",
+          message:
+            "The websocket connection reconnecting.",
+        });
         return didUnmount.current === false;
       },
       reconnectAttempts: 10,
       reconnectInterval: 1000,
+      retryOnError: true,
       onReconnectStop: (number) => {
         setAlertMessage({ active: false });
         setAlertMessage({
@@ -117,7 +127,7 @@ const Main = () => {
   useEffect(() => {
     if (lastJsonMessage !== null) {
       if (Object.keys(lastJsonMessage).length === 0) {
-        //This is a fix for the "HB" that is not a json obj
+        //This is a fix for the "HB" that is not an empty json obj
         //pass on the empty {}
       } else {
         updateStoreState(lastJsonMessage.fb_objects[0]);
@@ -133,10 +143,14 @@ const Main = () => {
         title: "Sweet!",
         message: "I'm connected to " + socketUrl,
       });
+      if(!connected){
       sendMessage("get_json=all\x0d\x0a");
-
       console.log("Requsting update from processor");
+      }
+      connectedState(true);
+
     } else if (ReadyState.CLOSING) {
+      connectedState(false);
       setAlertMessage({
         active: true,
         severity: "warning",
@@ -144,7 +158,7 @@ const Main = () => {
         message: "Attempting to reconnect.",
       });
     }
-  }, [readyState, sendMessage, socketUrl]);
+  }, [readyState, sendMessage, socketUrl, connected]);
 
   const colorMode = React.useMemo(
     () => ({

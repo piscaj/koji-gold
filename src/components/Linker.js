@@ -14,15 +14,18 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
-    try {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName
-      ) {
-        if (feedbackObject.fb_objects[0].value === "1") navigate(link);
+    if (Object.keys(feedbackObject).length === 0) {
+    }else{
+      try {
+        if (
+          feedbackObject.fb_objects[0].type === "bool" &&
+          feedbackObject.fb_objects[0].id === digitalName
+        ) {
+          if (feedbackObject.fb_objects[0].value === "1") navigate(link);
+        }
+      } catch {
+        console.warn("Waiting for payload from processor");
       }
-    } catch {
-      console.warn("Waiting for payload from processor");
     }
     return () => {};
   }, [feedbackObject, digitalName, link, navigate]);
