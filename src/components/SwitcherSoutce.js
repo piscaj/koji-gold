@@ -45,7 +45,7 @@ const SwitcherSoutce = ({
 SwitcherSoutce.propTypes = {
   sourceCount: PropTypes.number,
   digitalOffset: PropTypes.number,
-  sendMessage: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

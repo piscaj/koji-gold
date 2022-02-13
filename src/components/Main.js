@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
@@ -33,10 +33,9 @@ const Main = () => {
   const [wsStore, wsStoreState] = useState([
     { id: "null", value: "null", type: "null" },
   ]);
-  const [updateStore, updateStoreState] = useState([
-    { id: "null", value: "null", type: "null" },
-  ]);
+  const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [updateAll, updateAllState] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     active: false,
     severity: "info",
@@ -52,8 +51,9 @@ const Main = () => {
       : setAlertMessage({ active: true });
   };
 
-  const [socketUrl, setSocketUrl] = useState("wss://192.168.2.29:49797");
-
+  //const socketUrl = "wss://192.168.2.29:49797";
+  const socketUrl = "wss://79shawsheen.mycrestron.com:49797";
+  const empty = {};
   const didUnmount = useRef(false);
 
   const { sendMessage, lastJsonMessage, lastMessage, readyState } =
@@ -61,14 +61,27 @@ const Main = () => {
       shouldReconnect: (closeEvent) => {
         return didUnmount.current === false;
       },
-      reconnectAttempts: 20,
+      reconnectAttempts: 10,
       reconnectInterval: 1000,
+      onReconnectStop: (number) => {
+        setAlertMessage({ active: false });
+        setAlertMessage({
+          active: true,
+          severity: "error",
+          title: "Yikes! I tried reconnecting " + number + " times.",
+          message:
+            "We have a problem reaching - " +
+            socketUrl +
+            ". Check your network connection.",
+        });
+      },
     });
-
-  const empty = {};
 
   useEffect(() => {
     setLoader(true);
+    return () => {
+      didUnmount.current = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -77,6 +90,7 @@ const Main = () => {
         sendMessage("ACK\x0d\x0a");
         console.log("Heartbeat sent");
         setLoader(false);
+        updateAllState(true);
         setAlertMessage({ active: false });
       }
     }
@@ -114,14 +128,26 @@ const Main = () => {
   }, [lastJsonMessage]);
 
   useEffect(() => {
+    console.log("UPDATE STATE: " + updateAll);
     if (ReadyState.OPEN) {
-      setAlertMessage({
-        active: true,
-        severity: "success",
-        title: "Sweet!",
-        message: "I'm connected to " + socketUrl,
-      });
+      if (!updateAll) {
+        setAlertMessage({
+          active: true,
+          severity: "success",
+          title: "Sweet!",
+          message: "I'm connected to " + socketUrl,
+        });
+      } else if (updateAll) {
+        setAlertMessage({
+          active: true,
+          severity: "info",
+          title: "Darn...",
+          message: "The websocket connection was experiencing trouble.",
+        });
+      }
+
       sendMessage("get_json=all\x0d\x0a");
+
       console.log("Requsting update from processor");
     } else if (ReadyState.CLOSING) {
       setAlertMessage({
@@ -131,7 +157,7 @@ const Main = () => {
         message: "Attempting to reconnect.",
       });
     }
-  }, [readyState, sendMessage, socketUrl]);
+  }, [readyState, sendMessage, socketUrl, updateAll]);
 
   const colorMode = React.useMemo(
     () => ({
