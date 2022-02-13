@@ -16,16 +16,16 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
   useEffect(() => {
     try {
       if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === digitalName
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName
       ) {
-        if (feedbackObject.fb.fb_objects[0].value === "1") navigate(link);
+        if (feedbackObject.fb_objects[0].value === "1") navigate(link);
       }
     } catch {
       console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [feedbackObject.fb, digitalName, link, navigate]);
+  }, [feedbackObject, digitalName, link, navigate]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.

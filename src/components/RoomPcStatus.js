@@ -22,10 +22,10 @@ const RoomPcStatus = ({
   useEffect(() => {
     try {
       if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === syncStatusName
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === syncStatusName
       ) {
-        feedbackObject.fb.fb_objects[0].value === "1"
+        feedbackObject.fb_objects[0].value === "1"
           ? syncState({ value: true })
           : syncState({ value: false });
       }
@@ -33,7 +33,7 @@ const RoomPcStatus = ({
       console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [feedbackObject.fb, syncStatusName]);
+  }, [feedbackObject, syncStatusName]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.

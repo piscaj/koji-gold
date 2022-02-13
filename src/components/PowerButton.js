@@ -14,7 +14,7 @@ import Button from "@mui/material/Button";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
-// "websocketObject" - Pass the websocket as an object here
+// "sendMessage" - Pass the websocket as an object here
 // "feedbackObject" - Pass the data from the websocket here
 // "storedElements" - Array of fb_objects current values
 ///////////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const PowerButton = ({
   digitalName = null,
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements = [],
 }) => {
@@ -44,10 +44,10 @@ const PowerButton = ({
   useEffect(() => {
     try {
       if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === digitalName
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName
       ) {
-        feedbackObject.fb.fb_objects[0].value === "1"
+        feedbackObject.fb_objects[0].value === "1"
           ? showPowerState({ value: true })
           : showPowerState({ value: false });
       }
@@ -55,7 +55,7 @@ const PowerButton = ({
       console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [feedbackObject.fb, digitalName]);
+  }, [feedbackObject, digitalName]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
@@ -74,20 +74,6 @@ const PowerButton = ({
       }
     }
   }, [storedElements, digitalName]);
-
-  // Send message to websocket
-  const sendMessage = (data) => {
-    if (data.search("undefined") === -1) {
-      try {
-        if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
-      } catch (error) {
-        console.warn(
-          "Component id:" + digitalName + " had a websocketObject problem"
-        );
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <>
@@ -121,8 +107,21 @@ const PowerButton = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>{handleClose()}}>Cancel</Button>
-          <Button onClick={()=>{handleClose(); sendMessage("digital=38\x0d\x0a");}}>Ok</Button>
+          <Button
+            onClick={() => {
+              handleClose();
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              handleClose();
+              sendMessage("digital=38\x0d\x0a");
+            }}
+          >
+            Ok
+          </Button>
         </DialogActions>
       </Dialog>
     </>
@@ -131,7 +130,7 @@ const PowerButton = ({
 
 PowerButton.propTypes = {
   digitalName: PropTypes.string,
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

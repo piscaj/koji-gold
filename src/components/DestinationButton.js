@@ -85,29 +85,29 @@ const DestinationButton = ({
   useEffect(() => {
     try {
       if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === digitalName
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName
       ) {
-        feedbackObject.fb.fb_objects[0].value === "1"
+        feedbackObject.fb_objects[0].value === "1"
           ? styleState({ value: activeColor.value })
           : styleState({ value: inActiveColor.value });
       } else if (
-        feedbackObject.fb.fb_objects[0].type === "string" &&
-        feedbackObject.fb.fb_objects[0].id === serialName
+        feedbackObject.fb_objects[0].type === "string" &&
+        feedbackObject.fb_objects[0].id === serialName
       ) {
-        dynamicTextState({ value: feedbackObject.fb.fb_objects[0].value });
+        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
       } else if (
-        feedbackObject.fb.fb_objects[0].type === "string" &&
-        feedbackObject.fb.fb_objects[0].id === inputName
+        feedbackObject.fb_objects[0].type === "string" &&
+        feedbackObject.fb_objects[0].id === inputName
       ) {
-        inputTextState({ value: feedbackObject.fb.fb_objects[0].value });
+        inputTextState({ value: feedbackObject.fb_objects[0].value });
       }
     } catch {
       console.warn("Waiting for payload from processor");
     }
     return () => {};
   }, [
-    feedbackObject.fb,
+    feedbackObject,
     digitalName,
     activeColor,
     inActiveColor,
@@ -379,7 +379,7 @@ DestinationButton.propTypes = {
   serialName: PropTypes.string,
   inputName: PropTypes.string,
   eventType: PropTypes.string,
-  websocketObject: PropTypes.object,
+  websocketObject: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

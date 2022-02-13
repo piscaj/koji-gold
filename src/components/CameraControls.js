@@ -16,11 +16,7 @@ import {
   faLongArrowRight,
 } from "@fortawesome/pro-duotone-svg-icons";
 
-const CameraControls = ({
-  websocketObject,
-  feedbackObject,
-  storedElements,
-}) => {
+const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
   const useStyles = makeStyles({
     button: {
       textTransform: "none",
@@ -57,7 +53,7 @@ const CameraControls = ({
             onMouseUp={() => {
               show();
             }}
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -86,7 +82,7 @@ const CameraControls = ({
               minWidth: "75px",
               minHeight: "75px",
             }}
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -109,7 +105,7 @@ const CameraControls = ({
             }}
             eventType={"press"}
             digitalName="camera-up"
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -163,7 +159,7 @@ const CameraControls = ({
             }}
             eventType={"press"}
             digitalName="camera-left"
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -186,7 +182,7 @@ const CameraControls = ({
             }}
             eventType={"press"}
             digitalName="camera-home"
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -209,7 +205,7 @@ const CameraControls = ({
             }}
             eventType={"press"}
             digitalName="camera-right"
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -242,7 +238,7 @@ const CameraControls = ({
             }}
             eventType={"press"}
             digitalName="camera-zoom-minus"
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -265,7 +261,7 @@ const CameraControls = ({
             }}
             eventType={"press"}
             digitalName="camera-down"
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -288,7 +284,7 @@ const CameraControls = ({
             }}
             eventType={"press"}
             digitalName="camera-zoom-plus"
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -299,7 +295,7 @@ const CameraControls = ({
 };
 
 CameraControls.propTypes = {
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

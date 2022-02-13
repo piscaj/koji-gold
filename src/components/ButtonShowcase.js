@@ -5,11 +5,7 @@ import PropTypes from "prop-types";
 import Header from "./Header";
 import Fade from "@mui/material/Fade";
 
-const ButtonShowcase = ({
-  websocketObject,
-  feedbackObject,
-  storedElements,
-}) => {
+const ButtonShowcase = ({ sendMessage, feedbackObject, storedElements }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -56,7 +52,7 @@ const ButtonShowcase = ({
                 digitalName="showcase-contained"
                 joinNumber={9}
                 serialName=""
-                websocketObject={websocketObject}
+                sendMessage={sendMessage}
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
               />
@@ -70,7 +66,7 @@ const ButtonShowcase = ({
                 digitalName="showcase-outlined"
                 joinNumber={10}
                 serialName=""
-                websocketObject={websocketObject}
+                sendMessage={sendMessage}
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
               />
@@ -90,7 +86,7 @@ const ButtonShowcase = ({
                 digitalName="showcase-text"
                 joinNumber={11}
                 serialName="dynamic-text"
-                websocketObject={websocketObject}
+                sendMessage={sendMessage}
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
               />
@@ -104,7 +100,7 @@ const ButtonShowcase = ({
                 eventType={"press"}
                 digitalName="showcase-press"
                 serialName=""
-                websocketObject={websocketObject}
+                sendMessage={sendMessage}
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
               />
@@ -116,7 +112,7 @@ const ButtonShowcase = ({
   );
 };
 MuiButton.propTypes = {
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
 };
 

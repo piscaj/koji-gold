@@ -13,7 +13,7 @@ import VideoSwitching from "./VideoSwitching";
 
 //React Router routes go here
 export const DriveRoutes = ({
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements,
 }) => {
@@ -24,7 +24,7 @@ export const DriveRoutes = ({
         path="/"
         element={
           <RoomPc
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -34,7 +34,7 @@ export const DriveRoutes = ({
         path="/roomPc"
         element={
           <RoomPc
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -44,7 +44,7 @@ export const DriveRoutes = ({
         path="/laptop"
         element={
           <Laptop
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -54,7 +54,7 @@ export const DriveRoutes = ({
         path="/camera"
         element={
           <Camera
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -64,7 +64,7 @@ export const DriveRoutes = ({
         path="/switcher"
         element={
           <VideoSwitching
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -74,7 +74,7 @@ export const DriveRoutes = ({
         path="/showcase"
         element={
           <ButtonShowcase
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -85,6 +85,7 @@ export const DriveRoutes = ({
 };
 
 DriveRoutes.propTypes = {
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

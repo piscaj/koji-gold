@@ -6,7 +6,7 @@ import "./scss/Switcher.scss";
 const SwitcherDest = ({
   sourceCount = 1,
   digitalOffset = 1,
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements,
 }) => {
@@ -36,7 +36,7 @@ const SwitcherDest = ({
               display: "inline-flex", //Set text to top of button
               alignItems: "flex-start", //Set text to top of button
             }}
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -49,7 +49,7 @@ const SwitcherDest = ({
 SwitcherDest.propTypes = {
   sourceCount: PropTypes.number,
   digitalOffset: PropTypes.number,
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

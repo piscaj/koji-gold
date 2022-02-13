@@ -6,7 +6,7 @@ import "./scss/Switcher.scss";
 const SwitcherSoutce = ({
   sourceCount = 1,
   digitalOffset = 1,
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements,
 }) => {
@@ -32,7 +32,7 @@ const SwitcherSoutce = ({
               minWidth: "150px",
               minHeight: "70px",
             }}
-            websocketObject={websocketObject}
+            sendMessage={sendMessage}
             feedbackObject={feedbackObject}
             storedElements={storedElements}
           />
@@ -45,7 +45,7 @@ const SwitcherSoutce = ({
 SwitcherSoutce.propTypes = {
   sourceCount: PropTypes.number,
   digitalOffset: PropTypes.number,
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.object,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

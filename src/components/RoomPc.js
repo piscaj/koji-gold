@@ -5,7 +5,7 @@ import Header from "./Header";
 import RoomPcStatus from "./RoomPcStatus";
 import Fade from "@mui/material/Fade";
 
-const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
+const RoomPc = ({ sendMessage, feedbackObject, storedElements }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -54,7 +54,7 @@ const RoomPc = ({ websocketObject, feedbackObject, storedElements }) => {
 };
 
 RoomPc.propTypes = {
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

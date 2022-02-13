@@ -15,7 +15,7 @@ import { faLaptop, faBan } from "@fortawesome/pro-duotone-svg-icons";
 // "joinNumber" - Digital join number in Crestron for pulse/push
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "eventType" - Default "click" - values: "click" or "press"
-// "websocketObject" - Pass the websocket as an object here
+// "sendMessage" - Pass the websocket as an object here
 // "feedbackObject" - Pass the data from the websocket here
 // "storedElements" - Array of fb_objects current values
 // "syncStatusName" - This name should match up to the Crestron digital name paramiter
@@ -31,7 +31,7 @@ const LaptopButton = ({
   joinNumber,
   serialName = null,
   eventType = null,
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements = [],
   syncStatusName = null,
@@ -67,22 +67,22 @@ const LaptopButton = ({
   useEffect(() => {
     try {
       if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === digitalName
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName
       ) {
-        feedbackObject.fb.fb_objects[0].value === "1"
+        feedbackObject.fb_objects[0].value === "1"
           ? styleState({ value: activeColor.value })
           : styleState({ value: inActiveColor.value });
       } else if (
-        feedbackObject.fb.fb_objects[0].type === "string" &&
-        feedbackObject.fb.fb_objects[0].id === serialName
+        feedbackObject.fb_objects[0].type === "string" &&
+        feedbackObject.fb_objects[0].id === serialName
       ) {
-        dynamicTextState({ value: feedbackObject.fb.fb_objects[0].value });
+        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
       } else if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === syncStatusName
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === syncStatusName
       ) {
-        feedbackObject.fb.fb_objects[0].value === "1"
+        feedbackObject.fb_objects[0].value === "1"
           ? syncState({ value: true })
           : syncState({ value: false });
       }
@@ -91,7 +91,7 @@ const LaptopButton = ({
     }
     return () => {};
   }, [
-    feedbackObject.fb,
+    feedbackObject,
     digitalName,
     activeColor,
     inActiveColor,
@@ -177,20 +177,6 @@ const LaptopButton = ({
   useEffect(() => {
     if (!syncStatusName === null) syncState({ value: false });
   }, [syncStatusName]);
-
-  // Send message to websocket
-  const sendMessage = (data) => {
-    if (data.search("undefined") === -1) {
-      try {
-        if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
-      } catch (error) {
-        console.warn(
-          "Component id:" + digitalName + " had a websocketObject problem"
-        );
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <div>
@@ -330,7 +316,7 @@ LaptopButton.propTypes = {
   digitalName: PropTypes.string,
   serialName: PropTypes.string,
   eventType: PropTypes.string,
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
   syncStatusName: PropTypes.string,

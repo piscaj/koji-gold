@@ -5,7 +5,7 @@ import Header from "./Header";
 import LaptopButton from "./LaptopButton";
 import Fade from "@mui/material/Fade";
 
-const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
+const Laptop = ({ sendMessage, feedbackObject, storedElements }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -56,7 +56,7 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
                 digitalName="laptop-1"
                 joinNumber={6}
                 serialName=""
-                websocketObject={websocketObject}
+                sendMessage={sendMessage}
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
                 syncStatusName="sync-laptop-1"
@@ -77,7 +77,7 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
                 digitalName="laptop-2"
                 joinNumber={7}
                 serialName=""
-                websocketObject={websocketObject}
+                sendMessage={sendMessage}
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
                 syncStatusName="sync-laptop-2"
@@ -98,7 +98,7 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
                 digitalName="laptop-3"
                 joinNumber={8}
                 serialName=""
-                websocketObject={websocketObject}
+                sendMessage={sendMessage}
                 feedbackObject={feedbackObject}
                 storedElements={storedElements}
                 syncStatusName="sync-laptop-3"
@@ -112,7 +112,7 @@ const Laptop = ({ websocketObject, feedbackObject, storedElements }) => {
 };
 
 Laptop.propTypes = {
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

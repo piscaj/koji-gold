@@ -8,7 +8,7 @@ import "./scss/Switcher.scss";
 import Fade from "@mui/material/Fade";
 
 const VideoSwitching = ({
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements,
 }) => {
@@ -33,7 +33,7 @@ const VideoSwitching = ({
         <SwitcherSoutce
           sourceCount={10}
           digitalOffset={11}
-          websocketObject={websocketObject}
+          sendMessage={sendMessage}
           feedbackObject={feedbackObject}
           storedElements={storedElements}
         />
@@ -49,7 +49,7 @@ const VideoSwitching = ({
         <SwitcherDest
           sourceCount={5}
           digitalOffset={21}
-          websocketObject={websocketObject}
+          sendMessage={sendMessage}
           feedbackObject={feedbackObject}
           storedElements={storedElements}
         />
@@ -58,7 +58,7 @@ const VideoSwitching = ({
   );
 };
 VideoSwitching.propTypes = {
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

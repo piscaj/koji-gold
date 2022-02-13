@@ -5,7 +5,7 @@ import CameraControls from "./CameraControls";
 import Header from "./Header";
 import Fade from "@mui/material/Fade";
 
-const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
+const Camera = ({ sendMessage, feedbackObject, storedElements }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -16,6 +16,7 @@ const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
           left: "0",
           right: "0",
           m: "10px",
+          overflow: "scroll",
         }}
       >
         <Box
@@ -41,7 +42,7 @@ const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
             }}
           >
             <CameraControls
-              websocketObject={websocketObject}
+              sendMessage={sendMessage}
               feedbackObject={feedbackObject}
               storedElements={storedElements}
             />
@@ -52,7 +53,7 @@ const Camera = ({ websocketObject, feedbackObject, storedElements }) => {
   );
 };
 Camera.propTypes = {
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

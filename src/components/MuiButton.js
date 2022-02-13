@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // "joinNumber" - Digital join number in Crestron for pulse/push
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "eventType" - Default "click" - values: "click" or "press"
-// "websocketObject" - Pass the websocket as an object here
+// "sendMessage" - Pass the websocket as an object here
 // "feedbackObject" - Pass the data from the websocket here
 // "storedElements" - Array of fb_objects current values
 // "faIcon" - FontAwesome icon -- any imported icon
@@ -35,7 +35,7 @@ const MuiButton = ({
   joinNumber,
   serialName = null,
   eventType = null,
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements = [],
 }) => {
@@ -70,23 +70,23 @@ const MuiButton = ({
   useEffect(() => {
     try {
       if (
-        feedbackObject.fb.fb_objects[0].type === "bool" &&
-        feedbackObject.fb.fb_objects[0].id === digitalName
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName
       ) {
-        feedbackObject.fb.fb_objects[0].value === "1"
+        feedbackObject.fb_objects[0].value === "1"
           ? styleState({ value: activeColor.value })
           : styleState({ value: inActiveColor.value });
       } else if (
-        feedbackObject.fb.fb_objects[0].type === "string" &&
-        feedbackObject.fb.fb_objects[0].id === serialName
+        feedbackObject.fb_objects[0].type === "string" &&
+        feedbackObject.fb_objects[0].id === serialName
       ) {
-        dynamicTextState({ value: feedbackObject.fb.fb_objects[0].value });
+        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
       }
     } catch {
       console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [feedbackObject.fb, digitalName, activeColor, inActiveColor, serialName]);
+  }, [feedbackObject, digitalName, activeColor, inActiveColor, serialName]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
@@ -147,20 +147,6 @@ const MuiButton = ({
     if (!muiColorFeedback === null)
       activeColorState({ value: muiColorFeedback });
   }, [muiColorFeedback]);
-
-  // Send message to websocket
-  const sendMessage = (data) => {
-    if (data.search("undefined") === -1) {
-      try {
-        if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
-      } catch (error) {
-        console.warn(
-          "Component id:" + digitalName + " had a websocketObject problem"
-        );
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <div>
@@ -277,7 +263,7 @@ MuiButton.propTypes = {
   digitalName: PropTypes.string,
   serialName: PropTypes.string,
   eventType: PropTypes.string,
-  websocketObject: PropTypes.object,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };

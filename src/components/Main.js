@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import {
@@ -29,12 +30,13 @@ import { deepOrange, grey, indigo } from "@mui/material/colors";
 import PowerButton from "./PowerButton";
 
 const Main = () => {
-  const [ws, wsState] = useState({ socket: null });
-  const [fbObjects, fbObjectsState] = useState({ fb: null });
   const [wsStore, wsStoreState] = useState([
     { id: "null", value: "null", type: "null" },
   ]);
-  const [loader, setLoader] = useState({ value: false });
+  const [updateStore, updateStoreState] = useState([
+    { id: "null", value: "null", type: "null" },
+  ]);
+  const [loader, setLoader] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     active: false,
     severity: "info",
@@ -43,7 +45,6 @@ const Main = () => {
   });
   const [mode, setMode] = useState("light");
   const menuLeft = useRef();
-  var wsStoredElements = [{ id: "null", value: "null", type: "null" }];
 
   const clearAlert = () => {
     alertMessage.active === true
@@ -51,91 +52,86 @@ const Main = () => {
       : setAlertMessage({ active: true });
   };
 
+  const [socketUrl, setSocketUrl] = useState("wss://192.168.2.29:49797");
+
+  const didUnmount = useRef(false);
+
+  const { sendMessage, lastJsonMessage, lastMessage, readyState } =
+    useWebSocket(socketUrl, {
+      shouldReconnect: (closeEvent) => {
+        return didUnmount.current === false;
+      },
+      reconnectAttempts: 20,
+      reconnectInterval: 1000,
+    });
+
+  const empty = {};
+
   useEffect(() => {
-    setLoader({ value: true });
-    const connect = () => {
-      //var ws = new WebSocket("wss://192.168.2.29:49797");
-      var ws = new WebSocket("wss://79shawsheen.mycrestron.com:49797");
-      console.warn("New socket created");
-      wsState({ socket: ws });
-
-      const sendMessage = (data) => {
-        try {
-          ws.send(data);
-        } catch (error) {
-          console.warn("Main component websocket problem");
-          console.log(error);
-        }
-      };
-
-      ws.onopen = () => {
-        setAlertMessage({
-          active: true,
-          severity: "success",
-          title: "Sweet!",
-          message: "I'm connected to " + ws.url,
-        });
-        //setAlertMessage({ active: false, severity: "", message: "" });
-        sendMessage("get_json=all\x0d\x0a");
-        console.log("Requsting update from processor");
-      };
-
-      ws.onmessage = (event) => {
-        if (event.data === "HB") {
-          sendMessage("ACK\x0d\x0a");
-          console.log("Heartbeat sent");
-          wsStoreState(wsStoredElements);
-          setLoader({ value: false });
-          setAlertMessage({ active: false });
-        } else {
-          fbObjectsState({ fb: JSON.parse(event.data) });
-          var newObject = JSON.parse(event.data).fb_objects[0];
-          // Check incomming ws json stream elements against the stored elements
-          var foundIndex = wsStoredElements.findIndex(
-            (x) => x.id === newObject.id
-          );
-          // If we have a matching element value at id, overwrite it
-          if (foundIndex >= 0) {
-            wsStoredElements[foundIndex].value = newObject.value;
-            if (!setLoader.value) wsStoreState(wsStoredElements);
-          }
-          // If we don't have a match lets push the element into the array
-          else {
-            wsStoredElements.push(JSON.parse(event.data).fb_objects[0]);
-            if (!setLoader.value) wsStoreState(wsStoredElements);
-          }
-        }
-      };
-      ws.onclose = () => {
-        setAlertMessage({
-          active: true,
-          severity: "warning",
-          title: "Ooops!",
-          message: "Attempting to reconnect.",
-        });
-        //Try a reconnect in 1 seconds
-        setTimeout(() => check(), 1000);
-      };
-
-      const check = () => {
-        if (!ws || ws.readyState === WebSocket.CLOSED) {
-          connect();
-        }
-      };
-
-      ws.onerror = (err) => {
-        console.warn("Socket error: ", err.message, "Closing socket");
-        ws.close();
-      };
-    };
-    connect();
-    return () => {
-      ws.socket.close(1000, "Application closed");
-      console.warn("Socket closed");
-      console.warn("App exiting");
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setLoader(true);
   }, []);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      if (lastMessage.data === "HB") {
+        sendMessage("ACK\x0d\x0a");
+        console.log("Heartbeat sent");
+        setLoader(false);
+        setAlertMessage({ active: false });
+      }
+    }
+  }, [lastMessage, sendMessage]);
+
+  useEffect(() => {
+    var wsStoredElements = wsStore;
+    // Check incomming ws json stream elements against the stored elements
+    var foundIndex = wsStore.findIndex((x) => x.id === updateStore.id);
+    // If we have a matching element value at id, overwrite it
+    if (foundIndex >= 0) {
+      wsStore[foundIndex].value = updateStore.value;
+      if (!loader) {
+        wsStoreState(wsStoredElements);
+      }
+    }
+    // If we don't have a match lets push the element into the array
+    else {
+      wsStoredElements.push(updateStore);
+      if (!loader) {
+        wsStoreState(wsStoredElements);
+      }
+    }
+  }, [updateStore, wsStore, loader]);
+
+  useEffect(() => {
+    if (lastJsonMessage !== null) {
+      if (Object.keys(lastJsonMessage).length === 0) {
+        //This is a fix for the "HB" that is not a json obj
+        //pass on the empty {}
+      } else {
+        updateStoreState(lastJsonMessage.fb_objects[0]);
+      }
+    }
+  }, [lastJsonMessage]);
+
+  useEffect(() => {
+    if (ReadyState.OPEN) {
+      setAlertMessage({
+        active: true,
+        severity: "success",
+        title: "Sweet!",
+        message: "I'm connected to " + socketUrl,
+      });
+      sendMessage("get_json=all\x0d\x0a");
+      console.log("Requsting update from processor");
+    } else if (ReadyState.CLOSING) {
+      setAlertMessage({
+        active: true,
+        severity: "warning",
+        title: "Ooops!",
+        message: "Attempting to reconnect.",
+      });
+    }
+  }, [readyState, sendMessage, socketUrl]);
 
   const colorMode = React.useMemo(
     () => ({
@@ -195,9 +191,9 @@ const Main = () => {
       <Box className="container">
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={loader.value}
+          open={loader}
           onClick={() => {
-            setLoader({ value: false });
+            setLoader(false);
           }}
         >
           <Box
@@ -217,9 +213,9 @@ const Main = () => {
         </Backdrop>
         <MenuLeft
           serialName={"menu-index"}
-          feedbackObject={fbObjects}
+          feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
           storedElements={wsStore}
-          websocketObject={ws}
+          sendMessage={sendMessage}
           ref={menuLeft}
         />
         <Box
@@ -308,12 +304,15 @@ const Main = () => {
         </Box>
         <Box className="body">
           <DriveRoutes
-            websocketObject={ws}
-            feedbackObject={fbObjects}
+            sendMessage={sendMessage}
+            feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
             storedElements={wsStore}
           />
 
-          <DriveLinks feedbackObject={fbObjects} storedElements={wsStore} />
+          <DriveLinks
+            feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
+            storedElements={wsStore}
+          />
         </Box>
         <Box className="footer">
           <Box
@@ -331,8 +330,10 @@ const Main = () => {
             >
               <MediaVolume
                 serialName="media_volume"
-                websocketObject={ws}
-                feedbackObject={fbObjects}
+                sendMessage={sendMessage}
+                feedbackObject={
+                  lastJsonMessage !== null ? lastJsonMessage : empty
+                }
                 storedElements={wsStore}
               />
             </Box>
@@ -344,8 +345,10 @@ const Main = () => {
             >
               <PowerButton
                 digitalName="power-off"
-                websocketObject={ws}
-                feedbackObject={fbObjects}
+                sendMessage={sendMessage}
+                feedbackObject={
+                  lastJsonMessage !== null ? lastJsonMessage : empty
+                }
                 storedElements={wsStore}
               />
             </Box>

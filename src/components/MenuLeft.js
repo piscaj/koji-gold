@@ -27,10 +27,12 @@ import MuiButton from "./MuiButton";
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
 
-//iOS is hosted on high-end devices. The backdrop transition can be enabled without dropping frames. The performance will be good enough.
-//iOS has a "swipe to go back" feature that interferes with the discovery feature, so discovery has to be disabled.
+  //iOS is hosted on high-end devices. The backdrop transition can be enabled without dropping frames. The performance will be good enough.
+  //iOS has a "swipe to go back" feature that interferes with the discovery feature, so discovery has to be disabled.
 
-  const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const iOS =
+    typeof navigator !== "undefined" &&
+    /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const [menuIndex, menuIndexState] = useState({ value: "" });
 
@@ -48,16 +50,16 @@ const MenuLeft = forwardRef((props, ref) => {
   useEffect(() => {
     try {
       if (
-        props.feedbackObject.fb.fb_objects[0].type === "string" &&
-        props.feedbackObject.fb.fb_objects[0].id === props.serialName
+        props.feedbackObject.fb_objects[0].type === "string" &&
+        props.feedbackObject.fb_objects[0].id === props.serialName
       ) {
-        menuIndexState({ value: props.feedbackObject.fb.fb_objects[0].value });
+        menuIndexState({ value: props.feedbackObject.fb_objects[0].value });
       }
     } catch {
       console.warn("Waiting for payload from processor");
     }
     return () => {};
-  }, [props.feedbackObject.fb, props.serialName]);
+  }, [props.feedbackObject, props.serialName]);
 
   useEffect(() => {
     var foundIndexSerial = props.storedElements.findIndex(
@@ -73,24 +75,13 @@ const MenuLeft = forwardRef((props, ref) => {
     }
   }, [props.storedElements, props.serialName]);
 
-  // Send message to websocket
-  const sendMessage = (data) => {
-    try {
-      if (props.websocketObject.socket.OPEN)
-        props.websocketObject.socket.send(data);
-    } catch (error) {
-      console.warn("Component MenuL had a websocketObject problem");
-      console.log(error);
-    }
-  };
-
   return (
     <>
       <Box>
         <SwipeableDrawer
           anchor="left"
           open={drawerOpen.value}
-          disableBackdropTransition={!iOS} 
+          disableBackdropTransition={!iOS}
           disableDiscovery={iOS}
           onClose={() => setDrawerOpen(false)}
           onOpen={() => setDrawerOpen(true)}
@@ -101,7 +92,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 button
                 selected={menuIndex.value === "index-1" ? true : false}
                 onClick={() => {
-                  sendMessage("digital=1\x0d\x0a");
+                  props.sendMessage("digital=1\x0d\x0a");
                   setDrawerOpen(false);
                 }}
               >
@@ -120,7 +111,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 selected={menuIndex.value === "index-2" ? true : false}
                 button
                 onClick={() => {
-                  sendMessage("digital=2\x0d\x0a");
+                  props.sendMessage("digital=2\x0d\x0a");
                   setDrawerOpen(false);
                 }}
               >
@@ -136,7 +127,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 selected={menuIndex.value === "index-3" ? true : false}
                 button
                 onClick={() => {
-                  sendMessage("digital=3\x0d\x0a");
+                  props.sendMessage("digital=3\x0d\x0a");
                   setDrawerOpen(false);
                 }}
               >
@@ -152,7 +143,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 selected={menuIndex.value === "index-5" ? true : false}
                 button
                 onClick={() => {
-                  sendMessage("digital=5\x0d\x0a");
+                  props.sendMessage("digital=5\x0d\x0a");
                   setDrawerOpen(false);
                 }}
               >
@@ -171,7 +162,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 button
                 selected={menuIndex.value === "index-4" ? true : false}
                 onClick={() => {
-                  sendMessage("digital=4\x0d\x0a");
+                  props.sendMessage("digital=4\x0d\x0a");
                   setDrawerOpen(false);
                 }}
               >
@@ -190,7 +181,7 @@ const MenuLeft = forwardRef((props, ref) => {
               serialName="projector-status"
               joinNumberOn="32"
               joinNumberOff="33"
-              websocketObject={props.websocketObject}
+              sendMessage={props.sendMessage}
               feedbackObject={props.feedbackObject}
               storedElements={props.storedElements}
             />
@@ -225,7 +216,7 @@ const MenuLeft = forwardRef((props, ref) => {
                       digitalName="screen-up"
                       joinNumber={36}
                       serialName=""
-                      websocketObject={props.websocketObject}
+                      sendMessage={props.sendMessage}
                       feedbackObject={props.feedbackObject}
                       storedElements={props.storedElements}
                     />
@@ -250,7 +241,7 @@ const MenuLeft = forwardRef((props, ref) => {
                       digitalName="screen-down"
                       joinNumber={37}
                       serialName=""
-                      websocketObject={props.websocketObject}
+                      sendMessage={props.sendMessage}
                       feedbackObject={props.feedbackObject}
                       storedElements={props.storedElements}
                     />
@@ -266,7 +257,7 @@ const MenuLeft = forwardRef((props, ref) => {
               serialName="monitor-status"
               joinNumberOn="34"
               joinNumberOff="35"
-              websocketObject={props.websocketObject}
+              sendMessage={props.sendMessage}
               feedbackObject={props.feedbackObject}
               storedElements={props.storedElements}
             />
