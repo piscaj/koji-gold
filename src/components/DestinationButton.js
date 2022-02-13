@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // "joinNumber" - Digital join number in Crestron for pulse/push
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "eventType" - Default "click" - values: "click" or "press"
-// "websocketObject" - Pass the websocket as an object here
+// "sendMessage" - Pass the websocket as an object here
 // "feedbackObject" - Pass the data from the websocket here
 // "storedElements" - Array of fb_objects current values
 // "faIcon" - FontAwesome icon -- any imported icon
@@ -39,7 +39,7 @@ const DestinationButton = ({
   serialName = null,
   inputName = null,
   eventType = null,
-  websocketObject,
+  sendMessage,
   feedbackObject,
   storedElements = [],
 }) => {
@@ -190,20 +190,6 @@ const DestinationButton = ({
     if (!muiColorFeedback === null)
       activeColorState({ value: muiColorFeedback });
   }, [muiColorFeedback]);
-
-  // Send message to websocket
-  const sendMessage = (data) => {
-    if (data.search("undefined") === -1) {
-      try {
-        if (websocketObject.socket.OPEN) websocketObject.socket.send(data);
-      } catch (error) {
-        console.warn(
-          "Component id:" + digitalName + " had a websocketObject problem"
-        );
-        console.log(error);
-      }
-    }
-  };
 
   return (
     <div>
@@ -379,7 +365,7 @@ DestinationButton.propTypes = {
   serialName: PropTypes.string,
   inputName: PropTypes.string,
   eventType: PropTypes.string,
-  websocketObject: PropTypes.func,
+  sendMessage: PropTypes.func,
   feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };
