@@ -35,7 +35,6 @@ const Main = () => {
   ]);
   const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [updateAll, updateAllState] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     active: false,
     severity: "info",
@@ -90,7 +89,6 @@ const Main = () => {
         sendMessage("ACK\x0d\x0a");
         console.log("Heartbeat sent");
         setLoader(false);
-        updateAllState(true);
         setAlertMessage({ active: false });
       }
     }
@@ -128,24 +126,13 @@ const Main = () => {
   }, [lastJsonMessage]);
 
   useEffect(() => {
-    console.log("UPDATE STATE: " + updateAll);
     if (ReadyState.OPEN) {
-      if (!updateAll) {
-        setAlertMessage({
-          active: true,
-          severity: "success",
-          title: "Sweet!",
-          message: "I'm connected to " + socketUrl,
-        });
-      } else if (updateAll) {
-        setAlertMessage({
-          active: true,
-          severity: "info",
-          title: "Darn...",
-          message: "The websocket connection was experiencing trouble.",
-        });
-      }
-
+      setAlertMessage({
+        active: true,
+        severity: "success",
+        title: "Sweet!",
+        message: "I'm connected to " + socketUrl,
+      });
       sendMessage("get_json=all\x0d\x0a");
 
       console.log("Requsting update from processor");
@@ -157,7 +144,7 @@ const Main = () => {
         message: "Attempting to reconnect.",
       });
     }
-  }, [readyState, sendMessage, socketUrl, updateAll]);
+  }, [readyState, sendMessage, socketUrl]);
 
   const colorMode = React.useMemo(
     () => ({
