@@ -48,12 +48,14 @@ const MenuLeft = forwardRef((props, ref) => {
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
+    let mounted = true;
     if (Object.keys(props.feedbackObject).length === 0) {
-    }else{
+    } else {
       try {
         if (
           props.feedbackObject.fb_objects[0].type === "string" &&
-          props.feedbackObject.fb_objects[0].id === props.serialName
+          props.feedbackObject.fb_objects[0].id === props.serialName &&
+          mounted
         ) {
           menuIndexState({ value: props.feedbackObject.fb_objects[0].value });
         }
@@ -61,21 +63,28 @@ const MenuLeft = forwardRef((props, ref) => {
         console.warn("Waiting for payload from processor");
       }
     }
-    return () => {};
+    return () => {
+      mounted = false;
+    };
   }, [props.feedbackObject, props.serialName]);
 
   useEffect(() => {
+    let mounted = true;
     var foundIndexSerial = props.storedElements.findIndex(
       (x) => x.id === props.serialName
     );
     if (foundIndexSerial >= 0) {
       if (
         props.storedElements[foundIndexSerial].type === "string" &&
-        props.storedElements[foundIndexSerial].id === props.serialName
+        props.storedElements[foundIndexSerial].id === props.serialName &&
+        mounted
       ) {
         menuIndexState({ value: props.storedElements[foundIndexSerial].value });
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, [props.storedElements, props.serialName]);
 
   return (

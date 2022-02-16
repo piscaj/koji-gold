@@ -44,13 +44,15 @@ const MediaVolume = ({
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
+    let mounted = true;
     if (!moving) {
       if (Object.keys(feedbackObject).length === 0) {
-      }else{
+      } else {
         try {
           if (
             feedbackObject.fb_objects[0].type === "string" &&
-            feedbackObject.fb_objects[0].id === serialName
+            feedbackObject.fb_objects[0].id === serialName &&
+            mounted
           ) {
             setbarValue(feedbackObject.fb_objects[0].value);
           }
@@ -59,22 +61,29 @@ const MediaVolume = ({
         }
       }
     }
-    return () => {};
+    return () => {
+      mounted = false;
+    };
   }, [feedbackObject, serialName, moving]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
+    let mounted = true;
     var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
 
     if (foundIndexSerial >= 0) {
       if (
         storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === serialName
+        storedElements[foundIndexSerial].id === serialName &&
+        mounted
       ) {
         setbarValue(storedElements[foundIndexSerial].value);
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, [storedElements, serialName]);
 
   return (

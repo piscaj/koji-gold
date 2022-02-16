@@ -83,24 +83,28 @@ const DestinationButton = ({
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
+    let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
     } else {
       try {
         if (
           feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === digitalName
+          feedbackObject.fb_objects[0].id === digitalName &&
+          mounted
         ) {
           feedbackObject.fb_objects[0].value === "1"
             ? styleState({ value: activeColor.value })
             : styleState({ value: inActiveColor.value });
         } else if (
           feedbackObject.fb_objects[0].type === "string" &&
-          feedbackObject.fb_objects[0].id === serialName
+          feedbackObject.fb_objects[0].id === serialName &&
+          mounted
         ) {
           dynamicTextState({ value: feedbackObject.fb_objects[0].value });
         } else if (
           feedbackObject.fb_objects[0].type === "string" &&
-          feedbackObject.fb_objects[0].id === inputName
+          feedbackObject.fb_objects[0].id === inputName &&
+          mounted
         ) {
           inputTextState({ value: feedbackObject.fb_objects[0].value });
         }
@@ -108,7 +112,9 @@ const DestinationButton = ({
         console.warn("Waiting for payload from processor");
       }
     }
-    return () => {};
+    return () => {
+      mounted = false;
+    };
   }, [
     feedbackObject,
     digitalName,
@@ -121,13 +127,15 @@ const DestinationButton = ({
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
+    let mounted = true;
     var foundIndexDigital = storedElements.findIndex(
       (x) => x.id === digitalName
     );
     if (foundIndexDigital >= 0) {
       if (
         storedElements[foundIndexDigital].type === "bool" &&
-        storedElements[foundIndexDigital].id === digitalName
+        storedElements[foundIndexDigital].id === digitalName &&
+        mounted
       ) {
         storedElements[foundIndexDigital].value === "1"
           ? styleState({ value: activeColor.value })
@@ -138,7 +146,8 @@ const DestinationButton = ({
     if (foundIndexSerial >= 0) {
       if (
         storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === serialName
+        storedElements[foundIndexSerial].id === serialName &&
+        mounted
       ) {
         dynamicTextState({ value: storedElements[foundIndexSerial].value });
       }
@@ -147,11 +156,15 @@ const DestinationButton = ({
     if (foundInputSerial >= 0) {
       if (
         storedElements[foundInputSerial].type === "string" &&
-        storedElements[foundInputSerial].id === inputName
+        storedElements[foundInputSerial].id === inputName &&
+        mounted
       ) {
         inputTextState({ value: storedElements[foundInputSerial].value });
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, [
     storedElements,
     digitalName,

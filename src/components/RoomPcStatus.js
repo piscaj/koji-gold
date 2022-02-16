@@ -20,12 +20,14 @@ const RoomPcStatus = ({
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
+    let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
     } else {
       try {
         if (
           feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === syncStatusName
+          feedbackObject.fb_objects[0].id === syncStatusName &&
+          mounted
         ) {
           feedbackObject.fb_objects[0].value === "1"
             ? syncState({ value: true })
@@ -35,25 +37,32 @@ const RoomPcStatus = ({
         console.warn("Waiting for payload from processor");
       }
     }
-    return () => {};
+    return () => {
+      mounted = false;
+    };
   }, [feedbackObject, syncStatusName]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
+    let mounted = true;
     var foundIndexSync = storedElements.findIndex(
       (x) => x.id === syncStatusName
     );
     if (foundIndexSync >= 0) {
       if (
         storedElements[foundIndexSync].type === "bool" &&
-        storedElements[foundIndexSync].id === syncStatusName
+        storedElements[foundIndexSync].id === syncStatusName &&
+        mounted
       ) {
         storedElements[foundIndexSync].value === "1"
           ? syncState({ value: true })
           : syncState({ value: false });
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, [storedElements, syncStatusName]);
 
   useEffect(() => {

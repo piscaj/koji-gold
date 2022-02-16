@@ -35,7 +35,6 @@ const Main = () => {
   ]);
   const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [connected, connectedState] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     active: false,
     severity: "info",
@@ -53,10 +52,19 @@ const Main = () => {
 
   //const socketUrl = "wss://192.168.2.29:49797";
   const socketUrl = "wss://79shawsheen.mycrestron.com:49797";
-  const empty = {fb_objects: [{id: "", value: "", type: ""}]};
+  const empty = { fb_objects: [{ id: "", value: "", type: "" }] };
   const didUnmount = useRef(false);
 
-  const { sendMessage, lastJsonMessage, lastMessage, readyState } =
+  //Gereral app start stop stuff
+  useEffect(() => {
+    setLoader(true);
+    return () => {
+      didUnmount.current = true;
+    };
+  }, []);
+
+  //Websocket connection
+  const { sendMessage, lastJsonMessage, lastMessage, readyState} =
     useWebSocket(socketUrl, {
       shouldReconnect: (closeEvent) => {
         setAlertMessage({ active: false });
@@ -64,8 +72,7 @@ const Main = () => {
           active: true,
           severity: "info",
           title: "Whoops!",
-          message:
-            "The websocket connection reconnecting.",
+          message: "The websocket connection reconnecting.",
         });
         return didUnmount.current === false;
       },
@@ -81,18 +88,22 @@ const Main = () => {
           message:
             "We have a problem reaching - " +
             socketUrl +
-            ". Check your network connection.",
+            ". Check your network connection, then refresh your browser",
         });
+      },
+      onOpen: () => {
+        //Each time the socket opens perform a full update.
+        //This seems pretty costly but its the only option at the
+        //moment with this API.
+        sendMessage("get_json=all\x0d\x0a");
+        console.log("Requsting update from processor");
+      },
+      onError: () => {
+       
       },
     });
 
-  useEffect(() => {
-    setLoader(true);
-    return () => {
-      didUnmount.current = true;
-    };
-  }, []);
-
+  //Manage the websocket heartbeat message
   useEffect(() => {
     if (lastMessage !== null) {
       if (lastMessage.data === "HB") {
@@ -104,37 +115,49 @@ const Main = () => {
     }
   }, [lastMessage, sendMessage]);
 
+  //Build a stored feedback array for components
   useEffect(() => {
+    let mounted = true;
     var wsStoredElements = wsStore;
     // Check incomming ws json stream elements against the stored elements
     var foundIndex = wsStore.findIndex((x) => x.id === updateStore.id);
     // If we have a matching element value at id, overwrite it
     if (foundIndex >= 0) {
       wsStore[foundIndex].value = updateStore.value;
-      if (!loader) {
+      if (!loader && mounted) {
         wsStoreState(wsStoredElements);
       }
     }
     // If we don't have a match lets push the element into the array
     else {
       wsStoredElements.push(updateStore);
-      if (!loader) {
+      if (!loader && mounted) {
         wsStoreState(wsStoredElements);
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, [updateStore, wsStore, loader]);
 
+  //Process incomming json messages to be evaluated and put in stored feedback
   useEffect(() => {
+    let mounted = true;
     if (lastJsonMessage !== null) {
       if (Object.keys(lastJsonMessage).length === 0) {
         //This is a fix for the "HB" that is not an empty json obj
-        //pass on the empty {}
-      } else {
+        //pass if the json is empty {}
+      } else  {
+        if(mounted)
         updateStoreState(lastJsonMessage.fb_objects[0]);
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, [lastJsonMessage]);
 
+  //Websocket state. Keep user aware of connection status.
   useEffect(() => {
     if (ReadyState.OPEN) {
       setAlertMessage({
@@ -143,14 +166,7 @@ const Main = () => {
         title: "Sweet!",
         message: "I'm connected to " + socketUrl,
       });
-      if(!connected){
-      sendMessage("get_json=all\x0d\x0a");
-      console.log("Requsting update from processor");
-      }
-      connectedState(true);
-
     } else if (ReadyState.CLOSING) {
-      connectedState(false);
       setAlertMessage({
         active: true,
         severity: "warning",
@@ -158,7 +174,7 @@ const Main = () => {
         message: "Attempting to reconnect.",
       });
     }
-  }, [readyState, sendMessage, socketUrl, connected]);
+  }, [readyState, socketUrl]);
 
   const colorMode = React.useMemo(
     () => ({

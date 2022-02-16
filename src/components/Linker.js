@@ -14,12 +14,14 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
 
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
+    let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
-    }else{
+    } else {
       try {
         if (
           feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === digitalName
+          feedbackObject.fb_objects[0].id === digitalName &&
+          mounted
         ) {
           if (feedbackObject.fb_objects[0].value === "1") navigate(link);
         }
@@ -27,23 +29,30 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
         console.warn("Waiting for payload from processor");
       }
     }
-    return () => {};
+    return () => {
+      mounted = false;
+    };
   }, [feedbackObject, digitalName, link, navigate]);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
+    let mounted = true;
     var foundIndexDigital = storedElements.findIndex(
       (x) => x.id === digitalName
     );
     if (foundIndexDigital >= 0) {
       if (
         storedElements[foundIndexDigital].type === "bool" &&
-        storedElements[foundIndexDigital].id === digitalName
+        storedElements[foundIndexDigital].id === digitalName &&
+        mounted
       ) {
         if (storedElements[foundIndexDigital].value === "1") navigate(link);
       }
     }
+    return () => {
+      mounted = false;
+    };
   }, [storedElements, digitalName, link, navigate]);
 
   return <></>;
