@@ -70,6 +70,7 @@ const MuiButton = ({
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
+      return;
     }else{
       try {
         if (
