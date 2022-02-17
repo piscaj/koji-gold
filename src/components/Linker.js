@@ -16,6 +16,7 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
+      return;
     } else {
       try {
         if (
@@ -53,7 +54,8 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
     return () => {
       mounted = false;
     };
-  }, [storedElements, digitalName, link, navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return <></>;
 };

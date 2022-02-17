@@ -22,6 +22,7 @@ const RoomPcStatus = ({
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
+      return;
     } else {
       try {
         if (
@@ -63,7 +64,8 @@ const RoomPcStatus = ({
     return () => {
       mounted = false;
     };
-  }, [storedElements, syncStatusName]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!syncStatusName === null) syncState({ value: false });

@@ -67,6 +67,7 @@ const LaptopButton = ({
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
+      return;
     } else {
       try {
         if (
@@ -153,14 +154,8 @@ const LaptopButton = ({
     return () => {
       mounted = false;
     };
-  }, [
-    storedElements,
-    digitalName,
-    serialName,
-    activeColor,
-    inActiveColor,
-    syncStatusName,
-  ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!serialName === null) dynamicTextState({ value: serialName });

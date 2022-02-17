@@ -44,6 +44,7 @@ const PowerButton = ({
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
+      return;
     } else {
       try {
         if (
@@ -85,7 +86,8 @@ const PowerButton = ({
     return () => {
       mounted = false;
     };
-  }, [storedElements, digitalName]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

@@ -66,7 +66,7 @@ const MuiButton = ({
   });
   const classes = useStyles();
 
-  // This is where the realtime update happens from the wsObject.fb
+  // This is where the realtime update happens from the websocket
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
@@ -127,7 +127,8 @@ const MuiButton = ({
     return () => {
       mounted = false;
     };
-  }, [storedElements, digitalName, serialName, activeColor, inActiveColor]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!eventType === null) {

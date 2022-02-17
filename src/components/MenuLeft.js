@@ -50,6 +50,7 @@ const MenuLeft = forwardRef((props, ref) => {
   useEffect(() => {
     let mounted = true;
     if (Object.keys(props.feedbackObject).length === 0) {
+      return;
     } else {
       try {
         if (

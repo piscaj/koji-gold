@@ -89,6 +89,7 @@ const DisplayPowerListItem = ({
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
+      return;
     } else {
       try {
         if (
@@ -146,7 +147,8 @@ const DisplayPowerListItem = ({
     return () => {
       mounted = false;
     };
-  }, [storedElements, digitalName, serialName]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <List>

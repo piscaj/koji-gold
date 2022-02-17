@@ -47,6 +47,7 @@ const MediaVolume = ({
     let mounted = true;
     if (!moving) {
       if (Object.keys(feedbackObject).length === 0) {
+        return;
       } else {
         try {
           if (
@@ -84,7 +85,8 @@ const MediaVolume = ({
     return () => {
       mounted = false;
     };
-  }, [storedElements, serialName]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Stack direction="row" spacing={2} sx={{ mb: 1 }} alignItems="center">

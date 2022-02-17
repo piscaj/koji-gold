@@ -85,6 +85,7 @@ const DestinationButton = ({
   useEffect(() => {
     let mounted = true;
     if (Object.keys(feedbackObject).length === 0) {
+      return;
     } else {
       try {
         if (
@@ -165,14 +166,8 @@ const DestinationButton = ({
     return () => {
       mounted = false;
     };
-  }, [
-    storedElements,
-    digitalName,
-    serialName,
-    activeColor,
-    inActiveColor,
-    inputName,
-  ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!eventType === null) {
