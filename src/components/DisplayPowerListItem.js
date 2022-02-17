@@ -91,24 +91,20 @@ const DisplayPowerListItem = ({
     if (Object.keys(feedbackObject).length === 0) {
       return;
     } else {
-      try {
-        if (
-          feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === digitalName &&
-          mounted
-        ) {
-          feedbackObject.fb_objects[0].value === "1"
-            ? displayPowerState({ value: true })
-            : displayPowerState({ value: false });
-        } else if (
-          feedbackObject.fb_objects[0].type === "string" &&
-          feedbackObject.fb_objects[0].id === serialName &&
-          mounted
-        ) {
-          dynamicTextState({ value: feedbackObject.fb_objects[0].value });
-        }
-      } catch {
-        console.warn("Waiting for payload from processor");
+      if (
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName &&
+        mounted
+      ) {
+        feedbackObject.fb_objects[0].value === "1"
+          ? displayPowerState({ value: true })
+          : displayPowerState({ value: false });
+      } else if (
+        feedbackObject.fb_objects[0].type === "string" &&
+        feedbackObject.fb_objects[0].id === serialName &&
+        mounted
+      ) {
+        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
       }
     }
     return () => {
@@ -147,7 +143,7 @@ const DisplayPowerListItem = ({
     return () => {
       mounted = false;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

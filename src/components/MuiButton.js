@@ -72,7 +72,6 @@ const MuiButton = ({
     if (Object.keys(feedbackObject).length === 0) {
       return;
     }else{
-      try {
         if (
           feedbackObject.fb_objects[0].type === "bool" &&
           feedbackObject.fb_objects[0].id === digitalName
@@ -88,9 +87,6 @@ const MuiButton = ({
         ) {
           dynamicTextState({ value: feedbackObject.fb_objects[0].value });
         }
-      } catch {
-        console.warn("Waiting for payload from processor");
-      }
     }
     return () => {
       mounted = false;

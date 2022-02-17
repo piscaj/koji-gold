@@ -24,18 +24,14 @@ const RoomPcStatus = ({
     if (Object.keys(feedbackObject).length === 0) {
       return;
     } else {
-      try {
-        if (
-          feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === syncStatusName &&
-          mounted
-        ) {
-          feedbackObject.fb_objects[0].value === "1"
-            ? syncState({ value: true })
-            : syncState({ value: false });
-        }
-      } catch {
-        console.warn("Waiting for payload from processor");
+      if (
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === syncStatusName &&
+        mounted
+      ) {
+        feedbackObject.fb_objects[0].value === "1"
+          ? syncState({ value: true })
+          : syncState({ value: false });
       }
     }
     return () => {
@@ -64,7 +60,7 @@ const RoomPcStatus = ({
     return () => {
       mounted = false;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

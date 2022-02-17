@@ -18,16 +18,12 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
     if (Object.keys(feedbackObject).length === 0) {
       return;
     } else {
-      try {
-        if (
-          feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === digitalName &&
-          mounted
-        ) {
-          if (feedbackObject.fb_objects[0].value === "1") navigate(link);
-        }
-      } catch {
-        console.warn("Waiting for payload from processor");
+      if (
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName &&
+        mounted
+      ) {
+        if (feedbackObject.fb_objects[0].value === "1") navigate(link);
       }
     }
     return () => {
@@ -54,7 +50,7 @@ const Linker = ({ digitalName, link, feedbackObject, storedElements = [] }) => {
     return () => {
       mounted = false;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <></>;

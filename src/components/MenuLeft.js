@@ -52,16 +52,12 @@ const MenuLeft = forwardRef((props, ref) => {
     if (Object.keys(props.feedbackObject).length === 0) {
       return;
     } else {
-      try {
-        if (
-          props.feedbackObject.fb_objects[0].type === "string" &&
-          props.feedbackObject.fb_objects[0].id === props.serialName &&
-          mounted
-        ) {
-          menuIndexState({ value: props.feedbackObject.fb_objects[0].value });
-        }
-      } catch {
-        console.warn("Waiting for payload from processor");
+      if (
+        props.feedbackObject.fb_objects[0].type === "string" &&
+        props.feedbackObject.fb_objects[0].id === props.serialName &&
+        mounted
+      ) {
+        menuIndexState({ value: props.feedbackObject.fb_objects[0].value });
       }
     }
     return () => {

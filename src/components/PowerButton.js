@@ -46,18 +46,14 @@ const PowerButton = ({
     if (Object.keys(feedbackObject).length === 0) {
       return;
     } else {
-      try {
-        if (
-          feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === digitalName &&
-          mounted
-        ) {
-          feedbackObject.fb_objects[0].value === "1"
-            ? showPowerState({ value: true })
-            : showPowerState({ value: false });
-        }
-      } catch {
-        console.warn("Waiting for payload from processor");
+      if (
+        feedbackObject.fb_objects[0].type === "bool" &&
+        feedbackObject.fb_objects[0].id === digitalName &&
+        mounted
+      ) {
+        feedbackObject.fb_objects[0].value === "1"
+          ? showPowerState({ value: true })
+          : showPowerState({ value: false });
       }
     }
     return () => {
@@ -86,7 +82,7 @@ const PowerButton = ({
     return () => {
       mounted = false;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

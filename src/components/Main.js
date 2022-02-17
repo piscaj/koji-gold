@@ -98,6 +98,9 @@ const Main = () => {
         sendMessage("get_json=all\x0d\x0a");
         console.log("Requsting update from processor");
       },
+      onClose: (event) => {
+        console.error("Websocket closed - Code: " + event.code);
+      },
       onError: () => {
        
       },
