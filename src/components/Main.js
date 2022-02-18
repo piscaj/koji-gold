@@ -55,7 +55,7 @@ const Main = () => {
   const empty = { fb_objects: [{ id: "", value: "", type: "" }] };
   const didUnmount = useRef(false);
 
-  //Gereral app start stop stuff
+  //Stuff to do only once when the app starts.
   useEffect(() => {
     setLoader(true);
     return () => {
@@ -72,7 +72,7 @@ const Main = () => {
           active: true,
           severity: "info",
           title: "Whoops!",
-          message: "The websocket connection reconnecting.",
+          message: "The Websocket lost connection.",
         });
         return didUnmount.current === false;
       },
@@ -99,10 +99,11 @@ const Main = () => {
         console.log("Requsting update from processor");
       },
       onClose: (event) => {
+        //Report the reason the socket closed to the console
         console.error("Websocket closed - Code: " + event.code);
       },
       onError: () => {
-       
+       //Nothing to do at the moment
       },
     });
 
