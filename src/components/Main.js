@@ -28,6 +28,7 @@ import logoLight from "./images/logoLight.png";
 import { DriveLinks, DriveRoutes } from "./DrivePages";
 import { deepOrange, grey, indigo } from "@mui/material/colors";
 import PowerButton from "./PowerButton";
+import useLocalStorage from "./local-storage";
 
 const Main = () => {
   const [wsStore, wsStoreState] = useState([
@@ -41,7 +42,7 @@ const Main = () => {
     title: "None",
     message: "None",
   });
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useLocalStorage('mode','light');
   const menuLeft = useRef();
 
   const clearAlert = () => {
@@ -186,7 +187,7 @@ const Main = () => {
         setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
       },
     }),
-    []
+    [setMode]
   );
 
   var theme = React.useMemo(
