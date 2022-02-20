@@ -42,7 +42,7 @@ const Main = () => {
     title: "None",
     message: "None",
   });
-  const [mode, setMode] = useLocalStorage('mode','light');
+  const [mode, setMode] = useLocalStorage("mode", "light");
   const menuLeft = useRef();
 
   const clearAlert = () => {
@@ -65,7 +65,7 @@ const Main = () => {
   }, []);
 
   //Websocket connection
-  const { sendMessage, lastJsonMessage, lastMessage, readyState} =
+  const { sendMessage, lastJsonMessage, lastMessage, readyState } =
     useWebSocket(socketUrl, {
       shouldReconnect: (closeEvent) => {
         setAlertMessage({ active: false });
@@ -104,7 +104,7 @@ const Main = () => {
         console.error("Websocket closed - Code: " + event.code);
       },
       onError: () => {
-       //Nothing to do at the moment
+        //Nothing to do at the moment
       },
     });
 
@@ -152,9 +152,8 @@ const Main = () => {
       if (Object.keys(lastJsonMessage).length === 0) {
         //This is a fix for the "HB" that is not an empty json obj
         //pass if the json is empty {}
-      } else  {
-        if(mounted)
-        updateStoreState(lastJsonMessage.fb_objects[0]);
+      } else {
+        if (mounted) updateStoreState(lastJsonMessage.fb_objects[0]);
       }
     }
     return () => {
