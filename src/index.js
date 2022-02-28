@@ -8,15 +8,17 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { Provider } from 'react-redux'
+import { store } from './components/redux/store'
 
 ReactDOM.render(
-  <React.StrictMode>
-      <Router>
+    <Provider store = {store}>
+      <Router >
         <div className="noselect">
           <App />
         </div>
       </Router>
-  </React.StrictMode>,
+      </Provider>,
   document.getElementById("root")
 );
 

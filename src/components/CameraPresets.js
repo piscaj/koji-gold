@@ -8,8 +8,7 @@ import Paper from "@mui/material/Paper";
 
 const CameraPresets = ({
   sendMessage,
-  feedbackObject,
-  storedElements,
+
   onMouseUp,
 }) => {
   return (
@@ -47,8 +46,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-1"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
           <Box
@@ -67,8 +64,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-2"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
           <Box
@@ -115,8 +110,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-3"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
           <Box
@@ -135,8 +128,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-4"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
           <Box
@@ -155,8 +146,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-5"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
         </Box>
@@ -185,8 +174,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-6"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
           <Box
@@ -205,8 +192,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-7"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
           <Box
@@ -225,8 +210,6 @@ const CameraPresets = ({
               eventType={"press"}
               digitalName="camera-preset-8"
               sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
             />
           </Box>
         </Box>
@@ -236,8 +219,6 @@ const CameraPresets = ({
 };
 CameraPresets.propTypes = {
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default CameraPresets;

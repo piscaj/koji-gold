@@ -23,9 +23,11 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MuiButton from "./MuiButton";
+import { useSelector } from "react-redux";
 
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
+  const feedbackStore = useSelector((state) => state.feedback.value);
 
   //iOS is hosted on high-end devices. The backdrop transition can be enabled without dropping frames. The performance will be good enough.
   //iOS has a "swipe to go back" feature that interferes with the discovery feature, so discovery has to be disabled.
@@ -46,43 +48,24 @@ const MenuLeft = forwardRef((props, ref) => {
     },
   }));
 
-  // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
     let mounted = true;
-    if (Object.keys(props.feedbackObject).length === 0) {
-      return;
-    } else {
-      if (
-        props.feedbackObject.fb_objects[0].type === "string" &&
-        props.feedbackObject.fb_objects[0].id === props.serialName &&
-        mounted
-      ) {
-        menuIndexState({ value: props.feedbackObject.fb_objects[0].value });
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [props.feedbackObject, props.serialName]);
-
-  useEffect(() => {
-    let mounted = true;
-    var foundIndexSerial = props.storedElements.findIndex(
+    var foundIndexSerial = feedbackStore.findIndex(
       (x) => x.id === props.serialName
     );
     if (foundIndexSerial >= 0) {
       if (
-        props.storedElements[foundIndexSerial].type === "string" &&
-        props.storedElements[foundIndexSerial].id === props.serialName &&
+        feedbackStore[foundIndexSerial].type === "string" &&
+        feedbackStore[foundIndexSerial].id === props.serialName &&
         mounted
       ) {
-        menuIndexState({ value: props.storedElements[foundIndexSerial].value });
+        menuIndexState({ value: feedbackStore[foundIndexSerial].value });
       }
     }
     return () => {
       mounted = false;
     };
-  }, [props.storedElements, props.serialName]);
+  }, [feedbackStore, props.serialName]);
 
   return (
     <>
@@ -191,8 +174,6 @@ const MenuLeft = forwardRef((props, ref) => {
               joinNumberOn="32"
               joinNumberOff="33"
               sendMessage={props.sendMessage}
-              feedbackObject={props.feedbackObject}
-              storedElements={props.storedElements}
             />
 
             <Accordion>
@@ -226,8 +207,6 @@ const MenuLeft = forwardRef((props, ref) => {
                       joinNumber={36}
                       serialName=""
                       sendMessage={props.sendMessage}
-                      feedbackObject={props.feedbackObject}
-                      storedElements={props.storedElements}
                     />
                   </Box>
                   <Box
@@ -251,8 +230,6 @@ const MenuLeft = forwardRef((props, ref) => {
                       joinNumber={37}
                       serialName=""
                       sendMessage={props.sendMessage}
-                      feedbackObject={props.feedbackObject}
-                      storedElements={props.storedElements}
                     />
                   </Box>
                 </Box>
@@ -267,8 +244,6 @@ const MenuLeft = forwardRef((props, ref) => {
               joinNumberOn="34"
               joinNumberOff="35"
               sendMessage={props.sendMessage}
-              feedbackObject={props.feedbackObject}
-              storedElements={props.storedElements}
             />
           </Box>
         </SwipeableDrawer>

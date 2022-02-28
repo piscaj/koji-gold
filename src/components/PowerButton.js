@@ -11,6 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
@@ -23,12 +24,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const PowerButton = ({
-  digitalName = null,
-  sendMessage,
-  feedbackObject,
-  storedElements = [],
-}) => {
+const PowerButton = ({ digitalName = null, sendMessage }) => {
   const [showPower, showPowerState] = useState({ value: false });
   const [open, setOpen] = React.useState(false);
 
@@ -40,50 +36,26 @@ const PowerButton = ({
     setOpen(false);
   };
 
-  // This is where the realtime update happens from the wsObject.fb
-  useEffect(() => {
-    let mounted = true;
-    if (Object.keys(feedbackObject).length === 0) {
-      return;
-    } else {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName &&
-        mounted
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? showPowerState({ value: true })
-          : showPowerState({ value: false });
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [feedbackObject, digitalName]);
+  const feedbackStore = useSelector((state) => state.feedback.value);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    let mounted = true;
-    var foundIndexDigital = storedElements.findIndex(
+    var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName
     );
     if (foundIndexDigital >= 0) {
       if (
-        storedElements[foundIndexDigital].type === "bool" &&
-        storedElements[foundIndexDigital].id === digitalName &&
-        mounted
+        feedbackStore[foundIndexDigital].type === "bool" &&
+        feedbackStore[foundIndexDigital].id === digitalName
       ) {
-        storedElements[foundIndexDigital].value === "1"
+        feedbackStore[foundIndexDigital].value === "1"
           ? showPowerState({ value: true })
           : showPowerState({ value: false });
       }
     }
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {};
+  }, [feedbackStore, digitalName]);
 
   return (
     <>
@@ -141,8 +113,6 @@ const PowerButton = ({
 PowerButton.propTypes = {
   digitalName: PropTypes.string,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default PowerButton;

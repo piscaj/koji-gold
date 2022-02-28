@@ -5,7 +5,7 @@ import Header from "./Header";
 import RoomPcStatus from "./RoomPcStatus";
 import Fade from "@mui/material/Fade";
 
-const RoomPc = ({ sendMessage, feedbackObject, storedElements }) => {
+const RoomPc = ({ sendMessage }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -40,11 +40,7 @@ const RoomPc = ({ sendMessage, feedbackObject, storedElements }) => {
             }}
           >
             <Box sx={{ padding: "10px" }}>
-              <RoomPcStatus
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
-                syncStatusName="sync-room-pc"
-              />
+              <RoomPcStatus syncStatusName="sync-room-pc" />
             </Box>
           </Box>
         </Box>
@@ -55,8 +51,6 @@ const RoomPc = ({ sendMessage, feedbackObject, storedElements }) => {
 
 RoomPc.propTypes = {
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default RoomPc;

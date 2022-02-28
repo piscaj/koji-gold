@@ -7,11 +7,7 @@ import SwitcherDest from "./SwitcherDest";
 import "./scss/Switcher.scss";
 import Fade from "@mui/material/Fade";
 
-const VideoSwitching = ({
-  sendMessage,
-  feedbackObject,
-  storedElements,
-}) => {
+const VideoSwitching = ({ sendMessage }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -34,8 +30,6 @@ const VideoSwitching = ({
           sourceCount={10}
           digitalOffset={11}
           sendMessage={sendMessage}
-          feedbackObject={feedbackObject}
-          storedElements={storedElements}
         />
 
         <Box
@@ -50,8 +44,6 @@ const VideoSwitching = ({
           sourceCount={5}
           digitalOffset={21}
           sendMessage={sendMessage}
-          feedbackObject={feedbackObject}
-          storedElements={storedElements}
         />
       </Paper>
     </Fade>
@@ -59,8 +51,6 @@ const VideoSwitching = ({
 };
 VideoSwitching.propTypes = {
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default VideoSwitching;

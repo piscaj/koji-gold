@@ -5,7 +5,7 @@ import CameraControls from "./CameraControls";
 import Header from "./Header";
 import Fade from "@mui/material/Fade";
 
-const Camera = ({ sendMessage, feedbackObject, storedElements }) => {
+const Camera = ({ sendMessage }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -41,11 +41,7 @@ const Camera = ({ sendMessage, feedbackObject, storedElements }) => {
               mb: "20px",
             }}
           >
-            <CameraControls
-              sendMessage={sendMessage}
-              feedbackObject={feedbackObject}
-              storedElements={storedElements}
-            />
+            <CameraControls sendMessage={sendMessage} />
           </Box>
         </Box>
       </Paper>
@@ -54,8 +50,6 @@ const Camera = ({ sendMessage, feedbackObject, storedElements }) => {
 };
 Camera.propTypes = {
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default Camera;

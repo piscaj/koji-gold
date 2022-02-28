@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp, faVolumeDown } from "@fortawesome/pro-duotone-svg-icons";
+import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
@@ -13,12 +13,7 @@ import { faVolumeUp, faVolumeDown } from "@fortawesome/pro-duotone-svg-icons";
 // "storedElements" - Array of fb_objects current values
 ///////////////////////////////////////////////////////////////////////////////
 
-const MediaVolume = ({
-  serialName = null,
-  sendMessage,
-  feedbackObject,
-  storedElements = [],
-}) => {
+const MediaVolume = ({ serialName = null, sendMessage }) => {
   const [barValue, setbarValue] = useState("25");
   const [moving, setMoving] = useState(false);
   var movingTimeout;
@@ -41,48 +36,26 @@ const MediaVolume = ({
     //update the slider value for the badge that appears over the slider.
     setbarValue(value);
   };
-
-  // This is where the realtime update happens from the wsObject.fb
-  useEffect(() => {
-    let mounted = true;
-    if (!moving) {
-      if (Object.keys(feedbackObject).length === 0) {
-        return;
-      } else {
-        if (
-          feedbackObject.fb_objects[0].type === "string" &&
-          feedbackObject.fb_objects[0].id === serialName &&
-          mounted
-        ) {
-          setbarValue(feedbackObject.fb_objects[0].value);
-        }
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [feedbackObject, serialName, moving]);
+  const feedbackStore = useSelector((state) => state.feedback.value);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    let mounted = true;
-    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
-
-    if (foundIndexSerial >= 0) {
-      if (
-        storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === serialName &&
-        mounted
-      ) {
-        setbarValue(storedElements[foundIndexSerial].value);
+    if (!moving) {
+      var foundIndexSerial = feedbackStore.findIndex(
+        (x) => x.id === serialName
+      );
+      if (foundIndexSerial >= 0) {
+        if (
+          feedbackStore[foundIndexSerial].type === "string" &&
+          feedbackStore[foundIndexSerial].id === serialName
+        ) {
+          setbarValue(feedbackStore[foundIndexSerial].value);
+        }
       }
     }
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {};
+  }, [feedbackStore, moving, serialName]);
 
   return (
     <Stack direction="row" spacing={2} sx={{ mb: 1 }} alignItems="center">
@@ -101,8 +74,6 @@ const MediaVolume = ({
 MediaVolume.propTypes = {
   serialName: PropTypes.string,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default MediaVolume;

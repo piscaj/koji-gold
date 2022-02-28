@@ -3,13 +3,7 @@ import DestinationButton from "./DestinationButton";
 import Box from "@mui/material/Box";
 import "./scss/Switcher.scss";
 
-const SwitcherDest = ({
-  sourceCount = 1,
-  digitalOffset = 1,
-  sendMessage,
-  feedbackObject,
-  storedElements,
-}) => {
+const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1, sendMessage }) => {
   return (
     <Box className="destination-scroll">
       {[...Array(sourceCount)].map((value, index) => (
@@ -37,8 +31,6 @@ const SwitcherDest = ({
               alignItems: "flex-start", //Set text to top of button
             }}
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
       ))}
@@ -50,8 +42,6 @@ SwitcherDest.propTypes = {
   sourceCount: PropTypes.number,
   digitalOffset: PropTypes.number,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default SwitcherDest;

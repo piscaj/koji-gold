@@ -7,6 +7,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "@mui/material/styles";
+import { useSelector } from "react-redux";
 
 const DisplayPowerListItem = ({
   digitalName = null,
@@ -16,8 +17,6 @@ const DisplayPowerListItem = ({
   primaryText = "",
   faIcon = null,
   sendMessage,
-  feedbackObject,
-  storedElements = [],
 }) => {
   //Make switch look and act like a native IOS switch
   const IOSSwitch = styled((props) => (
@@ -84,67 +83,35 @@ const DisplayPowerListItem = ({
       ? sendMessage("digital=" + joinNumberOn + "\x0d\x0a")
       : sendMessage("digital=" + joinNumberOff + "\x0d\x0a");
   };
-
-  // This is where the realtime update happens from the wsObject.fb
-  useEffect(() => {
-    let mounted = true;
-    if (Object.keys(feedbackObject).length === 0) {
-      return;
-    } else {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName &&
-        mounted
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? displayPowerState({ value: true })
-          : displayPowerState({ value: false });
-      } else if (
-        feedbackObject.fb_objects[0].type === "string" &&
-        feedbackObject.fb_objects[0].id === serialName &&
-        mounted
-      ) {
-        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [feedbackObject, digitalName, serialName]);
+  const feedbackStore = useSelector((state) => state.feedback.value);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    let mounted = true;
-    var foundIndexDigital = storedElements.findIndex(
+    var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName
     );
     if (foundIndexDigital >= 0) {
       if (
-        storedElements[foundIndexDigital].type === "bool" &&
-        storedElements[foundIndexDigital].id === digitalName &&
-        mounted
+        feedbackStore[foundIndexDigital].type === "bool" &&
+        feedbackStore[foundIndexDigital].id === digitalName
       ) {
-        storedElements[foundIndexDigital].value === "1"
+        feedbackStore[foundIndexDigital].value === "1"
           ? displayPowerState({ value: true })
           : displayPowerState({ value: false });
       }
     }
-    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
+    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
     if (foundIndexSerial >= 0) {
       if (
-        storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === serialName &&
-        mounted
+        feedbackStore[foundIndexSerial].type === "string" &&
+        feedbackStore[foundIndexSerial].id === serialName
       ) {
-        dynamicTextState({ value: storedElements[foundIndexSerial].value });
+        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
       }
     }
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {};
+  }, [feedbackStore, digitalName, serialName]);
 
   return (
     <List>
@@ -170,8 +137,6 @@ DisplayPowerListItem.propTypes = {
   serialName: PropTypes.string,
   eventType: PropTypes.string,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default DisplayPowerListItem;

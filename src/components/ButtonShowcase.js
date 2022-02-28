@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import Header from "./Header";
 import Fade from "@mui/material/Fade";
 
-const ButtonShowcase = ({ sendMessage, feedbackObject, storedElements }) => {
+const ButtonShowcase = ({ sendMessage }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -53,8 +53,6 @@ const ButtonShowcase = ({ sendMessage, feedbackObject, storedElements }) => {
                 joinNumber={9}
                 serialName=""
                 sendMessage={sendMessage}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
               />
             </Box>
             <Box sx={{ p: "5px" }}>
@@ -67,8 +65,6 @@ const ButtonShowcase = ({ sendMessage, feedbackObject, storedElements }) => {
                 joinNumber={10}
                 serialName=""
                 sendMessage={sendMessage}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
               />
             </Box>
             <Box sx={{ p: "5px" }}>
@@ -87,8 +83,6 @@ const ButtonShowcase = ({ sendMessage, feedbackObject, storedElements }) => {
                 joinNumber={11}
                 serialName="dynamic-text"
                 sendMessage={sendMessage}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
               />
             </Box>
             <Box sx={{ p: "5px" }}>
@@ -101,8 +95,6 @@ const ButtonShowcase = ({ sendMessage, feedbackObject, storedElements }) => {
                 digitalName="showcase-press"
                 serialName=""
                 sendMessage={sendMessage}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
               />
             </Box>
           </Box>
@@ -113,7 +105,6 @@ const ButtonShowcase = ({ sendMessage, feedbackObject, storedElements }) => {
 };
 MuiButton.propTypes = {
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
 };
 
 export default ButtonShowcase;

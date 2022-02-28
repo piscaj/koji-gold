@@ -12,73 +12,20 @@ import VideoSwitching from "./VideoSwitching";
 //Drive all the pages here
 
 //React Router routes go here
-export const DriveRoutes = ({
-  sendMessage,
-  feedbackObject,
-  storedElements,
-}) => {
+export const DriveRoutes = ({ sendMessage }) => {
   return (
     <Routes>
-      <Route
-        exact
-        path="/"
-        element={
-          <RoomPc
-            sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
-          />
-        }
-      />
-      <Route
-        path="/roomPc"
-        element={
-          <RoomPc
-            sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
-          />
-        }
-      />
-      <Route
-        path="/laptop"
-        element={
-          <Laptop
-            sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
-          />
-        }
-      />
-      <Route
-        path="/camera"
-        element={
-          <Camera
-            sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
-          />
-        }
-      />
+      <Route exact path="/" element={<RoomPc sendMessage={sendMessage} />} />
+      <Route path="/roomPc" element={<RoomPc sendMessage={sendMessage} />} />
+      <Route path="/laptop" element={<Laptop sendMessage={sendMessage} />} />
+      <Route path="/camera" element={<Camera sendMessage={sendMessage} />} />
       <Route
         path="/switcher"
-        element={
-          <VideoSwitching
-            sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
-          />
-        }
+        element={<VideoSwitching sendMessage={sendMessage} />}
       />
       <Route
         path="/showcase"
-        element={
-          <ButtonShowcase
-            sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
-          />
-        }
+        element={<ButtonShowcase sendMessage={sendMessage} />}
       />
     </Routes>
   );
@@ -91,44 +38,16 @@ DriveRoutes.propTypes = {
 };
 
 //Make use of the Linker component for page tracking here.
-export const DriveLinks = ({ feedbackObject, storedElements }) => {
+export const DriveLinks = () => {
   return (
     <>
-      <Linker
-        link="/roomPc"
-        digitalName="menu-1"
-        feedbackObject={feedbackObject}
-        storedElements={storedElements}
-      />
-      <Linker
-        link="/laptop"
-        digitalName="menu-2"
-        feedbackObject={feedbackObject}
-        storedElements={storedElements}
-      />
-      <Linker
-        link="/camera"
-        digitalName="menu-3"
-        feedbackObject={feedbackObject}
-        storedElements={storedElements}
-      />
-      <Linker
-        link="/showcase"
-        digitalName="menu-4"
-        feedbackObject={feedbackObject}
-        storedElements={storedElements}
-      />
-      <Linker
-        link="/switcher"
-        digitalName="menu-5"
-        feedbackObject={feedbackObject}
-        storedElements={storedElements}
-      />
+      <Linker link="/roomPc" digitalName="menu-1" />
+      <Linker link="/laptop" digitalName="menu-2" />
+      <Linker link="/camera" digitalName="menu-3" />
+      <Linker link="/showcase" digitalName="menu-4" />
+      <Linker link="/switcher" digitalName="menu-5" />
     </>
   );
 };
 
-DriveLinks.propTypes = {
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
-};
+DriveLinks.propTypes = {};

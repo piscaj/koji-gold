@@ -16,7 +16,7 @@ import {
   faLongArrowRight,
 } from "@fortawesome/pro-duotone-svg-icons";
 
-const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
+const CameraControls = ({ sendMessage }) => {
   const useStyles = makeStyles({
     button: {
       textTransform: "none",
@@ -54,8 +54,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
               show();
             }}
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
       </Slide>
@@ -83,8 +81,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
               minHeight: "75px",
             }}
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
         <Box
@@ -106,8 +102,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
             eventType={"press"}
             digitalName="camera-up"
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
         <Box
@@ -160,8 +154,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
             eventType={"press"}
             digitalName="camera-left"
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
         <Box
@@ -183,8 +175,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
             eventType={"press"}
             digitalName="camera-home"
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
         <Box
@@ -206,8 +196,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
             eventType={"press"}
             digitalName="camera-right"
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
       </Box>
@@ -239,8 +227,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
             eventType={"press"}
             digitalName="camera-zoom-minus"
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
         <Box
@@ -262,8 +248,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
             eventType={"press"}
             digitalName="camera-down"
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
         <Box
@@ -285,8 +269,6 @@ const CameraControls = ({ sendMessage, feedbackObject, storedElements }) => {
             eventType={"press"}
             digitalName="camera-zoom-plus"
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
       </Box>

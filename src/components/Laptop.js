@@ -5,7 +5,7 @@ import Header from "./Header";
 import LaptopButton from "./LaptopButton";
 import Fade from "@mui/material/Fade";
 
-const Laptop = ({ sendMessage, feedbackObject, storedElements }) => {
+const Laptop = ({ sendMessage }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -57,8 +57,6 @@ const Laptop = ({ sendMessage, feedbackObject, storedElements }) => {
                 joinNumber={6}
                 serialName=""
                 sendMessage={sendMessage}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
                 syncStatusName="sync-laptop-1"
               />
             </Box>
@@ -78,8 +76,6 @@ const Laptop = ({ sendMessage, feedbackObject, storedElements }) => {
                 joinNumber={7}
                 serialName=""
                 sendMessage={sendMessage}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
                 syncStatusName="sync-laptop-2"
               />
             </Box>
@@ -99,8 +95,6 @@ const Laptop = ({ sendMessage, feedbackObject, storedElements }) => {
                 joinNumber={8}
                 serialName=""
                 sendMessage={sendMessage}
-                feedbackObject={feedbackObject}
-                storedElements={storedElements}
                 syncStatusName="sync-laptop-3"
               />
             </Box>
@@ -113,8 +107,6 @@ const Laptop = ({ sendMessage, feedbackObject, storedElements }) => {
 
 Laptop.propTypes = {
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default Laptop;

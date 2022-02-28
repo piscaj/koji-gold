@@ -29,11 +29,13 @@ import { DriveLinks, DriveRoutes } from "./DrivePages";
 import { deepOrange, grey, indigo } from "@mui/material/colors";
 import PowerButton from "./PowerButton";
 import useLocalStorage from "./local-storage";
-
-import { useDispatch } from "react-redux";
-import { updateObject } from "./redux/feedbackSlice";
+import { useSelector, useDispatch } from "react-redux";
+import update from "./redux/feedbackSlice";
 
 const Main = () => {
+  const [wsStore, wsStoreState] = useState([
+    { id: "null", value: "null", type: "null" },
+  ]);
   const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
@@ -51,12 +53,13 @@ const Main = () => {
       : setAlertMessage({ active: true });
   };
 
-  const dispatch = useDispatch();
-
   //const socketUrl = "wss://192.168.2.29:49797";
   const socketUrl = "wss://79shawsheen.mycrestron.com:49797";
   const empty = { fb_objects: [{ id: "", value: "", type: "" }] };
   const didUnmount = useRef(false);
+
+  const reduxStateTest = useSelector((state) => state.feedback.value);
+  const dispatch = useDispatch();
 
   //Stuff to do only once when the app starts.
   useEffect(() => {
@@ -122,11 +125,33 @@ const Main = () => {
     }
   }, [lastMessage, sendMessage]);
 
-  //Pass feeback state to store
+  //Build a stored feedback array for components
   useEffect(() => {
-    dispatch(updateObject(updateStore));
-    return () => {};
-  }, [updateStore, dispatch]);
+    let mounted = true;
+    var wsStoredElements = wsStore;
+    console.log(reduxStateTest);
+    // Check incomming ws json stream elements against the stored elements
+    var foundIndex = wsStore.findIndex((x) => x.id === updateStore.id);
+
+    // If we have a matching element value at id, overwrite it
+    if (foundIndex >= 0) {
+      wsStore[foundIndex].value = updateStore.value;
+
+      if (!loader && mounted) {
+        wsStoreState(wsStoredElements);
+      }
+    }
+    // If we don't have a match lets push the element into the array
+    else {
+      wsStoredElements.push(updateStore);
+      if (!loader && mounted) {
+        wsStoreState(wsStoredElements);
+      }
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [updateStore, wsStore, loader, reduxStateTest, dispatch]);
 
   //Process incomming json messages to be evaluated and put in stored feedback
   useEffect(() => {
@@ -136,9 +161,7 @@ const Main = () => {
         //This is a fix for the "HB" that is not an empty json obj
         //pass if the json is empty {}
       } else {
-        if (mounted) {
-          updateStoreState(lastJsonMessage.fb_objects[0]);
-        }
+        if (mounted) updateStoreState(lastJsonMessage.fb_objects[0]);
       }
     }
     return () => {
@@ -246,6 +269,7 @@ const Main = () => {
         <MenuLeft
           serialName={"menu-index"}
           feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
+          storedElements={wsStore}
           sendMessage={sendMessage}
           ref={menuLeft}
         />
@@ -337,10 +361,12 @@ const Main = () => {
           <DriveRoutes
             sendMessage={sendMessage}
             feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
+            storedElements={wsStore}
           />
 
           <DriveLinks
             feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
+            storedElements={wsStore}
           />
         </Box>
         <Box className="footer">
@@ -363,6 +389,7 @@ const Main = () => {
                 feedbackObject={
                   lastJsonMessage !== null ? lastJsonMessage : empty
                 }
+                storedElements={wsStore}
               />
             </Box>
             <Box
@@ -377,6 +404,7 @@ const Main = () => {
                 feedbackObject={
                   lastJsonMessage !== null ? lastJsonMessage : empty
                 }
+                storedElements={wsStore}
               />
             </Box>
           </Box>

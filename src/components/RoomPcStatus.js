@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDesktop, faBan } from "@fortawesome/pro-duotone-svg-icons";
+import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "websocketObject" - Pass the websocket as an object here
@@ -17,7 +18,8 @@ const RoomPcStatus = ({
   syncStatusName = null,
 }) => {
   const [sync, syncState] = useState({ value: false });
-
+  const feedbackStore = useSelector((state) => state.feedback.value);
+  /*
   // This is where the realtime update happens from the wsObject.fb
   useEffect(() => {
     let mounted = true;
@@ -38,30 +40,25 @@ const RoomPcStatus = ({
       mounted = false;
     };
   }, [feedbackObject, syncStatusName]);
-
+*/
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    let mounted = true;
-    var foundIndexSync = storedElements.findIndex(
+    var foundIndexSync = feedbackStore.findIndex(
       (x) => x.id === syncStatusName
     );
     if (foundIndexSync >= 0) {
       if (
-        storedElements[foundIndexSync].type === "bool" &&
-        storedElements[foundIndexSync].id === syncStatusName &&
-        mounted
+        feedbackStore[foundIndexSync].type === "bool" &&
+        feedbackStore[foundIndexSync].id === syncStatusName
       ) {
-        storedElements[foundIndexSync].value === "1"
+        feedbackStore[foundIndexSync].value === "1"
           ? syncState({ value: true })
           : syncState({ value: false });
       }
     }
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {};
+  }, [feedbackStore, syncStatusName]);
 
   useEffect(() => {
     if (!syncStatusName === null) syncState({ value: false });

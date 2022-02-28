@@ -6,6 +6,7 @@ import Zoom from "@mui/material/Zoom";
 import { makeStyles } from "@mui/styles";
 import Chip from "@mui/material/Chip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -40,8 +41,6 @@ const DestinationButton = ({
   inputName = null,
   eventType = null,
   sendMessage,
-  feedbackObject,
-  storedElements = [],
 }) => {
   const [style, styleState] = useState({ value: "primary" });
   const [handlerType, handlerTypeState] = useState({
@@ -80,90 +79,51 @@ const DestinationButton = ({
     sendMessage("digital=" + joinNumberDelete + "\x0d\x0a");
     inputTextState({ value: "" });
   };
-
-  // This is where the realtime update happens from the wsObject.fb
-  useEffect(() => {
-    let mounted = true;
-    if (Object.keys(feedbackObject).length === 0) {
-      return;
-    } else {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName &&
-        mounted
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? styleState({ value: activeColor.value })
-          : styleState({ value: inActiveColor.value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "string" &&
-        feedbackObject.fb_objects[0].id === serialName &&
-        mounted
-      ) {
-        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "string" &&
-        feedbackObject.fb_objects[0].id === inputName &&
-        mounted
-      ) {
-        inputTextState({ value: feedbackObject.fb_objects[0].value });
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [
-    feedbackObject,
-    digitalName,
-    activeColor,
-    inActiveColor,
-    serialName,
-    inputName,
-  ]);
+  const feedbackStore = useSelector((state) => state.feedback.value);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    let mounted = true;
-    var foundIndexDigital = storedElements.findIndex(
+    var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName
     );
     if (foundIndexDigital >= 0) {
       if (
-        storedElements[foundIndexDigital].type === "bool" &&
-        storedElements[foundIndexDigital].id === digitalName &&
-        mounted
+        feedbackStore[foundIndexDigital].type === "bool" &&
+        feedbackStore[foundIndexDigital].id === digitalName
       ) {
-        storedElements[foundIndexDigital].value === "1"
+        feedbackStore[foundIndexDigital].value === "1"
           ? styleState({ value: activeColor.value })
           : styleState({ value: inActiveColor.value });
       }
     }
-    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
+    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
     if (foundIndexSerial >= 0) {
       if (
-        storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === serialName &&
-        mounted
+        feedbackStore[foundIndexSerial].type === "string" &&
+        feedbackStore[foundIndexSerial].id === serialName
       ) {
-        dynamicTextState({ value: storedElements[foundIndexSerial].value });
+        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
       }
     }
-    var foundInputSerial = storedElements.findIndex((x) => x.id === inputName);
+    var foundInputSerial = feedbackStore.findIndex((x) => x.id === inputName);
     if (foundInputSerial >= 0) {
       if (
-        storedElements[foundInputSerial].type === "string" &&
-        storedElements[foundInputSerial].id === inputName &&
-        mounted
+        feedbackStore[foundInputSerial].type === "string" &&
+        feedbackStore[foundInputSerial].id === inputName
       ) {
-        inputTextState({ value: storedElements[foundInputSerial].value });
+        inputTextState({ value: feedbackStore[foundInputSerial].value });
       }
     }
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {};
+  }, [
+    feedbackStore,
+    digitalName,
+    serialName,
+    activeColor,
+    inActiveColor,
+    inputName,
+  ]);
 
   useEffect(() => {
     if (!eventType === null) {
@@ -373,8 +333,6 @@ DestinationButton.propTypes = {
   inputName: PropTypes.string,
   eventType: PropTypes.string,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default DestinationButton;

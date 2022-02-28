@@ -5,6 +5,7 @@ import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLaptop, faBan } from "@fortawesome/pro-duotone-svg-icons";
+import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -32,8 +33,6 @@ const LaptopButton = ({
   serialName = null,
   eventType = null,
   sendMessage,
-  feedbackObject,
-  storedElements = [],
   syncStatusName = null,
 }) => {
   const [style, styleState] = useState({ value: "primary" });
@@ -62,96 +61,55 @@ const LaptopButton = ({
     },
   });
   const classes = useStyles();
-
-  // This is where the realtime update happens from the wsObject.fb
-  useEffect(() => {
-    let mounted = true;
-    if (Object.keys(feedbackObject).length === 0) {
-      return;
-    } else {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === digitalName &&
-        mounted
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? styleState({ value: activeColor.value })
-          : styleState({ value: inActiveColor.value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "string" &&
-        feedbackObject.fb_objects[0].id === serialName &&
-        mounted
-      ) {
-        dynamicTextState({ value: feedbackObject.fb_objects[0].value });
-      } else if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === syncStatusName &&
-        mounted
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? syncState({ value: true })
-          : syncState({ value: false });
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [
-    feedbackObject,
-    digitalName,
-    activeColor,
-    inActiveColor,
-    serialName,
-    syncStatusName,
-  ]);
+  const feedbackStore = useSelector((state) => state.feedback.value);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    let mounted = true;
-    var foundIndexDigital = storedElements.findIndex(
+    var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName
     );
     if (foundIndexDigital >= 0) {
       if (
-        storedElements[foundIndexDigital].type === "bool" &&
-        storedElements[foundIndexDigital].id === digitalName &&
-        mounted
+        feedbackStore[foundIndexDigital].type === "bool" &&
+        feedbackStore[foundIndexDigital].id === digitalName
       ) {
-        storedElements[foundIndexDigital].value === "1"
+        feedbackStore[foundIndexDigital].value === "1"
           ? styleState({ value: activeColor.value })
           : styleState({ value: inActiveColor.value });
       }
     }
-    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
+    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
     if (foundIndexSerial >= 0) {
       if (
-        storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === serialName &&
-        mounted
+        feedbackStore[foundIndexSerial].type === "string" &&
+        feedbackStore[foundIndexSerial].id === serialName
       ) {
-        dynamicTextState({ value: storedElements[foundIndexSerial].value });
+        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
       }
     }
-    var foundIndexSync = storedElements.findIndex(
+    var foundIndexSync = feedbackStore.findIndex(
       (x) => x.id === syncStatusName
     );
     if (foundIndexSync >= 0) {
       if (
-        storedElements[foundIndexSync].type === "bool" &&
-        storedElements[foundIndexSync].id === syncStatusName &&
-        mounted
+        feedbackStore[foundIndexSync].type === "bool" &&
+        feedbackStore[foundIndexSync].id === syncStatusName
       ) {
-        storedElements[foundIndexSync].value === "1"
+        feedbackStore[foundIndexSync].value === "1"
           ? syncState({ value: true })
           : syncState({ value: false });
       }
     }
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {};
+  }, [
+    feedbackStore,
+    digitalName,
+    serialName,
+    activeColor,
+    inActiveColor,
+    syncStatusName,
+  ]);
 
   useEffect(() => {
     if (!serialName === null) dynamicTextState({ value: serialName });
@@ -324,8 +282,6 @@ LaptopButton.propTypes = {
   serialName: PropTypes.string,
   eventType: PropTypes.string,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
   syncStatusName: PropTypes.string,
 };
 

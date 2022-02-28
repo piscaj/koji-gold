@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -36,8 +37,6 @@ const MuiButton = ({
   serialName = null,
   eventType = null,
   sendMessage,
-  feedbackObject,
-  storedElements = [],
 }) => {
   const [style, styleState] = useState({ value: "primary" });
   const [handlerType, handlerTypeState] = useState({
@@ -66,66 +65,35 @@ const MuiButton = ({
   });
   const classes = useStyles();
 
-  // This is where the realtime update happens from the websocket
-  useEffect(() => {
-    let mounted = true;
-    if (Object.keys(feedbackObject).length === 0) {
-      return;
-    }else{
-        if (
-          feedbackObject.fb_objects[0].type === "bool" &&
-          feedbackObject.fb_objects[0].id === digitalName
-          && mounted
-        ) {
-          feedbackObject.fb_objects[0].value === "1"
-            ? styleState({ value: activeColor.value })
-            : styleState({ value: inActiveColor.value });
-        } else if (
-          feedbackObject.fb_objects[0].type === "string" &&
-          feedbackObject.fb_objects[0].id === serialName
-          && mounted
-        ) {
-          dynamicTextState({ value: feedbackObject.fb_objects[0].value });
-        }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [feedbackObject, digitalName, activeColor, inActiveColor, serialName]);
+  const feedbackStore = useSelector((state) => state.feedback.value);
 
   // When the component mounts set its last state if there was one.
   // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
-    let mounted = true;
-    var foundIndexDigital = storedElements.findIndex(
+    var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName
     );
     if (foundIndexDigital >= 0) {
       if (
-        storedElements[foundIndexDigital].type === "bool" &&
-        storedElements[foundIndexDigital].id === digitalName
-        && mounted
+        feedbackStore[foundIndexDigital].type === "bool" &&
+        feedbackStore[foundIndexDigital].id === digitalName
       ) {
-        storedElements[foundIndexDigital].value === "1"
+        feedbackStore[foundIndexDigital].value === "1"
           ? styleState({ value: activeColor.value })
           : styleState({ value: inActiveColor.value });
       }
     }
-    var foundIndexSerial = storedElements.findIndex((x) => x.id === serialName);
+    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
     if (foundIndexSerial >= 0) {
       if (
-        storedElements[foundIndexSerial].type === "string" &&
-        storedElements[foundIndexSerial].id === serialName
-        && mounted
+        feedbackStore[foundIndexSerial].type === "string" &&
+        feedbackStore[foundIndexSerial].id === serialName
       ) {
-        dynamicTextState({ value: storedElements[foundIndexSerial].value });
+        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
       }
     }
-    return () => {
-      mounted = false;
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {};
+  }, [feedbackStore, digitalName, serialName, activeColor, inActiveColor]);
 
   useEffect(() => {
     if (!eventType === null) {
@@ -276,8 +244,6 @@ MuiButton.propTypes = {
   serialName: PropTypes.string,
   eventType: PropTypes.string,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default MuiButton;

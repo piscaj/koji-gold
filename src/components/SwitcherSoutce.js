@@ -7,8 +7,6 @@ const SwitcherSoutce = ({
   sourceCount = 1,
   digitalOffset = 1,
   sendMessage,
-  feedbackObject,
-  storedElements,
 }) => {
   return (
     <Box className="source-scroll">
@@ -33,8 +31,6 @@ const SwitcherSoutce = ({
               minHeight: "70px",
             }}
             sendMessage={sendMessage}
-            feedbackObject={feedbackObject}
-            storedElements={storedElements}
           />
         </Box>
       ))}
@@ -46,8 +42,6 @@ SwitcherSoutce.propTypes = {
   sourceCount: PropTypes.number,
   digitalOffset: PropTypes.number,
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default SwitcherSoutce;
