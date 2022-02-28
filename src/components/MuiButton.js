@@ -16,8 +16,6 @@ import { useSelector } from "react-redux";
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "eventType" - Default "click" - values: "click" or "press"
 // "sendMessage" - Pass the websocket as an object here
-// "feedbackObject" - Pass the data from the websocket here
-// "storedElements" - Array of fb_objects current values
 // "faIcon" - FontAwesome icon -- any imported icon
 // "faClass" - FontAwesome class -- any fa class
 // "faSize" - FontAwesome icon size -- lg, sm, 1x, 2x, 3x, 4x
@@ -67,8 +65,6 @@ const MuiButton = ({
 
   const feedbackStore = useSelector((state) => state.feedback.value);
 
-  // When the component mounts set its last state if there was one.
-  // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
     var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName

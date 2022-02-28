@@ -16,8 +16,6 @@ import { useSelector } from "react-redux";
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
 // "sendMessage" - Pass the websocket as an object here
-// "feedbackObject" - Pass the data from the websocket here
-// "storedElements" - Array of fb_objects current values
 ///////////////////////////////////////////////////////////////////////////////
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -37,9 +35,7 @@ const PowerButton = ({ digitalName = null, sendMessage }) => {
   };
 
   const feedbackStore = useSelector((state) => state.feedback.value);
-
-  // When the component mounts set its last state if there was one.
-  // This is our store for all the fb_objects elements that hold the sockets last incoming value.
+  
   useEffect(() => {
     var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName

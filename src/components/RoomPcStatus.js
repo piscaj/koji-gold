@@ -7,8 +7,6 @@ import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "websocketObject" - Pass the websocket as an object here
-// "feedbackObject" - Pass the data from the websocket here
-// "storedElements" - Array of fb_objects current values
 // "syncStatusName" - This name should match up to the Crestron digital name paramiter
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,30 +17,7 @@ const RoomPcStatus = ({
 }) => {
   const [sync, syncState] = useState({ value: false });
   const feedbackStore = useSelector((state) => state.feedback.value);
-  /*
-  // This is where the realtime update happens from the wsObject.fb
-  useEffect(() => {
-    let mounted = true;
-    if (Object.keys(feedbackObject).length === 0) {
-      return;
-    } else {
-      if (
-        feedbackObject.fb_objects[0].type === "bool" &&
-        feedbackObject.fb_objects[0].id === syncStatusName &&
-        mounted
-      ) {
-        feedbackObject.fb_objects[0].value === "1"
-          ? syncState({ value: true })
-          : syncState({ value: false });
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [feedbackObject, syncStatusName]);
-*/
-  // When the component mounts set its last state if there was one.
-  // This is our store for all the fb_objects elements that hold the sockets last incoming value.
+
   useEffect(() => {
     var foundIndexSync = feedbackStore.findIndex(
       (x) => x.id === syncStatusName

@@ -17,8 +17,6 @@ import { useSelector } from "react-redux";
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "eventType" - Default "click" - values: "click" or "press"
 // "sendMessage" - Pass the websocket as an object here
-// "feedbackObject" - Pass the data from the websocket here
-// "storedElements" - Array of fb_objects current values
 // "syncStatusName" - This name should match up to the Crestron digital name paramiter
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -63,8 +61,6 @@ const LaptopButton = ({
   const classes = useStyles();
   const feedbackStore = useSelector((state) => state.feedback.value);
 
-  // When the component mounts set its last state if there was one.
-  // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
     var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName

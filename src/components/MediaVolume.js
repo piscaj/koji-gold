@@ -9,8 +9,6 @@ import { useSelector } from "react-redux";
 // Props definition for component /////////////////////////////////////////////
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "sendMessage" - Pass the websocket as an object here
-// "feedbackObject" - Pass the data from the websocket here
-// "storedElements" - Array of fb_objects current values
 ///////////////////////////////////////////////////////////////////////////////
 
 const MediaVolume = ({ serialName = null, sendMessage }) => {
@@ -38,8 +36,6 @@ const MediaVolume = ({ serialName = null, sendMessage }) => {
   };
   const feedbackStore = useSelector((state) => state.feedback.value);
 
-  // When the component mounts set its last state if there was one.
-  // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
     if (!moving) {
       var foundIndexSerial = feedbackStore.findIndex(

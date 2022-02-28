@@ -85,8 +85,6 @@ const DisplayPowerListItem = ({
   };
   const feedbackStore = useSelector((state) => state.feedback.value);
 
-  // When the component mounts set its last state if there was one.
-  // This is our store for all the fb_objects elements that hold the sockets last incoming value.
   useEffect(() => {
     var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName
