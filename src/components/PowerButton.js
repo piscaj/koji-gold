@@ -12,6 +12,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
+import "./scss/PowerButton.scss";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
@@ -35,7 +36,8 @@ const PowerButton = ({ digitalName = null, sendMessage }) => {
   };
 
   const feedbackStore = useSelector((state) => state.feedback.value);
-  
+  const themeModeStore = useSelector((state) => state.lightDarkMode.value);
+
   useEffect(() => {
     var foundIndexDigital = feedbackStore.findIndex(
       (x) => x.id === digitalName
@@ -68,7 +70,19 @@ const PowerButton = ({ digitalName = null, sendMessage }) => {
               handleClickOpen();
             }}
           >
-            <FontAwesomeIcon icon={faPowerOff} size="lg" />
+            {themeModeStore === "dark" ? (
+              <FontAwesomeIcon
+                icon={faPowerOff}
+                size="lg"
+                className="fa-beat-fade powerButDuoColorDark"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faPowerOff}
+                size="lg"
+                className="fa-beat-fade powerButDuoColorLight"
+              />
+            )}
           </IconButton>
         </Box>
       </Slide>

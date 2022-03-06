@@ -32,6 +32,7 @@ import useLocalStorage from "./local-storage";
 
 import { useDispatch } from "react-redux";
 import { updateObject } from "./redux/feedbackSlice";
+import { updateMode } from "./redux/lightDarkModeSlice";
 
 const Main = () => {
   const [updateStore, updateStoreState] = useState([]);
@@ -121,6 +122,12 @@ const Main = () => {
       }
     }
   }, [lastMessage, sendMessage]);
+
+ //Pass theme mode state to store
+ useEffect(() => {
+  dispatch(updateMode(mode));
+  return () => {};
+}, [mode, dispatch]);
 
   //Pass feeback state to store
   useEffect(() => {
