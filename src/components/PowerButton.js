@@ -92,7 +92,7 @@ const PowerButton = ({ digitalName = null, sendMessage }) => {
         keepMounted
         onClose={handleClose}
       >
-        <DialogTitle>{"Shutdown?"}</DialogTitle>
+        <DialogTitle>Shutdown?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Power off audiovisual equipment.
@@ -100,6 +100,7 @@ const PowerButton = ({ digitalName = null, sendMessage }) => {
         </DialogContent>
         <DialogActions>
           <Button
+            variant="outlined"
             onClick={() => {
               handleClose();
             }}
@@ -107,6 +108,7 @@ const PowerButton = ({ digitalName = null, sendMessage }) => {
             Cancel
           </Button>
           <Button
+            variant="outlined"
             onClick={() => {
               handleClose();
               sendMessage("digital=38\x0d\x0a");
