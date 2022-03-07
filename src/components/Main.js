@@ -140,8 +140,8 @@ const Main = () => {
     let mounted = true;
     if (lastJsonMessage !== null) {
       if (Object.keys(lastJsonMessage).length === 0) {
-        //This is a fix for the "HB" that is not an empty json obj
-        //pass if the json is empty {}
+        //This is a fix for the "HB".  This is not an object
+        //lets not put any garbage in the store, pass if the json is empty {}
       } else {
         if (mounted) {
           updateStoreState(lastJsonMessage.fb_objects[0]);
