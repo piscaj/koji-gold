@@ -54,8 +54,7 @@ const Main = () => {
 
   const dispatch = useDispatch();
 
-  //const socketUrl = "wss://192.168.2.29:49797";
-  const socketUrl = "wss://79shawsheen.mycrestron.com:49797";
+  const socketUrl = process.env.REACT_APP_URL;
   const empty = { fb_objects: [{ id: "", value: "", type: "" }] };
   const didUnmount = useRef(false);
 
