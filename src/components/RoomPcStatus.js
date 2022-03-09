@@ -6,13 +6,10 @@ import { faDesktop, faBan } from "@fortawesome/pro-duotone-svg-icons";
 import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
-// "websocketObject" - Pass the websocket as an object here
 // "syncStatusName" - This name should match up to the Crestron digital name paramiter
 ///////////////////////////////////////////////////////////////////////////////
 
 const RoomPcStatus = ({
-  feedbackObject,
-  storedElements = [],
   syncStatusName = null,
 }) => {
   const [sync, syncState] = useState({ value: false });
@@ -114,8 +111,6 @@ const RoomPcStatus = ({
 };
 
 RoomPcStatus.propTypes = {
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
   syncStatusName: PropTypes.string,
 };
 
