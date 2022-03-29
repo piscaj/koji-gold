@@ -6998,6 +6998,13 @@ portfinder@^1.0.28:
     debug "^3.1.1"
     mkdirp "^0.5.5"
 
+postal@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/postal/-/postal-2.0.6.tgz#d572784e85f4216f32a1c3604f5705ca8a305867"
+  integrity sha512-GM8j+yRefRfECj2Ukd+9WDuQ9Vd7Yt3tyzfMiTPcRtVgnF+53Kv/x142f6WvpqjnwF05AFIZ/djaQT/8zUBxJw==
+  dependencies:
+    lodash "^4.17.21"
+
 postcss-attribute-case-insensitive@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/postcss-attribute-case-insensitive/-/postcss-attribute-case-insensitive-5.0.0.tgz#39cbf6babf3ded1e4abf37d09d6eda21c644105c"
