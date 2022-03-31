@@ -12,7 +12,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
-import "./scss/PowerButton.scss";
+import "../assets/scss/PowerButton.scss";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter

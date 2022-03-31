@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import MuiButton from "./MuiButton";
 import Box from "@mui/material/Box";
-import "./scss/Switcher.scss";
+import "../assets/scss/Switcher.scss";
 
 const SwitcherSoutce = ({
   sourceCount = 1,

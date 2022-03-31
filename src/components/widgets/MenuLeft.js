@@ -16,7 +16,7 @@ import {
   faProjector,
   faTv,
 } from "@fortawesome/pro-duotone-svg-icons";
-import "./scss/MenuL.scss";
+import "../assets/scss/MenuL.scss";
 import DisplayPowerListItem from "./DisplayPowerListItem";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";

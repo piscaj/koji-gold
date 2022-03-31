@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Header from "./Header";
+import Header from "./widgets/Header";
 import LaptopButton from "./widgets/LaptopButton";
 import Fade from "@mui/material/Fade";
 

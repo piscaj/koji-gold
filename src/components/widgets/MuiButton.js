@@ -23,36 +23,22 @@ import { useSelector } from "react-redux";
 
 const MuiButton = ({
   text,
-  muiColor = null,
-  muiColorFeedback = null,
-  muiVariant = null,
+  muiColor = "primary",
+  muiColorFeedback = "secondary",
+  muiVariant = "contained",
   addStyle = {},
   faIcon,
   faClass,
   faSize,
   digitalName = null,
-  joinNumber,
+  joinNumber = "0",
   serialName = null,
-  eventType = null,
+  eventType = "click",
   sendMessage,
 }) => {
-  const [style, styleState] = useState({ value: "primary" });
-  const [handlerType, handlerTypeState] = useState({
-    value: eventType === null ? "click" : eventType,
-  });
-  const [variantType, variantTypeState] = useState({
-    value: muiVariant === null ? "outlined" : muiVariant,
-  });
-  const [styleType, styleTypeState] = useState({
-    value: addStyle === {} ? {} : addStyle,
-  });
-  const [dynamicText, dynamicTextState] = useState({ value: "" });
-  const [inActiveColor, inActiveColorState] = useState({
-    value: muiColor === null ? "primary" : muiColor,
-  });
-  const [activeColor, activeColorState] = useState({
-    value: muiColorFeedback === null ? "secondary" : muiColorFeedback,
-  });
+  const [style, styleState] = useState("primary");
+
+  const [dynamicText, dynamicTextState] = useState("");
 
   const useStyles = makeStyles({
     button: {
@@ -75,8 +61,8 @@ const MuiButton = ({
         feedbackStore[foundIndexDigital].id === digitalName
       ) {
         feedbackStore[foundIndexDigital].value === "1"
-          ? styleState({ value: activeColor.value })
-          : styleState({ value: inActiveColor.value });
+          ? styleState(muiColorFeedback)
+          : styleState(muiColor);
       }
     }
     var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
@@ -89,49 +75,16 @@ const MuiButton = ({
       }
     }
     return () => {};
-  }, [feedbackStore, digitalName, serialName, activeColor, inActiveColor]);
-
-  useEffect(() => {
-    if (!eventType === null) {
-      handlerTypeState({ value: eventType });
-    }
-  }, [eventType]);
-
-  useEffect(() => {
-    if (!eventType === null) {
-      handlerTypeState({ value: eventType });
-    }
-  }, [eventType]);
-
-  useEffect(() => {
-    if (!muiVariant === null) {
-      variantTypeState({ value: muiVariant });
-    }
-  }, [muiVariant]);
-
-  useEffect(() => {
-    if (!addStyle === {}) {
-      styleTypeState({ value: addStyle });
-    }
-  }, [addStyle]);
-
-  useEffect(() => {
-    if (!muiColor === null) inActiveColorState({ value: muiColor });
-  }, [muiColor]);
-
-  useEffect(() => {
-    if (!muiColorFeedback === null)
-      activeColorState({ value: muiColorFeedback });
-  }, [muiColorFeedback]);
+  }, [feedbackStore, digitalName, serialName, muiColor, muiColorFeedback]);
 
   return (
     <div>
-      {handlerType.value === "click" ? (
+      {eventType === "click" ? (
         <Button
           id={digitalName}
-          variant={variantType.value}
-          color={style.value}
-          style={styleType.value}
+          variant={muiVariant}
+          color={style}
+          style={addStyle}
           className={classes.button}
           onClick={() => {
             sendMessage("digital=" + joinNumber + "\x0d\x0a");
@@ -159,24 +112,24 @@ const MuiButton = ({
                 />
               </Box>
             ) : undefined}
-            {text === "" && dynamicText.value === "" ? undefined : (
+            {text === "" && dynamicText === "" ? undefined : (
               <Box
                 sx={{
                   p: "2.5px",
                 }}
               >
-                {dynamicText.value === "" ? text : dynamicText.value}
+                {dynamicText === "" ? text : dynamicText.value}
               </Box>
             )}
           </Box>
         </Button>
       ) : undefined}
-      {handlerType.value === "press" ? (
+      {eventType === "press" ? (
         <Button
           id={digitalName}
-          variant={variantType.value}
-          color={style.value}
-          style={styleType.value}
+          variant={muiVariant}
+          color={style}
+          style={addStyle}
           className={classes.button}
           onMouseDown={() => {
             sendMessage(digitalName + "=1\x0d\x0a");
@@ -213,13 +166,13 @@ const MuiButton = ({
                 />
               </Box>
             ) : undefined}
-            {text === "" && dynamicText.value === "" ? undefined : (
+            {text === "" && dynamicText === "" ? undefined : (
               <Box
                 sx={{
                   p: "2.5px",
                 }}
               >
-                {dynamicText.value === "" ? text : dynamicText.value}
+                {dynamicText === "" ? text : dynamicText}
               </Box>
             )}
           </Box>

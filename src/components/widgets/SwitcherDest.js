@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import DestinationButton from "./DestinationButton";
 import Box from "@mui/material/Box";
-import "./scss/Switcher.scss";
+import "../assets/scss/Switcher.scss";
 
 const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1, sendMessage }) => {
   return (

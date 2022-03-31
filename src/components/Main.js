@@ -13,8 +13,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Slide from "@mui/material/Slide";
-import MenuLeft from "./MenuLeft";
-import "./scss/Main.scss";
+import MenuLeft from "./widgets/MenuLeft";
+import "./assets/scss/Main.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
@@ -22,12 +22,12 @@ import {
   faSun,
   faMoon,
 } from "@fortawesome/pro-duotone-svg-icons";
-import MediaVolume from "./MediaVolume";
-import logoDark from "./images/logoDark.png";
-import logoLight from "./images/logoLight.png";
-import { DriveLinks, DriveRoutes } from "./DrivePages";
+import MediaVolume from "./widgets/MediaVolume";
+import logoDark from "../components/assets/images/logoDark.png";
+import logoLight from "../components/assets/images/logoDark.png";
+import { DriveLinks, DriveRoutes } from "./widgets/DrivePages";
 import { deepOrange, grey, indigo } from "@mui/material/colors";
-import PowerButton from "./PowerButton";
+import PowerButton from "./widgets/PowerButton";
 import useLocalStorage from "./imports/local-storage";
 
 import { useDispatch } from "react-redux";

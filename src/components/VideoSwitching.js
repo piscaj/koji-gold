@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Header from "./Header";
-import SwitcherSoutce from "./SwitcherSoutce";
+import Header from "./widgets/Header";
+import SwitcherSoutce from "./widgets/SwitcherSoutce";
 import SwitcherDest from "./widgets/SwitcherDest";
-import "./scss/Switcher.scss";
+import "./assets/scss/Switcher.scss";
 import Fade from "@mui/material/Fade";
 
 const VideoSwitching = ({ sendMessage }) => {
