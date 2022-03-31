@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./Header";
 import SwitcherSoutce from "./SwitcherSoutce";
-import SwitcherDest from "./SwitcherDest";
+import SwitcherDest from "./widgets/SwitcherDest";
 import "./scss/Switcher.scss";
 import Fade from "@mui/material/Fade";
 

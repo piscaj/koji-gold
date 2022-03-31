@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
-import MuiButton from "./MuiButton";
+import MuiButton from "../MuiButton";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/pro-duotone-svg-icons";

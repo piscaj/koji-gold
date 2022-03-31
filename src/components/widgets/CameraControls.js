@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
-import MuiButton from "./MuiButton";
+import MuiButton from "../MuiButton";
 import Button from "@mui/material/Button";
 import CameraPresets from "./CameraPresets";
 import Slide from "@mui/material/Slide";

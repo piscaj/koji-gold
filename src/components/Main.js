@@ -28,11 +28,14 @@ import logoLight from "./images/logoLight.png";
 import { DriveLinks, DriveRoutes } from "./DrivePages";
 import { deepOrange, grey, indigo } from "@mui/material/colors";
 import PowerButton from "./PowerButton";
-import useLocalStorage from "./local-storage";
+import useLocalStorage from "./imports/local-storage";
 
 import { useDispatch } from "react-redux";
 import { updateObject } from "./redux/feedbackSlice";
 import { updateMode } from "./redux/lightDarkModeSlice";
+
+import { useDigitalState } from "./imports/EventBus";
+import postal from "postal";
 
 const Main = () => {
   const [updateStore, updateStoreState] = useState([]);
@@ -57,6 +60,15 @@ const Main = () => {
   const socketUrl = process.env.REACT_APP_URL;
   const empty = { fb_objects: [{ id: "", value: "", type: "" }] };
   const didUnmount = useRef(false);
+
+  const testDigitalEvent = useDigitalState("digital");
+
+  //Event testing
+  useEffect(() => {
+    if (testDigitalEvent === true) console.log("My digital test value is TRUE");
+    else console.log("My digital test value is FALSE");
+    return () => {};
+  }, [testDigitalEvent]);
 
   //Stuff to do only once when the app starts.
   useEffect(() => {
@@ -113,20 +125,35 @@ const Main = () => {
   //Manage the websocket heartbeat message
   useEffect(() => {
     if (lastMessage !== null) {
+      postal.publish({
+        channel: "boolean",
+        topic: "digital",
+        data: {
+          value: false,
+        },
+      });
       if (lastMessage.data === "HB") {
         sendMessage("ACK\x0d\x0a");
         console.log("Heartbeat sent");
         setLoader(false);
         setAlertMessage({ active: false });
+
+        postal.publish({
+          channel: "boolean",
+          topic: "digital",
+          data: {
+            value: true,
+          },
+        });
       }
     }
   }, [lastMessage, sendMessage]);
 
- //Pass theme mode state to store
- useEffect(() => {
-  dispatch(updateMode(mode));
-  return () => {};
-}, [mode, dispatch]);
+  //Pass theme mode state to store
+  useEffect(() => {
+    dispatch(updateMode(mode));
+    return () => {};
+  }, [mode, dispatch]);
 
   //Pass feeback state to store
   useEffect(() => {

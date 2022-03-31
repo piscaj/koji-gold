@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
 import Linker from "./Linker";
 import { Route, Routes } from "react-router-dom";
-import ButtonShowcase from "./ButtonShowcase";
-import Laptop from "./Laptop";
-import RoomPc from "./RoomPc";
-import Camera from "./Camera";
-import VideoSwitching from "./VideoSwitching";
+import ButtonShowcase from "../ButtonShowcase";
+import Laptop from "../Laptop";
+import RoomPc from "../RoomPc";
+import Camera from "../Camera";
+import VideoSwitching from "../VideoSwitching";
 
 //This component just moves the clutter of React Router and the
 //Linker component out of the Main component to clean things up.
