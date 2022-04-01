@@ -4,8 +4,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSelector } from "react-redux";
-import { useDigitalState } from "../imports/EventBus";
+import { useDigitalState, useStringState } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -31,9 +30,9 @@ const MuiButton = ({
   faIcon,
   faClass,
   faSize,
-  digitalName = null,
+  digitalName,
   joinNumber = "0",
-  serialName = null,
+  serialName,
   eventType = "click",
   sendMessage,
 }) => {
@@ -47,26 +46,22 @@ const MuiButton = ({
     },
   });
   const classes = useStyles();
-  //const feedbackStore = useSelector((state) => state.feedback.value);
 
   const digitalState = useDigitalState(digitalName);
+  const stringState = useStringState(serialName);
 
   useEffect(() => {
-    if(digitalState !== undefined)
-    digitalState === "1" ? styleState(muiColorFeedback) : styleState(muiColor);
-/*
-    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
-    if (foundIndexSerial >= 0) {
-      if (
-        feedbackStore[foundIndexSerial].type === "string" &&
-        feedbackStore[foundIndexSerial].id === serialName
-      ) {
-        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
-      }
-    }
-    */
+    if (digitalState !== undefined)
+      digitalState === "1"
+        ? styleState(muiColorFeedback)
+        : styleState(muiColor);
     return () => {};
-  }, [ muiColor, muiColorFeedback, digitalState,digitalName]);
+  }, [muiColor, muiColorFeedback, digitalState, digitalName]);
+
+  useEffect(() => {
+    if (stringState !== undefined) dynamicTextState(stringState);
+    return () => {};
+  }, [dynamicTextState, stringState, serialName]);
 
   return (
     <div>
@@ -109,7 +104,7 @@ const MuiButton = ({
                   p: "2.5px",
                 }}
               >
-                {dynamicText === "" ? text : dynamicText.value}
+                {dynamicText === "" ? text : dynamicText}
               </Box>
             )}
           </Box>
