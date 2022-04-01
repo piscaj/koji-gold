@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import postal from "postal";
 
 const initialState = {
   value: [{ id: "null", value: "null", type: "null" }],
@@ -11,6 +12,15 @@ export const feedbackSlice = createSlice({
     updateObject: (state, action) => {
       var foundIndex = state.value.findIndex((x) => x.id === action.payload.id);
 
+      if (action.payload.type === "bool") {
+        postal.publish({
+          channel: "boolean",
+          topic: action.payload.id,
+          data: {
+            value: action.payload.value,
+          },
+        });
+      }
       // If we have a matching element value at id, overwrite it
       if (foundIndex >= 0) {
         state.value[foundIndex].value = action.payload.value;

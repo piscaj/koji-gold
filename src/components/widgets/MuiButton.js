@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
+import { useDigitalState } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -37,9 +38,7 @@ const MuiButton = ({
   sendMessage,
 }) => {
   const [style, styleState] = useState("primary");
-
   const [dynamicText, dynamicTextState] = useState("");
-
   const useStyles = makeStyles({
     button: {
       textTransform: "none",
@@ -48,8 +47,14 @@ const MuiButton = ({
     },
   });
   const classes = useStyles();
-
   const feedbackStore = useSelector((state) => state.feedback.value);
+
+  const testEvent = useDigitalState(digitalName);
+
+  useEffect(() => {
+    console.log("MuiButton Feedback Event: " + digitalName + " = " + testEvent);
+    return () => {};
+  }, [testEvent, digitalName]);
 
   useEffect(() => {
     var foundIndexDigital = feedbackStore.findIndex(

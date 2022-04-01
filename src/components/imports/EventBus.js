@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 function useSignalStateBool(signalName) {
   const [feedbackBool, setFeedbackBool] = useState();
   useEffect(() => {
+    if (signalName === null) {
+      return;
+    }
     const subscriptionID = postal.subscribe({
       channel: "boolean",
       topic: signalName,
