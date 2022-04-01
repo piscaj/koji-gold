@@ -1,9 +1,28 @@
+import { useEffect, useState, useCallback } from "react";
 import postal from "postal";
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 // "bool" (Digital) subscribe
 function useSignalStateBool(signalName) {
+  const feedbackStore = useSelector((state) => state.feedback.value);
   const [feedbackBool, setFeedbackBool] = useState();
+
+  const checkStore = useCallback((signalName) => {
+    let foundIndexDigital = feedbackStore.findIndex((x) => x.id === signalName);
+    if (
+      foundIndexDigital >= 0 &&
+      feedbackStore[foundIndexDigital].type === "bool"
+    ) {
+      postal.publish({
+        channel: "boolean",
+        topic: signalName,
+        data: {
+          value: feedbackStore[foundIndexDigital].value,
+        },
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (signalName === null) {
       return;
@@ -15,10 +34,11 @@ function useSignalStateBool(signalName) {
         setFeedbackBool(data.value);
       },
     });
+    checkStore(signalName);
     return () => {
       subscriptionID.unsubscribe();
     };
-  }, [signalName]);
+  }, [signalName, checkStore]);
   return feedbackBool;
 }
 

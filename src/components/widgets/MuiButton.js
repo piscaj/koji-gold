@@ -47,29 +47,14 @@ const MuiButton = ({
     },
   });
   const classes = useStyles();
-  const feedbackStore = useSelector((state) => state.feedback.value);
+  //const feedbackStore = useSelector((state) => state.feedback.value);
 
-  const testEvent = useDigitalState(digitalName);
-
-  useEffect(() => {
-    console.log("MuiButton Feedback Event: " + digitalName + " = " + testEvent);
-    return () => {};
-  }, [testEvent, digitalName]);
+  const digitalState = useDigitalState(digitalName);
 
   useEffect(() => {
-    var foundIndexDigital = feedbackStore.findIndex(
-      (x) => x.id === digitalName
-    );
-    if (foundIndexDigital >= 0) {
-      if (
-        feedbackStore[foundIndexDigital].type === "bool" &&
-        feedbackStore[foundIndexDigital].id === digitalName
-      ) {
-        feedbackStore[foundIndexDigital].value === "1"
-          ? styleState(muiColorFeedback)
-          : styleState(muiColor);
-      }
-    }
+    if(digitalState !== undefined)
+    digitalState === "1" ? styleState(muiColorFeedback) : styleState(muiColor);
+/*
     var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
     if (foundIndexSerial >= 0) {
       if (
@@ -79,8 +64,9 @@ const MuiButton = ({
         dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
       }
     }
+    */
     return () => {};
-  }, [feedbackStore, digitalName, serialName, muiColor, muiColorFeedback]);
+  }, [ muiColor, muiColorFeedback, digitalState,digitalName]);
 
   return (
     <div>
