@@ -23,11 +23,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MuiButton from "./MuiButton";
-import { useSelector } from "react-redux";
+import { useStringState } from "../imports/EventBus";
 
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
-  const feedbackStore = useSelector((state) => state.feedback.value);
+  //Hook for digital and string events
+  const stringState = useStringState(props.serialName);
 
   //iOS is hosted on high-end devices. The backdrop transition can be enabled without dropping frames. The performance will be good enough.
   //iOS has a "swipe to go back" feature that interferes with the discovery feature, so discovery has to be disabled.
@@ -36,7 +37,7 @@ const MenuLeft = forwardRef((props, ref) => {
     typeof navigator !== "undefined" &&
     /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-  const [menuIndex, menuIndexState] = useState({ value: "" });
+  const [menuIndex, menuIndexState] = useState("");
 
   const setDrawerOpen = (newState) => {
     drawerOpenState({ value: newState });
@@ -48,24 +49,11 @@ const MenuLeft = forwardRef((props, ref) => {
     },
   }));
 
+  //Watch for serial events
   useEffect(() => {
-    let mounted = true;
-    var foundIndexSerial = feedbackStore.findIndex(
-      (x) => x.id === props.serialName
-    );
-    if (foundIndexSerial >= 0) {
-      if (
-        feedbackStore[foundIndexSerial].type === "string" &&
-        feedbackStore[foundIndexSerial].id === props.serialName &&
-        mounted
-      ) {
-        menuIndexState({ value: feedbackStore[foundIndexSerial].value });
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [feedbackStore, props.serialName]);
+    if (stringState !== undefined) menuIndexState(stringState);
+    return () => {};
+  }, [stringState]);
 
   return (
     <>
@@ -82,7 +70,7 @@ const MenuLeft = forwardRef((props, ref) => {
             <List>
               <ListItem
                 button
-                selected={menuIndex.value === "index-1" ? true : false}
+                selected={menuIndex === "index-1" ? true : false}
                 onClick={() => {
                   props.sendMessage("digital=1\x0d\x0a");
                   setDrawerOpen(false);
@@ -100,7 +88,7 @@ const MenuLeft = forwardRef((props, ref) => {
             </List>
             <List>
               <ListItem
-                selected={menuIndex.value === "index-2" ? true : false}
+                selected={menuIndex === "index-2" ? true : false}
                 button
                 onClick={() => {
                   props.sendMessage("digital=2\x0d\x0a");
@@ -116,7 +104,7 @@ const MenuLeft = forwardRef((props, ref) => {
             </List>
             <List>
               <ListItem
-                selected={menuIndex.value === "index-3" ? true : false}
+                selected={menuIndex === "index-3" ? true : false}
                 button
                 onClick={() => {
                   props.sendMessage("digital=3\x0d\x0a");
@@ -132,7 +120,7 @@ const MenuLeft = forwardRef((props, ref) => {
             </List>
             <List>
               <ListItem
-                selected={menuIndex.value === "index-5" ? true : false}
+                selected={menuIndex === "index-5" ? true : false}
                 button
                 onClick={() => {
                   props.sendMessage("digital=5\x0d\x0a");
@@ -152,7 +140,7 @@ const MenuLeft = forwardRef((props, ref) => {
             <List>
               <ListItem
                 button
-                selected={menuIndex.value === "index-4" ? true : false}
+                selected={menuIndex === "index-4" ? true : false}
                 onClick={() => {
                   props.sendMessage("digital=4\x0d\x0a");
                   setDrawerOpen(false);
@@ -198,10 +186,8 @@ const MenuLeft = forwardRef((props, ref) => {
                       muiColorFeedback="secondary"
                       muiVariant="contained"
                       addStyle={{
-                        maxWidth: "80px",
-                        maxHeight: "30px",
-                        minWidth: "80px",
-                        minHeight: "30px",
+                        width: "80px",
+                        height: "30px",
                       }}
                       digitalName="screen-up"
                       joinNumber={36}
@@ -221,10 +207,8 @@ const MenuLeft = forwardRef((props, ref) => {
                       muiColorFeedback="secondary"
                       muiVariant="contained"
                       addStyle={{
-                        maxWidth: "80px",
-                        maxHeight: "30px",
-                        minWidth: "80px",
-                        minHeight: "30px",
+                        width: "80px",
+                        height: "30px",
                       }}
                       digitalName="screen-down"
                       joinNumber={37}

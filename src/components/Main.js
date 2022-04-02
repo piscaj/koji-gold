@@ -34,8 +34,6 @@ import { useDispatch } from "react-redux";
 import { updateObject } from "./redux/feedbackSlice";
 import { updateMode } from "./redux/lightDarkModeSlice";
 
-import { useDigitalState } from "./imports/EventBus";
-
 const Main = () => {
   const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
@@ -253,7 +251,6 @@ const Main = () => {
         </Backdrop>
         <MenuLeft
           serialName={"menu-index"}
-          feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
           sendMessage={sendMessage}
           ref={menuLeft}
         />
