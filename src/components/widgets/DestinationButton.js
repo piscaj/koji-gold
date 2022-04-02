@@ -61,7 +61,7 @@ const DestinationButton = ({
   //Hooks for digital and string events
   const digitalState = useDigitalState(digitalName);
   const stringState = useStringState(serialName);
-  const inputStringState = useStringState(serialName);
+  const inputStringState = useStringState(inputName);
 
   const handleDelete = () => {
     sendMessage("digital=" + joinNumberDelete + "\x0d\x0a");
@@ -145,7 +145,7 @@ const DestinationButton = ({
           >
             {inputText.value !== "" ? (
               <Zoom
-                in={inputText.value !== ""}
+                in={inputText !== ""}
                 style={{ transitionDelay: inputText ? "100ms" : "0ms" }}
               >
                 <Chip
@@ -232,7 +232,7 @@ const DestinationButton = ({
             }}
           >
             <Zoom
-              in={inputText.value !== ""}
+              in={inputText !== ""}
               style={{ transitionDelay: inputText ? "100ms" : "0ms" }}
             >
               <Chip
