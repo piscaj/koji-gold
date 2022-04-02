@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Slider from "@mui/material/Slider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp, faVolumeDown } from "@fortawesome/pro-duotone-svg-icons";
-import { useSelector } from "react-redux";
+import { useStringState } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
@@ -34,24 +34,17 @@ const MediaVolume = ({ serialName = null, sendMessage }) => {
     //update the slider value for the badge that appears over the slider.
     setbarValue(value);
   };
-  const feedbackStore = useSelector((state) => state.feedback.value);
 
+  //Hook for digital and string events
+  const stringState = useStringState(serialName);
+
+  //Watch for serial events
   useEffect(() => {
     if (!moving) {
-      var foundIndexSerial = feedbackStore.findIndex(
-        (x) => x.id === serialName
-      );
-      if (foundIndexSerial >= 0) {
-        if (
-          feedbackStore[foundIndexSerial].type === "string" &&
-          feedbackStore[foundIndexSerial].id === serialName
-        ) {
-          setbarValue(feedbackStore[foundIndexSerial].value);
-        }
-      }
+      if (stringState !== undefined) setbarValue(stringState);
     }
     return () => {};
-  }, [feedbackStore, moving, serialName]);
+  }, [stringState, moving]);
 
   return (
     <Stack direction="row" spacing={2} sx={{ mb: 1 }} alignItems="center">

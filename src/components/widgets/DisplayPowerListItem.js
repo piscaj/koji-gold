@@ -7,15 +7,15 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "@mui/material/styles";
-import { useSelector } from "react-redux";
+import { useDigitalState, useStringState } from "../imports/EventBus";
 
 const DisplayPowerListItem = ({
-  digitalName = null,
+  digitalName,
   joinNumberOn,
   joinNumberOff,
-  serialName = null,
+  serialName,
   primaryText = "",
-  faIcon = null,
+  faIcon,
   sendMessage,
 }) => {
   //Make switch look and act like a native IOS switch
@@ -75,41 +75,31 @@ const DisplayPowerListItem = ({
     },
   }));
 
-  const [dynamicText, dynamicTextState] = useState({ value: "Status" });
-  const [displayPower, displayPowerState] = useState({ value: false });
+  const [dynamicText, dynamicTextState] = useState("Status");
+  const [displayPower, displayPowerState] = useState(false);
+
+  //Hooks for digital and string events
+  const digitalState = useDigitalState(digitalName);
+  const stringState = useStringState(serialName);
 
   const handleChange = (event) => {
     event.target.checked
       ? sendMessage("digital=" + joinNumberOn + "\x0d\x0a")
       : sendMessage("digital=" + joinNumberOff + "\x0d\x0a");
   };
-  const feedbackStore = useSelector((state) => state.feedback.value);
 
+  //Watch for digital events
   useEffect(() => {
-    var foundIndexDigital = feedbackStore.findIndex(
-      (x) => x.id === digitalName
-    );
-    if (foundIndexDigital >= 0) {
-      if (
-        feedbackStore[foundIndexDigital].type === "bool" &&
-        feedbackStore[foundIndexDigital].id === digitalName
-      ) {
-        feedbackStore[foundIndexDigital].value === "1"
-          ? displayPowerState({ value: true })
-          : displayPowerState({ value: false });
-      }
-    }
-    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
-    if (foundIndexSerial >= 0) {
-      if (
-        feedbackStore[foundIndexSerial].type === "string" &&
-        feedbackStore[foundIndexSerial].id === serialName
-      ) {
-        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
-      }
-    }
+    if (digitalState !== undefined)
+      digitalState === "1" ? displayPowerState(true) : displayPowerState(false);
     return () => {};
-  }, [feedbackStore, digitalName, serialName]);
+  }, [digitalState]);
+
+  //Watch for serial events
+  useEffect(() => {
+    if (stringState !== undefined) dynamicTextState(stringState);
+    return () => {};
+  }, [dynamicTextState, stringState]);
 
   return (
     <List>
@@ -117,12 +107,8 @@ const DisplayPowerListItem = ({
         <ListItemIcon>
           <FontAwesomeIcon icon={faIcon} size="2x" />
         </ListItemIcon>
-        <ListItemText primary={primaryText} secondary={dynamicText.value} />
-        <IOSSwitch
-          edge="end"
-          checked={displayPower.value}
-          onChange={handleChange}
-        />
+        <ListItemText primary={primaryText} secondary={dynamicText} />
+        <IOSSwitch edge="end" checked={displayPower} onChange={handleChange} />
       </ListItem>
     </List>
   );

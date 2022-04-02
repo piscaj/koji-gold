@@ -75,7 +75,7 @@ const DestinationButton = ({
         ? styleState(muiColorFeedback)
         : styleState(muiColor);
     return () => {};
-  }, [muiColor, muiColorFeedback, digitalState, digitalName]);
+  }, [muiColor, muiColorFeedback, digitalState]);
 
   //Watch for serial events
   useEffect(() => {

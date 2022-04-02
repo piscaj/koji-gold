@@ -5,7 +5,7 @@ import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLaptop, faBan } from "@fortawesome/pro-duotone-svg-icons";
-import { useSelector } from "react-redux";
+import { useDigitalState, useStringState } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -22,35 +22,25 @@ import { useSelector } from "react-redux";
 
 const LaptopButton = ({
   text,
-  muiColor = null,
-  muiColorFeedback = null,
-  muiVariant = null,
+  muiColor = "primary",
+  muiColorFeedback = "secondary",
+  muiVariant = "contained",
   addStyle = {},
   digitalName,
   joinNumber,
-  serialName = null,
-  eventType = null,
+  serialName,
+  eventType = "click",
   sendMessage,
-  syncStatusName = null,
+  syncStatusName,
 }) => {
-  const [style, styleState] = useState({ value: "primary" });
-  const [handlerType, handlerTypeState] = useState({
-    value: eventType === null ? "click" : eventType,
-  });
-  const [variantType, variantTypeState] = useState({
-    value: muiVariant === null ? "outlined" : muiVariant,
-  });
-  const [styleType, styleTypeState] = useState({
-    value: addStyle === {} ? {} : addStyle,
-  });
-  const [dynamicText, dynamicTextState] = useState({ value: "" });
-  const [inActiveColor, inActiveColorState] = useState({
-    value: muiColor === null ? "primary" : muiColor,
-  });
-  const [activeColor, activeColorState] = useState({
-    value: muiColorFeedback === null ? "secondary" : muiColorFeedback,
-  });
-  const [sync, syncState] = useState({ value: false });
+  const [style, styleState] = useState("primary");
+  const [dynamicText, dynamicTextState] = useState("");
+  const [sync, syncState] = useState(false);
+
+  //Hooks for digital and string events
+  const digitalState = useDigitalState(digitalName);
+  const syncStatus = useDigitalState(syncStatusName);
+  const stringState = useStringState(serialName);
 
   const useStyles = makeStyles({
     button: {
@@ -59,94 +49,36 @@ const LaptopButton = ({
     },
   });
   const classes = useStyles();
-  const feedbackStore = useSelector((state) => state.feedback.value);
 
+  //Watch for digital events
   useEffect(() => {
-    var foundIndexDigital = feedbackStore.findIndex(
-      (x) => x.id === digitalName
-    );
-    if (foundIndexDigital >= 0) {
-      if (
-        feedbackStore[foundIndexDigital].type === "bool" &&
-        feedbackStore[foundIndexDigital].id === digitalName
-      ) {
-        feedbackStore[foundIndexDigital].value === "1"
-          ? styleState({ value: activeColor.value })
-          : styleState({ value: inActiveColor.value });
-      }
-    }
-    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
-    if (foundIndexSerial >= 0) {
-      if (
-        feedbackStore[foundIndexSerial].type === "string" &&
-        feedbackStore[foundIndexSerial].id === serialName
-      ) {
-        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
-      }
-    }
-    var foundIndexSync = feedbackStore.findIndex(
-      (x) => x.id === syncStatusName
-    );
-    if (foundIndexSync >= 0) {
-      if (
-        feedbackStore[foundIndexSync].type === "bool" &&
-        feedbackStore[foundIndexSync].id === syncStatusName
-      ) {
-        feedbackStore[foundIndexSync].value === "1"
-          ? syncState({ value: true })
-          : syncState({ value: false });
-      }
-    }
+    if (digitalState !== undefined)
+      digitalState === "1"
+        ? styleState(muiColorFeedback)
+        : styleState(muiColor);
     return () => {};
-  }, [
-    feedbackStore,
-    digitalName,
-    serialName,
-    activeColor,
-    inActiveColor,
-    syncStatusName,
-  ]);
+  }, [muiColor, muiColorFeedback, digitalState]);
 
   useEffect(() => {
-    if (!serialName === null) dynamicTextState({ value: serialName });
-  }, [serialName]);
+    if (syncStatus !== undefined)
+      syncStatus === "1" ? syncState(true) : syncState(false);
+    return () => {};
+  }, [syncStatus, syncState]);
 
+  //Watch for serial events
   useEffect(() => {
-    if (!eventType === null) {
-      handlerTypeState({ value: eventType });
-    }
-  }, [eventType]);
-
-  useEffect(() => {
-    if (!muiVariant === null) {
-      variantTypeState({ value: muiVariant });
-    }
-  }, [muiVariant]);
-
-  useEffect(() => {
-    if (!addStyle === {}) {
-      styleTypeState({ value: addStyle });
-    }
-  }, [addStyle]);
-
-  useEffect(() => {
-    if (!muiColor === null) inActiveColorState({ value: muiColor });
-    if (!muiColorFeedback === null)
-      activeColorState({ value: muiColorFeedback });
-  }, [muiColor, muiColorFeedback]);
-
-  useEffect(() => {
-    if (!syncStatusName === null) syncState({ value: false });
-  }, [syncStatusName]);
+    if (stringState !== undefined) dynamicTextState(stringState);
+    return () => {};
+  }, [dynamicTextState, stringState]);
 
   return (
     <div>
-      {handlerType.value === "click" ? (
+      {eventType === "click" ? (
         <Button
           id={digitalName}
-          variant={variantType.value}
-          color={style.value}
-          style={styleType.value}
+          variant={muiVariant}
+          color={style}
+          style={addStyle}
           className={classes.button}
           onClick={() => {
             sendMessage("digital=" + joinNumber + "\x0d\x0a");
@@ -166,7 +98,7 @@ const LaptopButton = ({
                 p: "2.5px",
               }}
             >
-              {sync.value === true ? (
+              {sync === true ? (
                 <FontAwesomeIcon icon={faLaptop} size="4x" />
               ) : (
                 <i className="fa-stack fa-2x">
@@ -184,7 +116,7 @@ const LaptopButton = ({
                 p: "2.5px",
               }}
             >
-              {dynamicText.value === "" ? text : dynamicText.value}
+              {dynamicText === "" ? text : dynamicText}
             </Box>
             {sync.value === false ? (
               <Box
@@ -198,12 +130,12 @@ const LaptopButton = ({
           </Box>
         </Button>
       ) : undefined}
-      {handlerType.value === "press" ? (
+      {eventType === "press" ? (
         <Button
           id={digitalName}
-          variant={variantType.value}
-          color={style.value}
-          style={styleType.value}
+          variant={muiVariant}
+          color={style}
+          style={addStyle}
           className={classes.button}
           onMouseDown={() => {
             sendMessage(digitalName + "=1\x0d\x0a");
@@ -232,7 +164,7 @@ const LaptopButton = ({
                 p: "2.5px",
               }}
             >
-              {sync.value === true ? (
+              {sync === true ? (
                 <FontAwesomeIcon icon={faLaptop} size="4x" />
               ) : (
                 <i className="fa-stack fa-2x">
@@ -250,9 +182,9 @@ const LaptopButton = ({
                 p: "2.5px",
               }}
             >
-              {dynamicText.value === "" ? text : dynamicText.value}
+              {dynamicText === "" ? text : dynamicText}
             </Box>
-            {sync.value === false ? (
+            {sync === false ? (
               <Box
                 sx={{
                   fontSize: "10px",

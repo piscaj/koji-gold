@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useDigitalState } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
@@ -10,22 +10,15 @@ import { useSelector } from "react-redux";
 
 const Linker = ({ digitalName, link }) => {
   const navigate = useNavigate();
-  const feedbackStore = useSelector((state) => state.feedback.value);
+  //Hooks for digital and string events
+  const digitalState = useDigitalState(digitalName);
 
-useEffect(() => {
-    var foundIndexDigital = feedbackStore.findIndex(
-      (x) => x.id === digitalName
-    );
-    if (foundIndexDigital >= 0) {
-      if (
-        feedbackStore[foundIndexDigital].type === "bool" &&
-        feedbackStore[foundIndexDigital].id === digitalName
-      ) {
-        if (feedbackStore[foundIndexDigital].value === "1") navigate(link);
-      }
-    }
+  //Watch for digital events
+  useEffect(() => {
+    if (digitalState !== undefined) if (digitalState === "1") navigate(link);
+
     return () => {};
-  }, [feedbackStore, digitalName, link, navigate]);
+  }, [digitalState, link, navigate]);
 
   return <></>;
 };
