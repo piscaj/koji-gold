@@ -6,6 +6,7 @@ import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDigitalState, useStringState } from "../imports/EventBus";
 
+
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
 // "muiColor" - Default "primary" Inactive state of the button. This must be an MUI Button color value
@@ -64,7 +65,7 @@ const MuiButton = ({
   useEffect(() => {
     if (stringState !== undefined) dynamicTextState(stringState);
     return () => {};
-  }, [dynamicTextState, stringState, serialName]);
+  }, [dynamicTextState, stringState]);
 
   return (
     <div>

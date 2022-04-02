@@ -6,7 +6,7 @@ import Zoom from "@mui/material/Zoom";
 import { makeStyles } from "@mui/styles";
 import Chip from "@mui/material/Chip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSelector } from "react-redux";
+import { useDigitalState, useStringState } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -25,39 +25,24 @@ import { useSelector } from "react-redux";
 
 const DestinationButton = ({
   text,
-  muiColor = null,
-  muiColorFeedback = null,
-  muiVariant = null,
+  muiColor = "primary",
+  muiColorFeedback = "secondary",
+  muiVariant = "contained",
   addStyle = {},
   faIcon,
   faClass,
   faSize,
-  digitalName = null,
-  joinNumber,
+  digitalName,
+  joinNumber = "0",
   joinNumberDelete,
-  serialName = null,
-  inputName = null,
-  eventType = null,
+  serialName,
+  inputName,
+  eventType = "click",
   sendMessage,
 }) => {
-  const [style, styleState] = useState({ value: "primary" });
-  const [handlerType, handlerTypeState] = useState({
-    value: eventType === null ? "click" : eventType,
-  });
-  const [variantType, variantTypeState] = useState({
-    value: muiVariant === null ? "outlined" : muiVariant,
-  });
-  const [styleType, styleTypeState] = useState({
-    value: addStyle === {} ? {} : addStyle,
-  });
-  const [dynamicText, dynamicTextState] = useState({ value: "" });
-  const [inputText, inputTextState] = useState({ value: "" });
-  const [inActiveColor, inActiveColorState] = useState({
-    value: muiColor === null ? "primary" : muiColor,
-  });
-  const [activeColor, activeColorState] = useState({
-    value: muiColorFeedback === null ? "secondary" : muiColorFeedback,
-  });
+  const [style, styleState] = useState("primary");
+  const [dynamicText, dynamicTextState] = useState("");
+  const [inputText, inputTextState] = useState("");
 
   const useStyles = makeStyles({
     button: {
@@ -73,95 +58,45 @@ const DestinationButton = ({
   });
   const classes = useStyles();
 
+  //Hooks for digital and string events
+  const digitalState = useDigitalState(digitalName);
+  const stringState = useStringState(serialName);
+  const inputStringState = useStringState(serialName);
+
   const handleDelete = () => {
     sendMessage("digital=" + joinNumberDelete + "\x0d\x0a");
-    inputTextState({ value: "" });
+    inputTextState("");
   };
-  const feedbackStore = useSelector((state) => state.feedback.value);
 
- useEffect(() => {
-    var foundIndexDigital = feedbackStore.findIndex(
-      (x) => x.id === digitalName
-    );
-    if (foundIndexDigital >= 0) {
-      if (
-        feedbackStore[foundIndexDigital].type === "bool" &&
-        feedbackStore[foundIndexDigital].id === digitalName
-      ) {
-        feedbackStore[foundIndexDigital].value === "1"
-          ? styleState({ value: activeColor.value })
-          : styleState({ value: inActiveColor.value });
-      }
-    }
-    var foundIndexSerial = feedbackStore.findIndex((x) => x.id === serialName);
-    if (foundIndexSerial >= 0) {
-      if (
-        feedbackStore[foundIndexSerial].type === "string" &&
-        feedbackStore[foundIndexSerial].id === serialName
-      ) {
-        dynamicTextState({ value: feedbackStore[foundIndexSerial].value });
-      }
-    }
-    var foundInputSerial = feedbackStore.findIndex((x) => x.id === inputName);
-    if (foundInputSerial >= 0) {
-      if (
-        feedbackStore[foundInputSerial].type === "string" &&
-        feedbackStore[foundInputSerial].id === inputName
-      ) {
-        inputTextState({ value: feedbackStore[foundInputSerial].value });
-      }
-    }
+  //Watch for digital events
+  useEffect(() => {
+    if (digitalState !== undefined)
+      digitalState === "1"
+        ? styleState(muiColorFeedback)
+        : styleState(muiColor);
     return () => {};
-  }, [
-    feedbackStore,
-    digitalName,
-    serialName,
-    activeColor,
-    inActiveColor,
-    inputName,
-  ]);
+  }, [muiColor, muiColorFeedback, digitalState, digitalName]);
 
+  //Watch for serial events
   useEffect(() => {
-    if (!eventType === null) {
-      handlerTypeState({ value: eventType });
-    }
-  }, [eventType]);
+    if (stringState !== undefined) dynamicTextState(stringState);
+    return () => {};
+  }, [dynamicTextState, stringState]);
 
+  //Watch for input text events
   useEffect(() => {
-    if (!eventType === null) {
-      handlerTypeState({ value: eventType });
-    }
-  }, [eventType]);
-
-  useEffect(() => {
-    if (!muiVariant === null) {
-      variantTypeState({ value: muiVariant });
-    }
-  }, [muiVariant]);
-
-  useEffect(() => {
-    if (!addStyle === {}) {
-      styleTypeState({ value: addStyle });
-    }
-  }, [addStyle]);
-
-  useEffect(() => {
-    if (!muiColor === null) inActiveColorState({ value: muiColor });
-  }, [muiColor]);
-
-  useEffect(() => {
-    if (!muiColorFeedback === null)
-      activeColorState({ value: muiColorFeedback });
-  }, [muiColorFeedback]);
+    if (inputStringState !== undefined) inputTextState(inputStringState);
+    return () => {};
+  }, [inputTextState, inputStringState]);
 
   return (
     <div>
-      {handlerType.value === "click" ? (
+      {eventType === "click" ? (
         <Button
           id={digitalName}
-          variant={variantType.value}
+          variant={muiVariant}
           color={style.value}
-          style={styleType.value}
+          style={addStyle}
           className={classes.button}
           onClick={() => {
             sendMessage("digital=" + joinNumber + "\x0d\x0a");
@@ -189,13 +124,13 @@ const DestinationButton = ({
                 />
               </Box>
             ) : undefined}
-            {text === "" && dynamicText.value === "" ? undefined : (
+            {text === "" && dynamicText === "" ? undefined : (
               <Box
                 sx={{
                   p: "2.5px",
                 }}
               >
-                {dynamicText.value === "" ? text : dynamicText.value}
+                {dynamicText === "" ? text : dynamicText}
               </Box>
             )}
           </Box>
@@ -211,13 +146,13 @@ const DestinationButton = ({
             {inputText.value !== "" ? (
               <Zoom
                 in={inputText.value !== ""}
-                style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
+                style={{ transitionDelay: inputText ? "100ms" : "0ms" }}
               >
                 <Chip
                   className={classes.chip}
                   variant={"contained"}
                   color={"secondary"}
-                  label={inputText.value}
+                  label={inputText}
                   onDelete={handleDelete}
                 />
               </Zoom>
@@ -235,12 +170,12 @@ const DestinationButton = ({
           </Box>
         </Button>
       ) : undefined}
-      {handlerType.value === "press" ? (
+      {eventType === "press" ? (
         <Button
           id={digitalName}
-          variant={variantType.value}
+          variant={muiVariant}
           color={style.value}
-          style={styleType.value}
+          style={addStyle}
           className={classes.button}
           onMouseDown={() => {
             sendMessage(digitalName + "=1\x0d\x0a");
@@ -277,13 +212,13 @@ const DestinationButton = ({
                 />
               </Box>
             ) : undefined}
-            {text === "" && dynamicText.value === "" ? undefined : (
+            {text === "" && dynamicText === "" ? undefined : (
               <Box
                 sx={{
                   p: "2.5px",
                 }}
               >
-                {dynamicText.value === "" ? text : dynamicText.value}
+                {dynamicText === "" ? text : dynamicText}
               </Box>
             )}
           </Box>
@@ -298,13 +233,13 @@ const DestinationButton = ({
           >
             <Zoom
               in={inputText.value !== ""}
-              style={{ transitionDelay: inputText.value ? "100ms" : "0ms" }}
+              style={{ transitionDelay: inputText ? "100ms" : "0ms" }}
             >
               <Chip
                 variant={"contained"}
                 color={"secondary"}
                 className={classes.chip}
-                label={inputText.value}
+                label={inputText}
                 onDelete={handleDelete}
               />
             </Zoom>
