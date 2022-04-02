@@ -75,10 +75,8 @@ const CameraControls = ({ sendMessage }) => {
             text=""
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             sendMessage={sendMessage}
           />
@@ -94,10 +92,8 @@ const CameraControls = ({ sendMessage }) => {
             faSize="4x"
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             eventType={"press"}
             digitalName="camera-up"
@@ -116,10 +112,8 @@ const CameraControls = ({ sendMessage }) => {
               show();
             }}
             sx={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
           >
             Presets
@@ -146,10 +140,8 @@ const CameraControls = ({ sendMessage }) => {
             faSize="4x"
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             eventType={"press"}
             digitalName="camera-left"
@@ -167,10 +159,8 @@ const CameraControls = ({ sendMessage }) => {
             faSize="3x"
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             eventType={"press"}
             digitalName="camera-home"
@@ -188,10 +178,8 @@ const CameraControls = ({ sendMessage }) => {
             faSize="4x"
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             eventType={"press"}
             digitalName="camera-right"
@@ -219,10 +207,8 @@ const CameraControls = ({ sendMessage }) => {
             faSize="2x"
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             eventType={"press"}
             digitalName="camera-zoom-minus"
@@ -240,10 +226,8 @@ const CameraControls = ({ sendMessage }) => {
             faSize="4x"
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             eventType={"press"}
             digitalName="camera-down"
@@ -261,10 +245,8 @@ const CameraControls = ({ sendMessage }) => {
             faSize="2x"
             muiVariant="text"
             addStyle={{
-              maxWidth: "75px",
-              maxHeight: "75px",
-              minWidth: "75px",
-              minHeight: "75px",
+              width: "75px",
+              height: "75px",
             }}
             eventType={"press"}
             digitalName="camera-zoom-plus"

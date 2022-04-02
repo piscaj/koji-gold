@@ -20,8 +20,7 @@ export const feedbackSlice = createSlice({
             value: action.payload.value,
           },
         });
-      }
-      else if (action.payload.type === "string") {
+      } else if (action.payload.type === "string") {
         postal.publish({
           channel: "string",
           topic: action.payload.id,
@@ -29,8 +28,7 @@ export const feedbackSlice = createSlice({
             value: action.payload.value,
           },
         });
-      }
-      else if (action.payload.type === "number") {
+      } else if (action.payload.type === "number") {
         postal.publish({
           channel: "number",
           topic: action.payload.id,
