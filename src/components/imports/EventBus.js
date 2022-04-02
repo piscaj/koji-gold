@@ -2,6 +2,14 @@ import { useEffect, useState, useCallback } from "react";
 import postal from "postal";
 import { useSelector } from "react-redux";
 
+//Event Hooks these hooks use a subrcribe/unsubscribe pattern simmilar
+//to the cr-com'lib, but using postal.js
+//////////////////////////////////////////////////
+//useDigitalState("Your signal number as a string")
+//useStringState("Your signal number as a string")
+//useAnalogState("Your signal number as a number")
+///////////////////////////////////////////////////
+
 // "bool" (Digital) subscribe hook
 function useSignalStateBool(signalName) {
   const feedbackStore = useSelector((state) => state.feedback.value);

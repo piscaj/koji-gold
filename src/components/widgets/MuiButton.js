@@ -47,9 +47,11 @@ const MuiButton = ({
   });
   const classes = useStyles();
 
+  //Hooks for digital and string events
   const digitalState = useDigitalState(digitalName);
   const stringState = useStringState(serialName);
 
+  //Watch for digital events
   useEffect(() => {
     if (digitalState !== undefined)
       digitalState === "1"
@@ -58,6 +60,7 @@ const MuiButton = ({
     return () => {};
   }, [muiColor, muiColorFeedback, digitalState, digitalName]);
 
+  //Watch for serial events
   useEffect(() => {
     if (stringState !== undefined) dynamicTextState(stringState);
     return () => {};
