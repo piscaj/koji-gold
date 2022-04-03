@@ -46,10 +46,8 @@ const Laptop = ({ sendMessage }) => {
                 text="LAPTOP TABLE"
                 muiColor="primary"
                 addStyle={{
-                  maxWidth: "150px",
-                  maxHeight: "150px",
-                  minWidth: "150px",
-                  minHeight: "150px",
+                  width: "150px",
+                  height: "150px",
                 }}
                 muiColorFeedback="secondary"
                 muiVariant="contained"
@@ -65,10 +63,8 @@ const Laptop = ({ sendMessage }) => {
                 text="LAPTOP FLOOR"
                 muiColor="primary"
                 addStyle={{
-                  maxWidth: "150px",
-                  maxHeight: "150px",
-                  minWidth: "150px",
-                  minHeight: "150px",
+                  width: "150px",
+                  height: "150px",
                 }}
                 muiColorFeedback="secondary"
                 muiVariant="contained"
@@ -84,10 +80,8 @@ const Laptop = ({ sendMessage }) => {
                 text="LAPTOP WALL"
                 muiColor="primary"
                 addStyle={{
-                  maxWidth: "150px",
-                  maxHeight: "150px",
-                  minWidth: "150px",
-                  minHeight: "150px",
+                  width: "150px",
+                  height: "150px",
                 }}
                 muiColorFeedback="secondary"
                 muiVariant="contained"

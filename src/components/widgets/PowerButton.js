@@ -11,8 +11,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
 import "../assets/scss/PowerButton.scss";
+import { useDigitalState } from "../imports/EventBus";
+import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
@@ -23,9 +24,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const PowerButton = ({ digitalName = null, sendMessage }) => {
-  const [showPower, showPowerState] = useState({ value: false });
+const PowerButton = ({ digitalName, sendMessage }) => {
+  const [showPower, showPowerState] = useState(false);
   const [open, setOpen] = React.useState(false);
+
+  //Hook for digital and string events
+  const digitalState = useDigitalState(digitalName);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -35,29 +39,18 @@ const PowerButton = ({ digitalName = null, sendMessage }) => {
     setOpen(false);
   };
 
-  const feedbackStore = useSelector((state) => state.feedback.value);
   const themeModeStore = useSelector((state) => state.lightDarkMode.value);
 
+  //Watch for digital events
   useEffect(() => {
-    var foundIndexDigital = feedbackStore.findIndex(
-      (x) => x.id === digitalName
-    );
-    if (foundIndexDigital >= 0) {
-      if (
-        feedbackStore[foundIndexDigital].type === "bool" &&
-        feedbackStore[foundIndexDigital].id === digitalName
-      ) {
-        feedbackStore[foundIndexDigital].value === "1"
-          ? showPowerState({ value: true })
-          : showPowerState({ value: false });
-      }
-    }
+    if (digitalState !== undefined)
+      digitalState === "1" ? showPowerState(true) : showPowerState(false);
     return () => {};
-  }, [feedbackStore, digitalName]);
+  }, [digitalState]);
 
   return (
     <>
-      <Slide direction="up" in={showPower.value} mountOnEnter unmountOnExit>
+      <Slide direction="up" in={showPower} mountOnEnter unmountOnExit>
         <Box>
           <Box sx={{ fontSize: "12px", display: "inline-block" }}>
             Power Off

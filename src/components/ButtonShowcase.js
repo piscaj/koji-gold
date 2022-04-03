@@ -72,10 +72,8 @@ const ButtonShowcase = ({ sendMessage }) => {
                 text="Some Text"
                 muiVariant="text"
                 addStyle={{
-                  maxWidth: "130px",
-                  maxHeight: "25px",
-                  minWidth: "130px",
-                  minHeight: "25px",
+                  width: "130px",
+                  height: "25px",
                 }}
                 muiColor="primary"
                 muiColorFeedback="error"

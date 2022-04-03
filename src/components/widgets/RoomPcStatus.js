@@ -3,38 +3,24 @@ import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDesktop, faBan } from "@fortawesome/pro-duotone-svg-icons";
-import { useSelector } from "react-redux";
+import { useDigitalState } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "syncStatusName" - This name should match up to the Crestron digital name paramiter
 ///////////////////////////////////////////////////////////////////////////////
 
-const RoomPcStatus = ({
-  syncStatusName = null,
-}) => {
-  const [sync, syncState] = useState({ value: false });
-  const feedbackStore = useSelector((state) => state.feedback.value);
+const RoomPcStatus = ({ syncStatusName }) => {
+  const [sync, syncState] = useState(false);
 
+  //Hook for digital and string events
+  const digitalState = useDigitalState(syncStatusName);
+
+  //Watch for digital events
   useEffect(() => {
-    var foundIndexSync = feedbackStore.findIndex(
-      (x) => x.id === syncStatusName
-    );
-    if (foundIndexSync >= 0) {
-      if (
-        feedbackStore[foundIndexSync].type === "bool" &&
-        feedbackStore[foundIndexSync].id === syncStatusName
-      ) {
-        feedbackStore[foundIndexSync].value === "1"
-          ? syncState({ value: true })
-          : syncState({ value: false });
-      }
-    }
+    if (digitalState !== undefined)
+      digitalState === "1" ? syncState(true) : syncState(false);
     return () => {};
-  }, [feedbackStore, syncStatusName]);
-
-  useEffect(() => {
-    if (!syncStatusName === null) syncState({ value: false });
-  }, [syncStatusName]);
+  }, [digitalState]);
 
   return (
     <div>
@@ -52,7 +38,7 @@ const RoomPcStatus = ({
             p: "2.5px",
           }}
         >
-          {sync.value === true ? (
+          {sync === true ? (
             <FontAwesomeIcon icon={faDesktop} size="7x" />
           ) : (
             <i className="fa-stack fa-5x">

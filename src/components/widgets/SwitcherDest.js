@@ -23,10 +23,8 @@ const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1, sendMessage }) => {
             joinNumberDelete={index + 1 + sourceCount + digitalOffset}
             muiVariant="contained"
             addStyle={{
-              maxWidth: "150px",
-              maxHeight: "70px",
-              minWidth: "150px",
-              minHeight: "70px",
+              width: "150px",
+              height: "70px",
               display: "inline-flex", //Set text to top of button
               alignItems: "flex-start", //Set text to top of button
             }}

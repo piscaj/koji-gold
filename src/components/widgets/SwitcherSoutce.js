@@ -25,10 +25,8 @@ const SwitcherSoutce = ({
             joinNumber={index + 1 + digitalOffset}
             muiVariant="contained"
             addStyle={{
-              maxWidth: "150px",
-              maxHeight: "70px",
-              minWidth: "150px",
-              minHeight: "70px",
+              width: "150px",
+              height: "70px",
             }}
             sendMessage={sendMessage}
           />
