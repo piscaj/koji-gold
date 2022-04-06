@@ -16,7 +16,6 @@ const Linker = ({ digitalName, link }) => {
   //Watch for digital events
   useEffect(() => {
     if (digitalState !== undefined) if (digitalState === "1") navigate(link);
-
     return () => {};
   }, [digitalState, link, navigate]);
 

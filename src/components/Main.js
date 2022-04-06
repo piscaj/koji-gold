@@ -35,6 +35,8 @@ import { updateObject } from "./redux/feedbackSlice";
 import { updateMode } from "./redux/lightDarkModeSlice";
 
 const Main = () => {
+  const wsWorker = new Worker(new URL("../wsWorker.js", import.meta.url));
+
   const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
@@ -58,9 +60,37 @@ const Main = () => {
   const empty = { fb_objects: [{ id: "", value: "", type: "" }] };
   const didUnmount = useRef(false);
 
+  //Websocket state. Keep user aware of connection status.
+  wsWorker.onmessage = ({ data }) => {
+    //console.log(data.message);
+    if (data.message === "OPEN") {
+      setAlertMessage({
+        active: true,
+        severity: "success",
+        title: "Sweet!",
+        message: "I'm connected to " + socketUrl,
+      });
+      setLoader(false);
+      setAlertMessage({ active: false });
+    }
+    if (data.message === "CLOSE") {
+      setAlertMessage({
+        active: true,
+        severity: "warning",
+        title: "Ooops!",
+        message: "Attempting to reconnect.",
+      });
+    }
+  };
+
   //Stuff to do only once when the app starts.
   useEffect(() => {
     setLoader(true);
+
+    wsWorker.postMessage({
+      message: "WSStart",
+    });
+
     return () => {
       didUnmount.current = true;
     };
@@ -98,8 +128,8 @@ const Main = () => {
         //Each time the socket opens perform a full update.
         //This seems pretty costly but its the only option at the
         //moment with this API.
-        sendMessage("get_json=all\x0d\x0a");
-        console.log("Requsting update from processor");
+        //sendMessage("get_json=all\x0d\x0a");
+        //console.log("Requsting update from processor");
       },
       onClose: (event) => {
         //Report the reason the socket closed to the console
@@ -110,6 +140,7 @@ const Main = () => {
       },
     });
 
+  /*
   //Manage the websocket heartbeat message
   useEffect(() => {
     if (lastMessage !== null) {
@@ -121,6 +152,7 @@ const Main = () => {
       }
     }
   }, [lastMessage, sendMessage]);
+*/
 
   //Pass theme mode state to store
   useEffect(() => {
@@ -152,6 +184,7 @@ const Main = () => {
     };
   }, [lastJsonMessage]);
 
+  /*
   //Websocket state. Keep user aware of connection status.
   useEffect(() => {
     if (ReadyState.OPEN) {
@@ -170,6 +203,7 @@ const Main = () => {
       });
     }
   }, [readyState, socketUrl]);
+*/
 
   const colorMode = React.useMemo(
     () => ({
