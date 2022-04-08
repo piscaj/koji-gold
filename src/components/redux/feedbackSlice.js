@@ -11,7 +11,7 @@ export const feedbackSlice = createSlice({
   reducers: {
     updateObject: (state, action) => {
       var foundIndex = state.value.findIndex((x) => x.id === action.payload.id);
-
+/*
       if (action.payload.type === "bool") {
         postal.publish({
           channel: "boolean",
@@ -37,6 +37,7 @@ export const feedbackSlice = createSlice({
           },
         });
       }
+      */
       // If we have a matching element value at id, overwrite it
       if (foundIndex >= 0) {
         state.value[foundIndex].value = action.payload.value;

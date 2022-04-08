@@ -33,7 +33,6 @@ export const DriveRoutes = ({ sendMessage }) => {
 
 DriveRoutes.propTypes = {
   sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
   storedElements: PropTypes.array,
 };
 

@@ -33,10 +33,10 @@ import useLocalStorage from "./imports/local-storage";
 import { useDispatch } from "react-redux";
 import { updateObject } from "./redux/feedbackSlice";
 import { updateMode } from "./redux/lightDarkModeSlice";
+import postal from "postal";
 
 const Main = () => {
-  const wsWorker = new Worker(new URL("../wsWorker.js", import.meta.url));
-
+  const [worker, setWorker] = useState(null);
   const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
@@ -57,45 +57,71 @@ const Main = () => {
   const dispatch = useDispatch();
 
   const socketUrl = process.env.REACT_APP_URL;
-  const empty = { fb_objects: [{ id: "", value: "", type: "" }] };
+
   const didUnmount = useRef(false);
 
-  //Websocket state. Keep user aware of connection status.
-  wsWorker.onmessage = ({ data }) => {
-    //console.log(data.message);
-    if (data.message === "OPEN") {
-      setAlertMessage({
-        active: true,
-        severity: "success",
-        title: "Sweet!",
-        message: "I'm connected to " + socketUrl,
-      });
-      setLoader(false);
-      setAlertMessage({ active: false });
-    }
-    if (data.message === "CLOSE") {
-      setAlertMessage({
-        active: true,
-        severity: "warning",
-        title: "Ooops!",
-        message: "Attempting to reconnect.",
-      });
-    }
+  const sendMessage = (data) => {
+    worker.postMessage({
+      sendMessage: data,
+    });
   };
+
+  useEffect(() => {
+    const myWorker = new Worker(
+      new URL("../workers/main.worker.js", import.meta.url)
+    );
+    setWorker(myWorker);
+    return () => {
+      myWorker.terminate();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (worker) {
+      worker.postMessage({
+        connectionStatus: "init",
+      });
+    }
+  }, [worker]);
+
+  useEffect(() => {
+    if (worker) {
+      worker.onmessage = function (e) {
+        if (typeof e.data === "string") {
+          if (e.data.includes("[")) {
+            console.log(e.data);
+          }
+        }
+        if (typeof e.data === "object") {
+          if (e.data.disableLoader !== undefined)
+            setLoader(e.data.disableLoader);
+          else if (e.data.disableAlert !== undefined)
+            setAlertMessage({ active: e.data.disableAlert });
+          else if (e.data.message === "PUBLISH") {
+            postal.publish({
+              channel: e.data.channel,
+              topic: e.data.topic,
+              data: {
+                value: e.data.data,
+              },
+            });
+          } else if (e.data.message === "STORE") {
+           // dispatch(updateObject(e.data.data));
+          }
+        }
+      };
+    }
+  }, [worker]);
 
   //Stuff to do only once when the app starts.
   useEffect(() => {
     setLoader(true);
-
-    wsWorker.postMessage({
-      message: "WSStart",
-    });
-
     return () => {
       didUnmount.current = true;
     };
   }, []);
 
+  /*
   //Websocket connection
   const { sendMessage, lastJsonMessage, lastMessage, readyState } =
     useWebSocket(socketUrl, {
@@ -139,7 +165,6 @@ const Main = () => {
         //Nothing to do at the moment
       },
     });
-
   /*
   //Manage the websocket heartbeat message
   useEffect(() => {
@@ -160,6 +185,7 @@ const Main = () => {
     return () => {};
   }, [mode, dispatch]);
 
+  /*
   //Pass feeback state to store
   useEffect(() => {
     dispatch(updateObject(updateStore));
@@ -184,7 +210,6 @@ const Main = () => {
     };
   }, [lastJsonMessage]);
 
-  /*
   //Websocket state. Keep user aware of connection status.
   useEffect(() => {
     if (ReadyState.OPEN) {
@@ -204,7 +229,6 @@ const Main = () => {
     }
   }, [readyState, socketUrl]);
 */
-
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
@@ -373,14 +397,9 @@ const Main = () => {
           </Box>
         </Box>
         <Box className="body">
-          <DriveRoutes
-            sendMessage={sendMessage}
-            feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
-          />
+          <DriveRoutes sendMessage={sendMessage} />
 
-          <DriveLinks
-            feedbackObject={lastJsonMessage !== null ? lastJsonMessage : empty}
-          />
+          <DriveLinks />
         </Box>
         <Box className="footer">
           <Box
@@ -399,9 +418,6 @@ const Main = () => {
               <MediaVolume
                 serialName="media_volume"
                 sendMessage={sendMessage}
-                feedbackObject={
-                  lastJsonMessage !== null ? lastJsonMessage : empty
-                }
               />
             </Box>
             <Box
@@ -410,13 +426,7 @@ const Main = () => {
                 ml: "auto",
               }}
             >
-              <PowerButton
-                digitalName="power-off"
-                sendMessage={sendMessage}
-                feedbackObject={
-                  lastJsonMessage !== null ? lastJsonMessage : empty
-                }
-              />
+              <PowerButton digitalName="power-off" sendMessage={sendMessage} />
             </Box>
           </Box>
         </Box>
