@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
 import postal from "postal";
-import { useSelector } from "react-redux";
 
 //Hooks used to subrcribe/unsubscribe (listen to changes) in a
 //pattern simmilar to the cr-com'lib, but using postal.js
@@ -12,26 +11,17 @@ import { useSelector } from "react-redux";
 
 // "bool" (Digital) subscribe hook
 function useSignalStateBool(signalName) {
-  const feedbackStore = useSelector((state) => state.feedback.value);
   const [feedbackBool, setFeedbackBool] = useState();
 
   const checkStore = useCallback(
     (signalName) => {
-      let foundIndexDigital = feedbackStore.findIndex(
-        (x) => x.id === signalName
-      );
-      if (
-        foundIndexDigital >= 0 &&
-        feedbackStore[foundIndexDigital].type === "bool"
-      ) {
-        postal.publish({
-          channel: "boolean",
-          topic: signalName,
-          data: {
-            value: feedbackStore[foundIndexDigital].value,
-          },
-        });
-      }
+      postal.publish({
+        channel: "update",
+        topic: "component.refresh",
+        data: {
+          value: signalName,
+        },
+      });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
@@ -62,23 +52,16 @@ export function useDigitalState(signalName) {
 
 // "string" subscribe hook
 function useSignalStateString(signalName) {
-  const feedbackStore = useSelector((state) => state.feedback.value);
   const [feedbackString, setFeedbackString] = useState();
 
   const checkStore = useCallback((signalName) => {
-    let foundIndexSerial = feedbackStore.findIndex((x) => x.id === signalName);
-    if (
-      foundIndexSerial >= 0 &&
-      feedbackStore[foundIndexSerial].type === "string"
-    ) {
-      postal.publish({
-        channel: "string",
-        topic: signalName,
-        data: {
-          value: feedbackStore[foundIndexSerial].value,
-        },
-      });
-    }
+    postal.publish({
+      channel: "update",
+      topic: "component.refresh",
+      data: {
+        value: signalName,
+      },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -108,23 +91,16 @@ export function useStringState(signalName) {
 
 // "number" (Analog) subscribe
 function useSignalStateNumber(signalName) {
-  const feedbackStore = useSelector((state) => state.feedback.value);
   const [feedbackNumber, setFeedbackNumber] = useState();
 
   const checkStore = useCallback((signalName) => {
-    let foundIndexNumber = feedbackStore.findIndex((x) => x.id === signalName);
-    if (
-      foundIndexNumber >= 0 &&
-      feedbackStore[foundIndexNumber].type === "number"
-    ) {
-      postal.publish({
-        channel: "number",
-        topic: signalName,
-        data: {
-          value: feedbackStore[foundIndexNumber].value,
-        },
-      });
-    }
+    postal.publish({
+      channel: "update",
+      topic: "component.refresh",
+      data: {
+        value: signalName,
+      },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

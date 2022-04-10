@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
 import {
@@ -31,13 +30,11 @@ import PowerButton from "./widgets/PowerButton";
 import useLocalStorage from "./imports/local-storage";
 
 import { useDispatch } from "react-redux";
-import { updateObject } from "./redux/feedbackSlice";
 import { updateMode } from "./redux/lightDarkModeSlice";
 import postal from "postal";
 
 const Main = () => {
   const [worker, setWorker] = useState(null);
-  const [updateStore, updateStoreState] = useState([]);
   const [loader, setLoader] = useState(false);
   const [alertMessage, setAlertMessage] = useState({
     active: false,
@@ -55,8 +52,6 @@ const Main = () => {
   };
 
   const dispatch = useDispatch();
-
-  const socketUrl = process.env.REACT_APP_URL;
 
   const didUnmount = useRef(false);
 
@@ -106,11 +101,29 @@ const Main = () => {
               },
             });
           } else if (e.data.message === "STORE") {
-           // dispatch(updateObject(e.data.data));
+            //console.log(e.data.data);
           }
         }
       };
     }
+  }, [worker]);
+
+  useEffect(() => {
+    const componentNeedsUpdate = postal.subscribe({
+      channel: "update",
+      topic: "component.refresh",
+      callback: function (data, envelope) {
+        if (worker) {
+          worker.postMessage({
+            componentUpdate: data.value,
+          });
+        }
+      },
+    });
+
+    return () => {
+      componentNeedsUpdate.unsubscribe();
+    };
   }, [worker]);
 
   //Stuff to do only once when the app starts.
@@ -121,64 +134,6 @@ const Main = () => {
     };
   }, []);
 
-  /*
-  //Websocket connection
-  const { sendMessage, lastJsonMessage, lastMessage, readyState } =
-    useWebSocket(socketUrl, {
-      shouldReconnect: (closeEvent) => {
-        setAlertMessage({ active: false });
-        setAlertMessage({
-          active: true,
-          severity: "info",
-          title: "Whoops!",
-          message: "The Websocket lost connection.",
-        });
-        return didUnmount.current === false;
-      },
-      reconnectAttempts: 10,
-      reconnectInterval: 1000,
-      retryOnError: true,
-      onReconnectStop: (number) => {
-        setAlertMessage({ active: false });
-        setAlertMessage({
-          active: true,
-          severity: "error",
-          title: "Yikes! I tried reconnecting " + number + " times.",
-          message:
-            "We have a problem reaching - " +
-            socketUrl +
-            ". Check your network connection, then refresh your browser",
-        });
-      },
-      onOpen: () => {
-        //Each time the socket opens perform a full update.
-        //This seems pretty costly but its the only option at the
-        //moment with this API.
-        //sendMessage("get_json=all\x0d\x0a");
-        //console.log("Requsting update from processor");
-      },
-      onClose: (event) => {
-        //Report the reason the socket closed to the console
-        console.error("Websocket closed - Code: " + event.code);
-      },
-      onError: () => {
-        //Nothing to do at the moment
-      },
-    });
-  /*
-  //Manage the websocket heartbeat message
-  useEffect(() => {
-    if (lastMessage !== null) {
-      if (lastMessage.data === "HB") {
-        sendMessage("ACK\x0d\x0a");
-        console.log("Heartbeat sent");
-        setLoader(false);
-        setAlertMessage({ active: false });
-      }
-    }
-  }, [lastMessage, sendMessage]);
-*/
-
   //Pass theme mode state to store
   useEffect(() => {
     dispatch(updateMode(mode));
@@ -186,30 +141,6 @@ const Main = () => {
   }, [mode, dispatch]);
 
   /*
-  //Pass feeback state to store
-  useEffect(() => {
-    dispatch(updateObject(updateStore));
-    return () => {};
-  }, [updateStore, dispatch]);
-
-  //Process incomming json messages to be evaluated and put in stored feedback
-  useEffect(() => {
-    let mounted = true;
-    if (lastJsonMessage !== null) {
-      if (Object.keys(lastJsonMessage).length === 0) {
-        //This is a fix for the "HB".  This is not an object
-        //lets not put any garbage in the store, pass if the json is empty {}
-      } else {
-        if (mounted) {
-          updateStoreState(lastJsonMessage.fb_objects[0]);
-        }
-      }
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [lastJsonMessage]);
-
   //Websocket state. Keep user aware of connection status.
   useEffect(() => {
     if (ReadyState.OPEN) {

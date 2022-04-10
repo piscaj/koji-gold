@@ -2,6 +2,7 @@
 import ReconnectingWebSocket from "reconnecting-websocket";
 
 const socketUrl = process.env.REACT_APP_URL;
+const store = [];
 var socketInstance = null;
 
 self.onmessage = function (e) {
@@ -22,7 +23,25 @@ self.onmessage = function (e) {
       socketManagement();
   }
   if (workerData.sendMessage) socketInstance.send(workerData.sendMessage);
+  else if (workerData.componentUpdate) {
+    broadcastUpdate(workerData.componentUpdate);
+  }
 };
+
+function broadcastUpdate(data) {
+  var foundIndex = store.findIndex((x) => x.id === data);
+  // If we have a matching element value at id,
+  if (foundIndex >= 0) {
+    postMessage("[SOCKET] Sending UPDATE!! " + foundIndex);
+    postMessage({
+      message: "PUBLISH",
+      channel:
+        store[foundIndex].type === "bool" ? "boolean" : store[foundIndex].type,
+      topic: store[foundIndex].id,
+      data: store[foundIndex].value,
+    });
+  }
+}
 
 function socketManagement() {
   if (socketInstance) {
@@ -45,10 +64,17 @@ function socketManagement() {
             //This is a fix for the "HB".  This is not an object
             //lets not put any garbage in the store, pass if the json is empty {}
           } else {
-            postMessage({
-              message: "STORE",
-              data: jsonObject.fb_objects[0],
-            });
+            var foundIndex = store.findIndex(
+              (x) => x.id === jsonObject.fb_objects[0].id
+            );
+            // If we have a matching element value at id, overwrite it
+            if (foundIndex >= 0) {
+              store[foundIndex].value = jsonObject.fb_objects[0].value;
+            }
+            // If we don't have a match lets push the element into the array
+            else {
+              store.push(jsonObject.fb_objects[0]);
+            }
           }
         }
         if (jsonObject.fb_objects[0].type === "bool") {
