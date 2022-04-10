@@ -32,7 +32,6 @@ function broadcastUpdate(data) {
   var foundIndex = store.findIndex((x) => x.id === data);
   // If we have a matching element value at id,
   if (foundIndex >= 0) {
-    postMessage("[SOCKET] Sending UPDATE!! " + foundIndex);
     postMessage({
       message: "PUBLISH",
       channel:
