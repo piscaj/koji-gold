@@ -1,13 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import postal from "postal";
 
-//Hooks used to subrcribe/unsubscribe (listen to changes) in a
-//pattern simmilar to the cr-com'lib, but using postal.js
-//////////////////////////////////////////////////
-//useDigitalState("Your signal number as a string")
-//useStringState("Your signal number as a string")
-//useAnalogState("Your signal number as a number")
-///////////////////////////////////////////////////
+/*
+Hooks used to subrcribe/unsubscribe in a
+pattern simmilar to the cr-com'lib, but using postal.js
+* useDigitalState("Your signal number/name as a string")
+* useStringState("Your signal number/name as a string")
+* useAnalogState("Your signal number as a number")
+*/
 
 // "bool" (Digital) subscribe hook
 function useSignalStateBool(signalName) {
