@@ -92,7 +92,7 @@ const Main = () => {
             setLoader(e.data.disableLoader);
           else if (e.data.disableAlert !== undefined)
             setAlertMessage({ active: e.data.disableAlert });
-          else if (e.data.message === "PUBLISH") {
+          else if (e.data.message === "STATE") {
             postal.publish({
               channel: e.data.channel,
               topic: e.data.topic,
@@ -109,6 +109,23 @@ const Main = () => {
   }, [worker]);
 
   useEffect(() => {
+    const publishComponentMessage = postal.subscribe({
+      channel: "publish",
+      topic: "component.publish",
+      callback: function (data, envelope) {
+        if (worker) {
+          worker.postMessage({
+            sendMessage: data.value,
+          });
+        }
+      },
+    });
+    return () => {
+      publishComponentMessage.unsubscribe();
+    };
+  }, [worker]);
+
+  useEffect(() => {
     const componentNeedsUpdate = postal.subscribe({
       channel: "update",
       topic: "component.refresh",
@@ -120,7 +137,6 @@ const Main = () => {
         }
       },
     });
-
     return () => {
       componentNeedsUpdate.unsubscribe();
     };

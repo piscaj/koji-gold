@@ -4,9 +4,15 @@ import postal from "postal";
 /*
 Hooks used to subrcribe/unsubscribe in a
 pattern simmilar to the cr-com'lib, but using postal.js
-* useDigitalState("Your signal number/name as a string")
-* useStringState("Your signal number/name as a string")
-* useAnalogState("Your signal number as a number")
+
+* useDigitalState("Signal number/name as a string")
+* useStringState("Signal number/name as a string")
+* useAnalogState("Signal number as a number")
+
+* publishDigitalState("Signal number/name as a string")
+* publishStringState("Signal number/name as a string")
+* publishAnalogState("Signal number as a number")
+
 */
 
 // "bool" (Digital) subscribe hook
@@ -48,6 +54,34 @@ function useSignalStateBool(signalName) {
 
 export function useDigitalState(signalName) {
   return useSignalStateBool(signalName);
+}
+
+export function usePublishDigital(signalName, delay) {
+  if (delay === 0) {
+    delay = 200;
+  }
+  return useCallback(() => {
+    postal.publish({
+      channel: "publish",
+      topic: "component.publish",
+      data: {
+        type: "boolean",
+        name: signalName,
+        value: true,
+      },
+    });
+    setTimeout(function () {
+      postal.publish({
+        channel: "publish",
+        topic: "component.publish",
+        data: {
+          type: "boolean",
+          name: signalName,
+          value: false,
+        },
+      });
+    }, delay);
+  }, [delay, signalName]);
 }
 
 // "string" subscribe hook

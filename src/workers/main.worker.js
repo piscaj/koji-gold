@@ -33,7 +33,7 @@ function broadcastUpdate(data) {
   // If we have a matching element value at id,
   if (foundIndex >= 0) {
     postMessage({
-      message: "PUBLISH",
+      message: "STATE",
       channel:
         store[foundIndex].type === "bool" ? "boolean" : store[foundIndex].type,
       topic: store[foundIndex].id,
@@ -78,21 +78,21 @@ function socketManagement() {
         }
         if (jsonObject.fb_objects[0].type === "bool") {
           postMessage({
-            message: "PUBLISH",
+            message: "STATE",
             channel: "boolean",
             topic: jsonObject.fb_objects[0].id,
             data: jsonObject.fb_objects[0].value,
           });
         } else if (jsonObject.fb_objects[0].type === "string") {
           postMessage({
-            message: "PUBLISH",
+            message: "STATE",
             channel: "string",
             topic: jsonObject.fb_objects[0].id,
             data: jsonObject.fb_objects[0].value,
           });
         } else if (jsonObject.fb_objects[0].type === "number") {
           postMessage({
-            message: "PUBLISH",
+            message: "STATE",
             channel: "number",
             topic: jsonObject.fb_objects[0].id,
             data: jsonObject.fb_objects[0].value,
