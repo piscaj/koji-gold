@@ -115,7 +115,7 @@ const Main = () => {
       callback: function (data, envelope) {
         if (worker) {
           worker.postMessage({
-            sendMessage: data.value,
+            publishComponentMessage: data,
           });
         }
       },

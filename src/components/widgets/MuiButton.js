@@ -4,7 +4,12 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDigitalState, useStringState } from "../imports/EventBus";
+import {
+  useDigitalState,
+  useStringState,
+  usePublishDigital,
+  usePublishDigitalLatch,
+} from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -34,6 +39,7 @@ const MuiButton = ({
   joinNumber = "0",
   serialName,
   eventType = "click",
+  digitalPulseTime,
   sendMessage,
 }) => {
   const [style, styleState] = useState("primary");
@@ -50,6 +56,9 @@ const MuiButton = ({
   //Hooks for digital and string events
   const digitalState = useDigitalState(digitalName);
   const stringState = useStringState(serialName);
+  const handleClick = usePublishDigital(digitalName, digitalPulseTime);
+  const handleTouchDown = usePublishDigitalLatch(digitalName, true);
+  const handleTouchUp = usePublishDigitalLatch(digitalName, false);
 
   //Watch for digital events
   useEffect(() => {
@@ -75,9 +84,7 @@ const MuiButton = ({
           color={style}
           style={addStyle}
           className={classes.button}
-          onClick={() => {
-            sendMessage("digital=" + joinNumber + "\x0d\x0a");
-          }}
+          onClick={handleClick}
         >
           <Box
             sx={{
@@ -120,18 +127,10 @@ const MuiButton = ({
           color={style}
           style={addStyle}
           className={classes.button}
-          onMouseDown={() => {
-            sendMessage(digitalName + "=1\x0d\x0a");
-          }}
-          onMouseUp={() => {
-            sendMessage(digitalName + "=0\x0d\x0a");
-          }}
-          onTouchStart={() => {
-            sendMessage(digitalName + "=1\x0d\x0a");
-          }}
-          onTouchEnd={() => {
-            sendMessage(digitalName + "=0\x0d\x0a");
-          }}
+          onMouseDown={handleTouchDown}
+          onMouseUp={handleTouchUp}
+          onTouchStart={handleTouchDown}
+          onTouchEnd={handleTouchUp}
         >
           <Box
             sx={{

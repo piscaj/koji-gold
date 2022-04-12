@@ -25,8 +25,18 @@ self.onmessage = function (e) {
   if (workerData.sendMessage) socketInstance.send(workerData.sendMessage);
   else if (workerData.componentUpdate) {
     broadcastUpdate(workerData.componentUpdate);
+  } else if (workerData.publishComponentMessage) {
+    publishMessage(workerData.publishComponentMessage);
   }
 };
+
+function publishMessage(data) {
+  if (data.type === "boolean"){
+    data.value === true ?
+    socketInstance.send(data.name+"=1\x0d\x0a"):
+    socketInstance.send(data.name+"=0\x0d\x0a")
+  }
+}
 
 function broadcastUpdate(data) {
   var foundIndex = store.findIndex((x) => x.id === data);
@@ -60,8 +70,7 @@ function socketManagement() {
         let jsonObject = JSON.parse(event.data);
         if (jsonObject !== null) {
           if (Object.keys(jsonObject).length === 0) {
-            //This is a fix for the "HB".  This is not an object
-            //lets not put any garbage in the store, pass if the json is empty {}
+            //This is a fix for and {empty} objects. We don't need them.
           } else {
             var foundIndex = store.findIndex(
               (x) => x.id === jsonObject.fb_objects[0].id

@@ -2,14 +2,13 @@ import { useEffect, useState, useCallback } from "react";
 import postal from "postal";
 
 /*
-Hooks used to subrcribe/unsubscribe in a
-pattern simmilar to the cr-com'lib, but using postal.js
 
 * useDigitalState("Signal number/name as a string")
 * useStringState("Signal number/name as a string")
 * useAnalogState("Signal number as a number")
 
-* publishDigitalState("Signal number/name as a string")
+* usePublishDigitalState("Signal number/name as a string")
+* usePublishDigitalLatch(signalName, value) 
 * publishStringState("Signal number/name as a string")
 * publishAnalogState("Signal number as a number")
 
@@ -84,6 +83,20 @@ export function usePublishDigital(signalName, delay) {
   }, [delay, signalName]);
 }
 
+export function usePublishDigitalLatch(signalName, value) {
+  return useCallback(() => {
+    postal.publish({
+      channel: "publish",
+      topic: "component.publish",
+      data: {
+        type: "boolean",
+        name: signalName,
+        value: value,
+      },
+    });
+  }, [signalName, value]);
+}
+
 // "string" subscribe hook
 function useSignalStateString(signalName) {
   const [feedbackString, setFeedbackString] = useState();
@@ -123,6 +136,20 @@ export function useStringState(signalName) {
   return useSignalStateString(signalName);
 }
 
+export function usePublishString(signalName, value) {
+  return useCallback(() => {
+    postal.publish({
+      channel: "publish",
+      topic: "component.publish",
+      data: {
+        type: "string",
+        name: signalName,
+        value: value,
+      },
+    });
+  }, [signalName, value]);
+}
+
 // "number" (Analog) subscribe
 function useSignalStateNumber(signalName) {
   const [feedbackNumber, setFeedbackNumber] = useState();
@@ -160,4 +187,18 @@ function useSignalStateNumber(signalName) {
 
 export function useAnalogState(signalName) {
   return useSignalStateNumber(signalName, 0);
+}
+
+export function usePublishAnalog(signalName, value) {
+  return useCallback(() => {
+    postal.publish({
+      channel: "publish",
+      topic: "component.publish",
+      data: {
+        type: "number",
+        name: signalName,
+        value: value,
+      },
+    });
+  }, [signalName, value]);
 }
