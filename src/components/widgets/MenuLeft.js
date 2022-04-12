@@ -23,12 +23,18 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MuiButton from "./MuiButton";
-import { useStringState } from "../imports/EventBus";
+import { useStringState, usePublishDigital } from "../imports/EventBus";
 
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
+  
   //Hook for digital and string events
   const stringState = useStringState(props.serialName);
+  const handleClickMenu1 = usePublishDigital("menu-1", 0);
+  const handleClickMenu2 = usePublishDigital("menu-2", 0);
+  const handleClickMenu3 = usePublishDigital("menu-3", 0);
+  const handleClickMenu4 = usePublishDigital("menu-4", 0);
+  const handleClickMenu5 = usePublishDigital("menu-5", 0);
 
   //iOS is hosted on high-end devices. The backdrop transition can be enabled without dropping frames. The performance will be good enough.
   //iOS has a "swipe to go back" feature that interferes with the discovery feature, so discovery has to be disabled.
@@ -72,7 +78,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 button
                 selected={menuIndex === "index-1" ? true : false}
                 onClick={() => {
-                  props.sendMessage("digital=1\x0d\x0a");
+                  handleClickMenu1();
                   setDrawerOpen(false);
                 }}
               >
@@ -91,7 +97,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 selected={menuIndex === "index-2" ? true : false}
                 button
                 onClick={() => {
-                  props.sendMessage("digital=2\x0d\x0a");
+                  handleClickMenu2();
                   setDrawerOpen(false);
                 }}
               >
@@ -107,7 +113,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 selected={menuIndex === "index-3" ? true : false}
                 button
                 onClick={() => {
-                  props.sendMessage("digital=3\x0d\x0a");
+                  handleClickMenu3();
                   setDrawerOpen(false);
                 }}
               >
@@ -123,7 +129,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 selected={menuIndex === "index-5" ? true : false}
                 button
                 onClick={() => {
-                  props.sendMessage("digital=5\x0d\x0a");
+                  handleClickMenu5();
                   setDrawerOpen(false);
                 }}
               >
@@ -142,7 +148,7 @@ const MenuLeft = forwardRef((props, ref) => {
                 button
                 selected={menuIndex === "index-4" ? true : false}
                 onClick={() => {
-                  props.sendMessage("digital=4\x0d\x0a");
+                  handleClickMenu4();
                   setDrawerOpen(false);
                 }}
               >

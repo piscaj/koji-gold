@@ -30,17 +30,23 @@ self.onmessage = function (e) {
   }
 };
 
+//Process requsts from component to the API
 function publishMessage(data) {
-  if (data.type === "boolean"){
-    data.value === true ?
-    socketInstance.send(data.name+"=1\x0d\x0a"):
-    socketInstance.send(data.name+"=0\x0d\x0a")
+  if (data.type === "boolean") {
+    data.value === true
+      ? socketInstance.send(data.name + "=1\x0d\x0a")
+      : socketInstance.send(data.name + "=0\x0d\x0a");
+  } else if (data.type === "string") {
+    socketInstance.send(data.name + "=" + data.value + "\x0d\x0a");
+  } else if (data.type === "number") {
+    //API not avalable yet
   }
 }
 
+//Process state update of component when it first loads
 function broadcastUpdate(data) {
   var foundIndex = store.findIndex((x) => x.id === data);
-  // If we have a matching element value at id,
+  // Find the matching data value at id,
   if (foundIndex >= 0) {
     postMessage({
       message: "STATE",
@@ -114,8 +120,6 @@ function socketManagement() {
       if (event.wasClean) {
         postMessage(`[SOCKET] Connection closed cleanly, code=${event.code}`);
       } else {
-        // e.g. server process killed or network down
-        // event.code is usually 1006 in this case
         postMessage("[SOCKET] Connection died");
       }
     };
