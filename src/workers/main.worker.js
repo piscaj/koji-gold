@@ -76,7 +76,7 @@ function socketManagement() {
         let jsonObject = JSON.parse(event.data);
         if (jsonObject !== null) {
           if (Object.keys(jsonObject).length === 0) {
-            //This is a fix for and {empty} objects. We don't need them.
+            //This is a fix for {empty} objects. We don't need them.
           } else {
             var foundIndex = store.findIndex(
               (x) => x.id === jsonObject.fb_objects[0].id
