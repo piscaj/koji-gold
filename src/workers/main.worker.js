@@ -117,10 +117,11 @@ function socketManagement() {
     };
 
     socketInstance.onclose = function (event) {
+      postMessage({ message: "SOCKET-CLOSED" });
       if (event.wasClean) {
-        postMessage(`[SOCKET] Connection closed cleanly, code=${event.code}`);
+        postMessage(`[SOCKET] Connection closed, code=${event.code}`);
       } else {
-        postMessage("[SOCKET] Connection died");
+        postMessage("[SOCKET] Connection failure");
       }
     };
 

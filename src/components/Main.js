@@ -100,8 +100,13 @@ const Main = () => {
                 value: e.data.data,
               },
             });
-          } else if (e.data.message === "STORE") {
-            //console.log(e.data.data);
+          } else if (e.data.message === "SOCKET-CLOSED") {
+            setAlertMessage({
+              active: true,
+              severity: "warning",
+              title: "Ooops!",
+              message: "Attempting to reconnect.",
+            });
           }
         }
       };
@@ -156,26 +161,6 @@ const Main = () => {
     return () => {};
   }, [mode, dispatch]);
 
-  /*
-  //Websocket state. Keep user aware of connection status.
-  useEffect(() => {
-    if (ReadyState.OPEN) {
-      setAlertMessage({
-        active: true,
-        severity: "success",
-        title: "Sweet!",
-        message: "I'm connected to " + socketUrl,
-      });
-    } else if (ReadyState.CLOSING) {
-      setAlertMessage({
-        active: true,
-        severity: "warning",
-        title: "Ooops!",
-        message: "Attempting to reconnect.",
-      });
-    }
-  }, [readyState, socketUrl]);
-*/
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
