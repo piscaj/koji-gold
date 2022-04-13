@@ -6,7 +6,12 @@ import Zoom from "@mui/material/Zoom";
 import { makeStyles } from "@mui/styles";
 import Chip from "@mui/material/Chip";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDigitalState, useStringState } from "../imports/EventBus";
+import {
+  useDigitalState,
+  useStringState,
+  usePublishDigital,
+  usePublishDigitalLatch,
+} from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -14,10 +19,8 @@ import { useDigitalState, useStringState } from "../imports/EventBus";
 // "muiColorFeedback" - Default "secondary" Active state of the button. This must be an MUI Button color value
 // "muiVariant" - Default "outlined" - This must be an MUI Variant value
 // "digitalName" - This name should match up to the Crestron digital name paramiter
-// "joinNumber" - Digital join number in Crestron for pulse/push
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "eventType" - Default "click" - values: "click" or "press"
-// "sendMessage" - Pass the websocket as an object here
 // "faIcon" - FontAwesome icon -- any imported icon
 // "faClass" - FontAwesome class -- any fa class
 // "faSize" - FontAwesome icon size -- lg, sm, 1x, 2x, 3x, 4x
@@ -33,12 +36,11 @@ const DestinationButton = ({
   faClass,
   faSize,
   digitalName,
-  joinNumber = "0",
   joinNumberDelete,
   serialName,
   inputName,
   eventType = "click",
-  sendMessage,
+  digitalPulseTime,
 }) => {
   const [style, styleState] = useState("primary");
   const [dynamicText, dynamicTextState] = useState("");
@@ -62,11 +64,10 @@ const DestinationButton = ({
   const digitalState = useDigitalState(digitalName);
   const stringState = useStringState(serialName);
   const inputStringState = useStringState(inputName);
-
-  const handleDelete = () => {
-    sendMessage("digital=" + joinNumberDelete + "\x0d\x0a");
-    inputTextState("");
-  };
+  const handleClick = usePublishDigital(digitalName, digitalPulseTime);
+  const handleTouchDown = usePublishDigitalLatch(digitalName, true);
+  const handleTouchUp = usePublishDigitalLatch(digitalName, false);
+  const handleDelete = usePublishDigital(joinNumberDelete, digitalPulseTime);
 
   //Watch for digital events
   useEffect(() => {
@@ -98,9 +99,7 @@ const DestinationButton = ({
           color={style.value}
           style={addStyle}
           className={classes.button}
-          onClick={() => {
-            sendMessage("digital=" + joinNumber + "\x0d\x0a");
-          }}
+          onClick={handleClick}
         >
           <Box
             sx={{
@@ -177,18 +176,10 @@ const DestinationButton = ({
           color={style.value}
           style={addStyle}
           className={classes.button}
-          onMouseDown={() => {
-            sendMessage(digitalName + "=1\x0d\x0a");
-          }}
-          onMouseUp={() => {
-            sendMessage(digitalName + "=0\x0d\x0a");
-          }}
-          onTouchStart={() => {
-            sendMessage(digitalName + "=1\x0d\x0a");
-          }}
-          onTouchEnd={() => {
-            sendMessage(digitalName + "=0\x0d\x0a");
-          }}
+          onMouseDown={handleTouchDown}
+          onMouseUp={handleTouchUp}
+          onTouchStart={handleTouchDown}
+          onTouchEnd={handleTouchUp}
         >
           <Box
             sx={{
@@ -252,7 +243,6 @@ const DestinationButton = ({
 
 DestinationButton.propTypes = {
   text: PropTypes.string,
-  joinNumber: PropTypes.number,
   joinNumberDelete: PropTypes.number,
   muiColor: PropTypes.string,
   muiColorFeedback: PropTypes.string,
@@ -263,7 +253,7 @@ DestinationButton.propTypes = {
   serialName: PropTypes.string,
   inputName: PropTypes.string,
   eventType: PropTypes.string,
-  sendMessage: PropTypes.func,
+  digitalPulseTime: PropTypes.number,
 };
 
 export default DestinationButton;

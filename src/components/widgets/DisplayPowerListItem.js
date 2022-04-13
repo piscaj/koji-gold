@@ -7,7 +7,11 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "@mui/material/styles";
-import { useDigitalState, useStringState } from "../imports/EventBus";
+import {
+  useDigitalState,
+  useStringState,
+  usePublishDigital,
+} from "../imports/EventBus";
 
 const DisplayPowerListItem = ({
   digitalName,
@@ -16,7 +20,7 @@ const DisplayPowerListItem = ({
   serialName,
   primaryText = "",
   faIcon,
-  sendMessage,
+  digitalPulseTime,
 }) => {
   //Make switch look and act like a native IOS switch
   const IOSSwitch = styled((props) => (
@@ -81,11 +85,11 @@ const DisplayPowerListItem = ({
   //Hooks for digital and string events
   const digitalState = useDigitalState(digitalName);
   const stringState = useStringState(serialName);
+  const handleClickOn = usePublishDigital(joinNumberOn, digitalPulseTime);
+  const handleClickOff = usePublishDigital(joinNumberOff, digitalPulseTime);
 
   const handleChange = (event) => {
-    event.target.checked
-      ? sendMessage("digital=" + joinNumberOn + "\x0d\x0a")
-      : sendMessage("digital=" + joinNumberOff + "\x0d\x0a");
+    event.target.checked ? handleClickOn() : handleClickOff();
   };
 
   //Watch for digital events
@@ -120,7 +124,7 @@ DisplayPowerListItem.propTypes = {
   joinNumberOff: PropTypes.string,
   serialName: PropTypes.string,
   eventType: PropTypes.string,
-  sendMessage: PropTypes.func,
+  digitalPulseTime: PropTypes.number,
 };
 
 export default DisplayPowerListItem;

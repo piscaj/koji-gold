@@ -3,7 +3,7 @@ import DestinationButton from "./DestinationButton";
 import Box from "@mui/material/Box";
 import "../assets/scss/Switcher.scss";
 
-const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1, sendMessage }) => {
+const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1 }) => {
   return (
     <Box className="destination-scroll">
       {[...Array(sourceCount)].map((value, index) => (
@@ -19,8 +19,7 @@ const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1, sendMessage }) => {
             digitalName={"output-" + (index + 1) + "-d"}
             serialName={"output-" + (index + 1) + "-s"}
             inputName={"output-fb-" + (index + 1) + "-s"}
-            joinNumber={index + 1 + digitalOffset}
-            joinNumberDelete={index + 1 + sourceCount + digitalOffset}
+            joinNumberDelete={"output-" + (index + 1) + "-delete"}
             muiVariant="contained"
             addStyle={{
               width: "150px",
@@ -28,7 +27,6 @@ const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1, sendMessage }) => {
               display: "inline-flex", //Set text to top of button
               alignItems: "flex-start", //Set text to top of button
             }}
-            sendMessage={sendMessage}
           />
         </Box>
       ))}

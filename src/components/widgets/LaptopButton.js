@@ -5,7 +5,12 @@ import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLaptop, faBan } from "@fortawesome/pro-duotone-svg-icons";
-import { useDigitalState, useStringState } from "../imports/EventBus";
+import {
+  useDigitalState,
+  useStringState,
+  usePublishDigital,
+  usePublishDigitalLatch,
+} from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "text" - Button text
@@ -27,11 +32,10 @@ const LaptopButton = ({
   muiVariant = "contained",
   addStyle = {},
   digitalName,
-  joinNumber,
   serialName,
   eventType = "click",
-  sendMessage,
   syncStatusName,
+  digitalPulseTime,
 }) => {
   const [style, styleState] = useState("primary");
   const [dynamicText, dynamicTextState] = useState("");
@@ -41,6 +45,9 @@ const LaptopButton = ({
   const digitalState = useDigitalState(digitalName);
   const syncStatus = useDigitalState(syncStatusName);
   const stringState = useStringState(serialName);
+  const handleClick = usePublishDigital(digitalName, digitalPulseTime);
+  const handleTouchDown = usePublishDigitalLatch(digitalName, true);
+  const handleTouchUp = usePublishDigitalLatch(digitalName, false);
 
   const useStyles = makeStyles({
     button: {
@@ -80,9 +87,7 @@ const LaptopButton = ({
           color={style}
           style={addStyle}
           className={classes.button}
-          onClick={() => {
-            sendMessage("digital=" + joinNumber + "\x0d\x0a");
-          }}
+          onClick={handleClick}
         >
           <Box
             sx={{
@@ -137,18 +142,10 @@ const LaptopButton = ({
           color={style}
           style={addStyle}
           className={classes.button}
-          onMouseDown={() => {
-            sendMessage(digitalName + "=1\x0d\x0a");
-          }}
-          onMouseUp={() => {
-            sendMessage(digitalName + "=0\x0d\x0a");
-          }}
-          onTouchStart={() => {
-            sendMessage(digitalName + "=1\x0d\x0a");
-          }}
-          onTouchEnd={() => {
-            sendMessage(digitalName + "=0\x0d\x0a");
-          }}
+          onMouseDown={handleTouchDown}
+          onMouseUp={handleTouchUp}
+          onTouchStart={handleTouchDown}
+          onTouchEnd={handleTouchUp}
         >
           <Box
             sx={{

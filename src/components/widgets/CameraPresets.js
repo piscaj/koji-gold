@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import MuiButton from "./MuiButton";
 import Button from "@mui/material/Button";
@@ -6,11 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/pro-duotone-svg-icons";
 import Paper from "@mui/material/Paper";
 
-const CameraPresets = ({
-  sendMessage,
-
-  onMouseUp,
-}) => {
+const CameraPresets = ({ onMouseUp }) => {
   return (
     <Paper elevation={0}>
       <Box
@@ -43,7 +38,6 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-1"
-              sendMessage={sendMessage}
             />
           </Box>
           <Box
@@ -59,7 +53,6 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-2"
-              sendMessage={sendMessage}
             />
           </Box>
           <Box
@@ -101,7 +94,6 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-3"
-              sendMessage={sendMessage}
             />
           </Box>
           <Box
@@ -117,7 +109,6 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-4"
-              sendMessage={sendMessage}
             />
           </Box>
           <Box
@@ -133,7 +124,6 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-5"
-              sendMessage={sendMessage}
             />
           </Box>
         </Box>
@@ -159,7 +149,6 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-6"
-              sendMessage={sendMessage}
             />
           </Box>
           <Box
@@ -175,7 +164,6 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-7"
-              sendMessage={sendMessage}
             />
           </Box>
           <Box
@@ -191,16 +179,12 @@ const CameraPresets = ({
               }}
               eventType={"press"}
               digitalName="camera-preset-8"
-              sendMessage={sendMessage}
             />
           </Box>
         </Box>
       </Box>
     </Paper>
   );
-};
-CameraPresets.propTypes = {
-  sendMessage: PropTypes.func,
 };
 
 export default CameraPresets;

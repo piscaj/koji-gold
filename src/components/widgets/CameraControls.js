@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import MuiButton from "./MuiButton";
@@ -16,7 +15,7 @@ import {
   faLongArrowRight,
 } from "@fortawesome/pro-duotone-svg-icons";
 
-const CameraControls = ({ sendMessage }) => {
+const CameraControls = ({ props }) => {
   const useStyles = makeStyles({
     button: {
       textTransform: "none",
@@ -53,7 +52,6 @@ const CameraControls = ({ sendMessage }) => {
             onMouseUp={() => {
               show();
             }}
-            sendMessage={sendMessage}
           />
         </Box>
       </Slide>
@@ -78,7 +76,6 @@ const CameraControls = ({ sendMessage }) => {
               width: "75px",
               height: "75px",
             }}
-            sendMessage={sendMessage}
           />
         </Box>
         <Box
@@ -97,7 +94,6 @@ const CameraControls = ({ sendMessage }) => {
             }}
             eventType={"press"}
             digitalName="camera-up"
-            sendMessage={sendMessage}
           />
         </Box>
         <Box
@@ -145,7 +141,6 @@ const CameraControls = ({ sendMessage }) => {
             }}
             eventType={"press"}
             digitalName="camera-left"
-            sendMessage={sendMessage}
           />
         </Box>
         <Box
@@ -164,7 +159,6 @@ const CameraControls = ({ sendMessage }) => {
             }}
             eventType={"press"}
             digitalName="camera-home"
-            sendMessage={sendMessage}
           />
         </Box>
         <Box
@@ -183,7 +177,6 @@ const CameraControls = ({ sendMessage }) => {
             }}
             eventType={"press"}
             digitalName="camera-right"
-            sendMessage={sendMessage}
           />
         </Box>
       </Box>
@@ -212,7 +205,6 @@ const CameraControls = ({ sendMessage }) => {
             }}
             eventType={"press"}
             digitalName="camera-zoom-minus"
-            sendMessage={sendMessage}
           />
         </Box>
         <Box
@@ -231,7 +223,6 @@ const CameraControls = ({ sendMessage }) => {
             }}
             eventType={"press"}
             digitalName="camera-down"
-            sendMessage={sendMessage}
           />
         </Box>
         <Box
@@ -250,18 +241,11 @@ const CameraControls = ({ sendMessage }) => {
             }}
             eventType={"press"}
             digitalName="camera-zoom-plus"
-            sendMessage={sendMessage}
           />
         </Box>
       </Box>
     </Box>
   );
-};
-
-CameraControls.propTypes = {
-  sendMessage: PropTypes.func,
-  feedbackObject: PropTypes.object,
-  storedElements: PropTypes.array,
 };
 
 export default CameraControls;

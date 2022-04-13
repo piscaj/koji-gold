@@ -17,10 +17,8 @@ import {
 // "muiColorFeedback" - Default "secondary" Active state of the button. This must be an MUI Button color value
 // "muiVariant" - Default "outlined" - This must be an MUI Variant value
 // "digitalName" - This name should match up to the Crestron digital name paramiter
-// "joinNumber" - Digital join number in Crestron for pulse/push
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "eventType" - Default "click" - values: "click" or "press"
-// "sendMessage" - Pass the websocket as an object here
 // "faIcon" - FontAwesome icon -- any imported icon
 // "faClass" - FontAwesome class -- any fa class
 // "faSize" - FontAwesome icon size -- lg, sm, 1x, 2x, 3x, 4x
@@ -36,11 +34,9 @@ const MuiButton = ({
   faClass,
   faSize,
   digitalName,
-  joinNumber = "0",
   serialName,
   eventType = "click",
   digitalPulseTime,
-  sendMessage,
 }) => {
   const [style, styleState] = useState("primary");
   const [dynamicText, dynamicTextState] = useState("");
@@ -180,7 +176,6 @@ MuiButton.propTypes = {
   digitalName: PropTypes.string,
   serialName: PropTypes.string,
   eventType: PropTypes.string,
-  sendMessage: PropTypes.func,
 };
 
 export default MuiButton;

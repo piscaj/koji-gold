@@ -12,20 +12,20 @@ import VideoSwitching from "../VideoSwitching";
 //We drive all the pages here
 
 //React Router routes go here
-export const DriveRoutes = ({ sendMessage }) => {
+export const DriveRoutes = ({ props }) => {
   return (
     <Routes>
-      <Route exact path="/" element={<RoomPc sendMessage={sendMessage} />} />
-      <Route path="/roomPc" element={<RoomPc sendMessage={sendMessage} />} />
-      <Route path="/laptop" element={<Laptop sendMessage={sendMessage} />} />
-      <Route path="/camera" element={<Camera sendMessage={sendMessage} />} />
+      <Route exact path="/" element={<RoomPc  />} />
+      <Route path="/roomPc" element={<RoomPc  />} />
+      <Route path="/laptop" element={<Laptop  />} />
+      <Route path="/camera" element={<Camera  />} />
       <Route
         path="/switcher"
-        element={<VideoSwitching sendMessage={sendMessage} />}
+        element={<VideoSwitching  />}
       />
       <Route
         path="/showcase"
-        element={<ButtonShowcase sendMessage={sendMessage} />}
+        element={<ButtonShowcase  />}
       />
     </Routes>
   );

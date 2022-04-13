@@ -4,14 +4,14 @@ import Stack from "@mui/material/Stack";
 import Slider from "@mui/material/Slider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp, faVolumeDown } from "@fortawesome/pro-duotone-svg-icons";
-import { useStringState } from "../imports/EventBus";
+import { useStringState, usePublishString } from "../imports/EventBus";
 
 // Props definition for component /////////////////////////////////////////////
 // "serialName" - Dynamic button text. This name should match up to the Crestron serial name paramiter
 // "sendMessage" - Pass the websocket as an object here
 ///////////////////////////////////////////////////////////////////////////////
 
-const MediaVolume = ({ serialName = null, sendMessage }) => {
+const MediaVolume = ({ serialName = null }) => {
   const [barValue, setbarValue] = useState("25");
   const [moving, setMoving] = useState(false);
   var movingTimeout;
@@ -25,18 +25,16 @@ const MediaVolume = ({ serialName = null, sendMessage }) => {
     clearTimeout(movingTimeout);
     //Reset... We are moving the slider, so stop websocket feedback stream
     setMoving(true);
-    // the slider moving "event" likes to trigger on the same value more than once,
+    //The slider moving "event" likes to trigger on the same value more than once,
     //so lets clean this up and make sure we are not sending
     // duplicate values down the websocket to the processor.
-    if (value !== barValue) {
-      sendMessage(serialName + "=" + value + "\x0d\x0a");
-    }
-    //update the slider value for the badge that appears over the slider.
+    if (barValue + 1 !== value) publishString();
     setbarValue(value);
   };
 
   //Hook for digital and string events
   const stringState = useStringState(serialName);
+  const publishString = usePublishString(serialName, barValue);
 
   //Watch for serial events
   useEffect(() => {
@@ -62,7 +60,6 @@ const MediaVolume = ({ serialName = null, sendMessage }) => {
 
 MediaVolume.propTypes = {
   serialName: PropTypes.string,
-  sendMessage: PropTypes.func,
 };
 
 export default MediaVolume;

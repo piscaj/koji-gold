@@ -27,7 +27,7 @@ import { useStringState, usePublishDigital } from "../imports/EventBus";
 
 const MenuLeft = forwardRef((props, ref) => {
   const [drawerOpen, drawerOpenState] = useState({ value: false });
-  
+
   //Hook for digital and string events
   const stringState = useStringState(props.serialName);
   const handleClickMenu1 = usePublishDigital("menu-1", 0);
@@ -165,9 +165,8 @@ const MenuLeft = forwardRef((props, ref) => {
               faIcon={faProjector}
               digitalName="projector-power"
               serialName="projector-status"
-              joinNumberOn="32"
-              joinNumberOff="33"
-              sendMessage={props.sendMessage}
+              joinNumberOn="projector-on"
+              joinNumberOff="projector-off"
             />
 
             <Accordion>
@@ -196,9 +195,7 @@ const MenuLeft = forwardRef((props, ref) => {
                         height: "30px",
                       }}
                       digitalName="screen-up"
-                      joinNumber={36}
                       serialName=""
-                      sendMessage={props.sendMessage}
                     />
                   </Box>
                   <Box
@@ -217,9 +214,7 @@ const MenuLeft = forwardRef((props, ref) => {
                         height: "30px",
                       }}
                       digitalName="screen-down"
-                      joinNumber={37}
                       serialName=""
-                      sendMessage={props.sendMessage}
                     />
                   </Box>
                 </Box>
@@ -231,9 +226,8 @@ const MenuLeft = forwardRef((props, ref) => {
               faIcon={faTv}
               digitalName="monitor-power"
               serialName="monitor-status"
-              joinNumberOn="34"
-              joinNumberOff="35"
-              sendMessage={props.sendMessage}
+              joinNumberOn="monitor-on"
+              joinNumberOff="monitor-off"
             />
           </Box>
         </SwipeableDrawer>
