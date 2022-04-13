@@ -1,11 +1,10 @@
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import MuiButton from "./widgets/MuiButton";
-import PropTypes from "prop-types";
 import Header from "./widgets/Header";
 import Fade from "@mui/material/Fade";
 
-const ButtonShowcase = ({ sendMessage }) => {
+const ButtonShowcase = ({ props }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -50,9 +49,7 @@ const ButtonShowcase = ({ sendMessage }) => {
                 muiColorFeedback="secondary"
                 muiVariant="contained"
                 digitalName="showcase-contained"
-                joinNumber={9}
                 serialName=""
-                sendMessage={sendMessage}
               />
             </Box>
             <Box sx={{ p: "5px" }}>
@@ -62,9 +59,7 @@ const ButtonShowcase = ({ sendMessage }) => {
                 muiColorFeedback="error"
                 muiVariant="outlined"
                 digitalName="showcase-outlined"
-                joinNumber={10}
                 serialName=""
-                sendMessage={sendMessage}
               />
             </Box>
             <Box sx={{ p: "5px" }}>
@@ -78,9 +73,7 @@ const ButtonShowcase = ({ sendMessage }) => {
                 muiColor="primary"
                 muiColorFeedback="error"
                 digitalName="showcase-text"
-                joinNumber={11}
                 serialName="dynamic-text"
-                sendMessage={sendMessage}
               />
             </Box>
             <Box sx={{ p: "5px" }}>
@@ -92,7 +85,6 @@ const ButtonShowcase = ({ sendMessage }) => {
                 eventType={"press"}
                 digitalName="showcase-press"
                 serialName=""
-                sendMessage={sendMessage}
               />
             </Box>
           </Box>
@@ -100,9 +92,6 @@ const ButtonShowcase = ({ sendMessage }) => {
       </Paper>
     </Fade>
   );
-};
-MuiButton.propTypes = {
-  sendMessage: PropTypes.func,
 };
 
 export default ButtonShowcase;

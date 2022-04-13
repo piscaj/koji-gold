@@ -3,11 +3,7 @@ import MuiButton from "./MuiButton";
 import Box from "@mui/material/Box";
 import "../assets/scss/Switcher.scss";
 
-const SwitcherSoutce = ({
-  sourceCount = 1,
-  digitalOffset = 1,
-  sendMessage,
-}) => {
+const SwitcherSoutce = ({ sourceCount = 1, digitalOffset = 1 }) => {
   return (
     <Box className="source-scroll">
       {[...Array(sourceCount)].map((value, index) => (
@@ -22,13 +18,11 @@ const SwitcherSoutce = ({
             text={"Source " + (index + 1)}
             digitalName={"input-" + (index + 1) + "-d"}
             serialName={"input-" + (index + 1) + "-s"}
-            joinNumber={index + 1 + digitalOffset}
             muiVariant="contained"
             addStyle={{
               width: "150px",
               height: "70px",
             }}
-            sendMessage={sendMessage}
           />
         </Box>
       ))}
@@ -39,7 +33,6 @@ const SwitcherSoutce = ({
 SwitcherSoutce.propTypes = {
   sourceCount: PropTypes.number,
   digitalOffset: PropTypes.number,
-  sendMessage: PropTypes.func,
 };
 
 export default SwitcherSoutce;

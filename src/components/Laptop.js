@@ -5,7 +5,7 @@ import Header from "./widgets/Header";
 import LaptopButton from "./widgets/LaptopButton";
 import Fade from "@mui/material/Fade";
 
-const Laptop = ({ sendMessage }) => {
+const Laptop = ({ props }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -52,9 +52,7 @@ const Laptop = ({ sendMessage }) => {
                 muiColorFeedback="secondary"
                 muiVariant="contained"
                 digitalName="laptop-1"
-                joinNumber={6}
                 serialName=""
-                sendMessage={sendMessage}
                 syncStatusName="sync-laptop-1"
               />
             </Box>
@@ -69,9 +67,7 @@ const Laptop = ({ sendMessage }) => {
                 muiColorFeedback="secondary"
                 muiVariant="contained"
                 digitalName="laptop-2"
-                joinNumber={7}
                 serialName=""
-                sendMessage={sendMessage}
                 syncStatusName="sync-laptop-2"
               />
             </Box>
@@ -86,9 +82,7 @@ const Laptop = ({ sendMessage }) => {
                 muiColorFeedback="secondary"
                 muiVariant="contained"
                 digitalName="laptop-3"
-                joinNumber={8}
                 serialName=""
-                sendMessage={sendMessage}
                 syncStatusName="sync-laptop-3"
               />
             </Box>
@@ -97,10 +91,6 @@ const Laptop = ({ sendMessage }) => {
       </Paper>
     </Fade>
   );
-};
-
-Laptop.propTypes = {
-  sendMessage: PropTypes.func,
 };
 
 export default Laptop;

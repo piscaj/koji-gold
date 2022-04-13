@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./widgets/Header";
@@ -7,7 +6,7 @@ import SwitcherDest from "./widgets/SwitcherDest";
 import "./assets/scss/Switcher.scss";
 import Fade from "@mui/material/Fade";
 
-const VideoSwitching = ({ sendMessage }) => {
+const VideoSwitching = ({ props }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -26,11 +25,7 @@ const VideoSwitching = ({ sendMessage }) => {
         <Box>
           <Header title="Inputs" />
         </Box>
-        <SwitcherSoutce
-          sourceCount={10}
-          digitalOffset={11}
-          sendMessage={sendMessage}
-        />
+        <SwitcherSoutce sourceCount={10} digitalOffset={11} />
 
         <Box
           sx={{
@@ -40,17 +35,10 @@ const VideoSwitching = ({ sendMessage }) => {
           <Header title="Outputs" />
         </Box>
 
-        <SwitcherDest
-          sourceCount={5}
-          digitalOffset={21}
-          sendMessage={sendMessage}
-        />
+        <SwitcherDest sourceCount={5} digitalOffset={21} />
       </Paper>
     </Fade>
   );
-};
-VideoSwitching.propTypes = {
-  sendMessage: PropTypes.func,
 };
 
 export default VideoSwitching;

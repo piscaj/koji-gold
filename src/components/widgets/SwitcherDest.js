@@ -37,7 +37,6 @@ const SwitcherDest = ({ sourceCount = 1, digitalOffset = 1 }) => {
 SwitcherDest.propTypes = {
   sourceCount: PropTypes.number,
   digitalOffset: PropTypes.number,
-  sendMessage: PropTypes.func,
 };
 
 export default SwitcherDest;

@@ -12,24 +12,24 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import "../assets/scss/PowerButton.scss";
-import { useDigitalState } from "../imports/EventBus";
+import { useDigitalState, usePublishDigital } from "../imports/EventBus";
 import { useSelector } from "react-redux";
 
 // Props definition for component /////////////////////////////////////////////
 // "digitalName" - This name should match up to the Crestron digital name paramiter
-// "sendMessage" - Pass the websocket as an object here
 ///////////////////////////////////////////////////////////////////////////////
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const PowerButton = ({ digitalName, sendMessage }) => {
+const PowerButton = ({ digitalName }) => {
   const [showPower, showPowerState] = useState(false);
   const [open, setOpen] = React.useState(false);
 
   //Hook for digital and string events
   const digitalState = useDigitalState(digitalName);
+  const handleClick = usePublishDigital(digitalName, 0);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -103,8 +103,8 @@ const PowerButton = ({ digitalName, sendMessage }) => {
           <Button
             variant="outlined"
             onClick={() => {
+              handleClick();
               handleClose();
-              sendMessage("digital=38\x0d\x0a");
             }}
           >
             Ok

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Header from "./widgets/Header";
@@ -47,10 +46,6 @@ const RoomPc = ({ sendMessage }) => {
       </Paper>
     </Fade>
   );
-};
-
-RoomPc.propTypes = {
-  sendMessage: PropTypes.func,
 };
 
 export default RoomPc;

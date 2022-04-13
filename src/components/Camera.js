@@ -1,11 +1,10 @@
-import PropTypes from "prop-types";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import CameraControls from "./widgets/CameraControls";
 import Header from "./widgets/Header";
 import Fade from "@mui/material/Fade";
 
-const Camera = ({ sendMessage }) => {
+const Camera = ({ props }) => {
   return (
     <Fade in={true}>
       <Paper
@@ -41,15 +40,12 @@ const Camera = ({ sendMessage }) => {
               mb: "20px",
             }}
           >
-            <CameraControls sendMessage={sendMessage} />
+            <CameraControls />
           </Box>
         </Box>
       </Paper>
     </Fade>
   );
-};
-Camera.propTypes = {
-  sendMessage: PropTypes.func,
 };
 
 export default Camera;

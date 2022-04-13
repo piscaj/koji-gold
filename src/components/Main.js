@@ -358,7 +358,7 @@ const Main = () => {
                 ml: "auto",
               }}
             >
-              <PowerButton digitalName="power-off" sendMessage={sendMessage} />
+              <PowerButton digitalName="power-off" />
             </Box>
           </Box>
         </Box>
