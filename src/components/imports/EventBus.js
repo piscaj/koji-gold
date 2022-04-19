@@ -3,10 +3,12 @@ import postal from "postal";
 
 /*
 
+Hooks for subscribing to events
 * useDigitalState("Signal number/name as a string")
 * useStringState("Signal number/name as a string")
 * useAnalogState("Signal number as a number")
 
+Hooks for publishing events
 * usePublishDigitalState("Signal number/name as a string")
 * usePublishDigitalLatch(signalName, value) 
 * publishStringState("Signal number/name as a string")
