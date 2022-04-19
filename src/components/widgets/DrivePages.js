@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import Linker from "./Linker";
 import { Route, Routes } from "react-router-dom";
 import ButtonShowcase from "../ButtonShowcase";
@@ -15,25 +14,14 @@ import VideoSwitching from "../VideoSwitching";
 export const DriveRoutes = ({ props }) => {
   return (
     <Routes>
-      <Route exact path="/" element={<RoomPc  />} />
-      <Route path="/roomPc" element={<RoomPc  />} />
-      <Route path="/laptop" element={<Laptop  />} />
-      <Route path="/camera" element={<Camera  />} />
-      <Route
-        path="/switcher"
-        element={<VideoSwitching  />}
-      />
-      <Route
-        path="/showcase"
-        element={<ButtonShowcase  />}
-      />
+      <Route exact path="/" element={<RoomPc />} />
+      <Route path="/roomPc" element={<RoomPc />} />
+      <Route path="/laptop" element={<Laptop />} />
+      <Route path="/camera" element={<Camera />} />
+      <Route path="/switcher" element={<VideoSwitching />} />
+      <Route path="/showcase" element={<ButtonShowcase />} />
     </Routes>
   );
-};
-
-DriveRoutes.propTypes = {
-  sendMessage: PropTypes.func,
-  storedElements: PropTypes.array,
 };
 
 //Make use of the Linker component for page tracking here.
@@ -48,5 +36,3 @@ export const DriveLinks = () => {
     </>
   );
 };
-
-DriveLinks.propTypes = {};

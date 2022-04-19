@@ -1,20 +1,23 @@
 /* eslint-disable no-restricted-globals */
 import ReconnectingWebSocket from "reconnecting-websocket";
 
+//Change IP in .env
 const socketUrl = process.env.REACT_APP_URL;
 const store = [];
 var socketInstance = null;
 
+//Process messages from main thread
 self.onmessage = function (e) {
   const workerData = e.data;
   switch (workerData.connectionStatus) {
+    //Start websocket connection
     case "init":
       if (socketInstance === null) {
         socketInstance = createSocketInstance();
         socketManagement();
       }
       break;
-
+    //Stop websocket connection
     case "stop":
       socketInstance.close();
       break;
@@ -22,9 +25,10 @@ self.onmessage = function (e) {
     default:
       socketManagement();
   }
-  if (workerData.sendMessage) socketInstance.send(workerData.sendMessage);
-  else if (workerData.componentUpdate) {
+  //Send state update to component
+  if (workerData.componentUpdate) {
     broadcastUpdate(workerData.componentUpdate);
+    //Send messages to websocket from main thread
   } else if (workerData.publishComponentMessage) {
     publishMessage(workerData.publishComponentMessage);
   }
@@ -43,7 +47,7 @@ function publishMessage(data) {
   }
 }
 
-//Process state update of component when it first loads
+//Process state update request from component
 function broadcastUpdate(data) {
   var foundIndex = store.findIndex((x) => x.id === data);
   // Find the matching data value at id,
@@ -76,7 +80,7 @@ function socketManagement() {
         let jsonObject = JSON.parse(event.data);
         if (jsonObject !== null) {
           if (Object.keys(jsonObject).length === 0) {
-            //This is a fix for {empty} objects. We don't need them.
+            //Find {empty} objects. We don't need them.
           } else {
             var foundIndex = store.findIndex(
               (x) => x.id === jsonObject.fb_objects[0].id
@@ -127,7 +131,7 @@ function socketManagement() {
 
     socketInstance.onerror = function (error) {
       postMessage(`[SOCKET] ${error.message}`);
-      socketInstance.close();
+      //socketInstance.close();
     };
   }
 }

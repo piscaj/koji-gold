@@ -55,12 +55,6 @@ const Main = () => {
 
   const didUnmount = useRef(false);
 
-  const sendMessage = (data) => {
-    worker.postMessage({
-      sendMessage: data,
-    });
-  };
-
   useEffect(() => {
     const myWorker = new Worker(
       new URL("../workers/main.worker.js", import.meta.url)
@@ -239,11 +233,7 @@ const Main = () => {
             <Box sx={{ p: "5px" }}>Updating</Box>
           </Box>
         </Backdrop>
-        <MenuLeft
-          serialName={"menu-index"}
-          sendMessage={sendMessage}
-          ref={menuLeft}
-        />
+        <MenuLeft serialName={"menu-index"} ref={menuLeft} />
         <Box
           sx={{
             display: "flex",
@@ -329,7 +319,7 @@ const Main = () => {
           </Box>
         </Box>
         <Box className="body">
-          <DriveRoutes sendMessage={sendMessage} />
+          <DriveRoutes />
 
           <DriveLinks />
         </Box>
@@ -347,10 +337,7 @@ const Main = () => {
                 width: "300px",
               }}
             >
-              <MediaVolume
-                serialName="media_volume"
-                sendMessage={sendMessage}
-              />
+              <MediaVolume serialName="media_volume" />
             </Box>
             <Box
               sx={{

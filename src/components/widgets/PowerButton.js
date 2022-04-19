@@ -117,7 +117,6 @@ const PowerButton = ({ digitalName }) => {
 
 PowerButton.propTypes = {
   digitalName: PropTypes.string,
-  sendMessage: PropTypes.func,
 };
 
 export default PowerButton;

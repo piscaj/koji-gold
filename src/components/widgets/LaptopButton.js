@@ -206,7 +206,6 @@ LaptopButton.propTypes = {
   digitalName: PropTypes.string,
   serialName: PropTypes.string,
   eventType: PropTypes.string,
-  sendMessage: PropTypes.func,
   syncStatusName: PropTypes.string,
 };
 
