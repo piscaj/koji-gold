@@ -130,7 +130,7 @@ function socketManagement() {
     };
 
     socketInstance.onerror = function (error) {
-      postMessage(`[SOCKET] ${error.message}`);
+      postMessage(`[SOCKET] Error : ${error.message}`);
       //socketInstance.close();
     };
   }
